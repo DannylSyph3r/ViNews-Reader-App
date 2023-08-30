@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "379566625582",
+    "project_id": "vinews-newsreader-app",
+    "storage_bucket": "vinews-newsreader-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:379566625582:android:476a5a07c50a20166560bf",
+        "android_client_info": {
+          "package_name": "se.sleth.vinews_reader_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "379566625582-8h7f3fsgst16jnon0rtkphar5fbnh0vp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgmz1n0JD2-SmvTwLyL5bBa9ULNnwn0MY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "379566625582-8h7f3fsgst16jnon0rtkphar5fbnh0vp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
