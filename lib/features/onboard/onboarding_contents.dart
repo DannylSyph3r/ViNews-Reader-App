@@ -11,7 +11,7 @@ class UnboardingContent {
 List<UnboardingContent> pageContents = [
   UnboardingContent(
     image: ViNewsAppImagesPath.onboardScreenImageOne,
-    title: "Get The Latest News headlines and Updates to Read Anytime and Anywhere!",
+    title: "Get The Latest News Headlines and Updates to Read Anywhere!",
     description: "Stay informed with the most up-to-date news from around the world. Our app delivers breaking headlines and updates straight to your device, ensuring you're always in the know, no matter where you are."
   ),
   UnboardingContent(

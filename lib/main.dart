@@ -32,7 +32,7 @@ class _ViNewsAppState extends ConsumerState<ViNewsApp> {
   Widget build(BuildContext context) {
     final appRouter = ref.watch(appRouterProvider);
     return ScreenUtilInit(
-        designSize: const Size(375, 812),
+        designSize: const Size(430, 932),
         builder: (context, child) {
           return Builder(
               builder: ((context) => Builder(
