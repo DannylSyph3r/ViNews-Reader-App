@@ -7,9 +7,9 @@ import 'package:vinews_news_reader/features/auth/views/initalized_screen.dart';
 import 'package:vinews_news_reader/features/auth/views/login_view.dart';
 import 'package:vinews_news_reader/features/auth/views/sign_up_view.dart';
 import 'package:vinews_news_reader/features/base_navbar/bottom_navigation_bar.dart';
+import 'package:vinews_news_reader/features/onboard/views/onboard_view.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/features/home/views/home_screen.dart';
-import 'package:vinews_news_reader/features/onboard/onboard_view.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
