@@ -18,6 +18,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
   @override
   Widget build(BuildContext context) {
     final currentUserProvider = FirebaseAuth.instance.currentUser?.email;
+    final currentUserEmailVerificationStatus = FirebaseAuth.instance.currentUser?.emailVerified;
     return Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(
@@ -31,6 +32,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                 const Text("Home Screen"),
                 15.sbH,
                 Text(currentUserProvider.toString()),
+                Text(currentUserEmailVerificationStatus.toString()),
                 15.sbH,
                 ViNewsAppIconButton(
                   onButtonPress: () {

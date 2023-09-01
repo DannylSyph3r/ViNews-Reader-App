@@ -13,6 +13,7 @@ import 'package:vinews_news_reader/utils/widget_extensions.dart';
 import 'package:vinews_news_reader/widgets/vinews_image_icon_button.dart';
 
 var logger = Logger();
+
 class EmailVerificationView extends ConsumerStatefulWidget {
   final String userEmailAddress;
   const EmailVerificationView({required this.userEmailAddress, super.key});
@@ -23,27 +24,27 @@ class EmailVerificationView extends ConsumerStatefulWidget {
 }
 
 class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
-  Timer? _timer;
+  Timer? _emailVerificationTimer;
 
   @override
   void initState() {
     super.initState();
-    // Start the periodic timer to check email verification status every 3 seconds
-    _timer = Timer.periodic(const Duration(seconds: 4), (_) {
+    // Start the periodic timer to check email verification status every 4 seconds
+    _emailVerificationTimer = Timer.periodic(const Duration(seconds: 4), (_) {
       ref.read(authNotifierProvider.notifier).checkEmailVerificationStatus();
     });
   }
 
   @override
   void dispose() {
-    _timer?.cancel(); // Cancel the timer to avoid memory leaks
+    _emailVerificationTimer?.cancel(); // Cancel the timer to avoid memory leaks
     super.dispose();
   }
 
   void resendCodedButtonPress() {
-    //Call onResendButtonPressed() to restart the timer and disable the button
+    // Call this fucnction to disable button and restart timer
     ref.read(authNotifierProvider.notifier).sendUserEmailVerificationLink();
-    ref.read(resendTimerProvider.notifier).resetTimer();
+    ref.read(resendTimerProvider.notifier).resetTimer();// Start or pause the timer
   }
 
   String getFormattedRemainingTime(int remainingTime) {
@@ -58,13 +59,14 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
 
   @override
   Widget build(BuildContext context) {
+    // Auth State Changes logic handler
     ref.listen<UserAuthenticationState>(authNotifierProvider,
         (previous, state) {
       if (state is UserAuthenticationStateSuccess) {
         if (state.isEmailVerified == true) {
           logger.i("User email is verified via listener on email page");
-          context.pushReplacementNamed(
-              ViNewsAppRouteConstants.appNavigationBar);
+          context
+              .pushReplacementNamed(ViNewsAppRouteConstants.appNavigationBar);
         } else {
           logger.i("User email is not verified via listener on email page");
         }
@@ -83,6 +85,7 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Screen Content
                   ViNewsIcons.emailVerifyIcon.iconslide(size: 100),
                   10.sbH,
                   Row(
@@ -95,8 +98,10 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
                     ],
                   ),
                   20.sbH,
-                  "Verify Your Email Address"
-                      .txtStyled(fontSize: 25, fontWeight: FontWeight.bold),
+                  "Verify Your Email Address".txtStyled(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      textAlign: TextAlign.center),
                   15.sbH,
                   "We have just sent an email with a verfication link to your inbox. Please check your mail, and click on the link to verify your Email Address!"
                       .txtStyled(fontSize: 16.sp, textAlign: TextAlign.center),
@@ -104,13 +109,6 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
                   "You will be automatically redirected after verifying your Email ;)"
                       .txtStyled(fontSize: 16.sp, textAlign: TextAlign.center),
                   50.sbH,
-                  // ViNewsAppImageIconButton(
-                  //     onButtonPress: () {
-                  //     },
-                  //     buttonColor: Pallete.appButtonColor,
-                  //     iconColor: Pallete.blackColor,
-                  //     buttonPlaceholderText: "Continue",
-                  //     isEnabled: true),
                   const Divider(
                     thickness: 1.5,
                   ),
@@ -122,7 +120,7 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
                     buttonPlaceholderText: remainingTime == 0
                         ? "Resend Link"
                         : getFormattedRemainingTime(
-                            remainingTime), // Pass isPinComplete value as !isPinComplete
+                            remainingTime),
                     isEnabled: remainingTime == 0
                         ? true
                         : false, // Enable the button when remainingTime is 0
@@ -131,7 +129,6 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
                   GestureDetector(
                       onTap: () {
                         ref.read(resendTimerProvider.notifier).resetTimer();
-                        ref.read(resendTimerProvider.notifier).pauseTimer();
                         ref.read(authNotifierProvider.notifier).userSignOut();
                         context.pushReplacementNamed(
                             ViNewsAppRouteConstants.authIntializer);

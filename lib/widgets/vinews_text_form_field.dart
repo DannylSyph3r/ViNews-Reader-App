@@ -42,7 +42,7 @@ class ViNewsAppTextFormField extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
       width: double.infinity,
-      height: 60,
+      //height: 60,
       child: TextFormField(
         focusNode: focusNode,
         onChanged: onChanged,
@@ -71,7 +71,7 @@ class ViNewsAppTextFormField extends ConsumerWidget {
               borderRadius: BorderRadius.circular(12)),
           errorMaxLines: 2,
           errorStyle:
-              TextStyle(color: Pallete.redColor, fontSize: 13.sp, height: 1.0),
+              TextStyle(color: Pallete.redColor, fontSize: 13.sp, height: 1.0,),
           errorBorder: OutlineInputBorder(
             borderSide: const BorderSide(
               color: Pallete.redColor,

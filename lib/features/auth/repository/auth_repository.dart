@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:logger/logger.dart';
 import 'package:vinews_news_reader/core/constants/firebase_constants.dart';
-import 'package:vinews_news_reader/firebase_options.dart';
+
+var logger = Logger();
 
 // Auth Repository Class
 class AuthRepository {
@@ -27,7 +29,7 @@ class AuthRepository {
   Stream<User?> get authStateChange => _auth.authStateChanges();
 
   // Sign In a user via Registered Email and Password...
-  Future<Either<String, User?>> loginwithEmaillAndPassword(
+  Future<Either<String, User?>> loginwithEmailAndPassword(
       {required String email, required String password}) async {
     try {
       final authProcessResult = await _auth.signInWithEmailAndPassword(
@@ -45,7 +47,7 @@ class AuthRepository {
       } else if (e.code == 'wrong-password') {
         return left('Wrong Credentials! Please check your email and password!');
       } else {
-        return left('An error occurred. Please try again later.');
+        return left('An error occurred. Check your Internet Connection!');
       }
     } on FirebaseException catch (_) {
       // Handle other Firebase exceptions
@@ -86,18 +88,19 @@ class AuthRepository {
     } on FirebaseAuthException catch (e) {
       // Handle FirebaseAuthException
       if (e.code == 'email-already-in-use') {
-        return left('The email address is already in use.');
+        return left('The email address is already in use!');
       } else if (e.code == 'invalid-email') {
-        return left('Invalid email address.');
+        return left('Invalid email address!');
       } else {
-        return left('An error occurred. Please try again later.');
+        return left(
+            'An error occurred. Check your Internet Connection or try again later!');
       }
     } on FirebaseException catch (_) {
       // Handle other Firebase exceptions
-      return left('Another bad error occurred. Please try again later.');
+      return left('Another bad error occurred. Please try again later!');
     } catch (_) {
       // Handle other exceptions
-      return left('Fatal Error occurred. Please try again later.');
+      return left('Critical Error occurred. Please try again later!');
     }
   }
 
@@ -105,8 +108,8 @@ class AuthRepository {
   Future<Either<String, User>> continueWithGoogleAuthentication(
       {required bool isSignUp}) async {
     try {
-      final googleSignIn =
-          GoogleSignIn(clientId: DefaultFirebaseOptions.ios.iosClientId);
+      final googleSignIn = GoogleSignIn();
+      //GoogleSignIn(clientId: DefaultFirebaseOptions.ios.iosClientId);
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser != null) {
         final GoogleSignInAuthentication googleAuth =
@@ -135,10 +138,10 @@ class AuthRepository {
         if (signedInUser != null) {
           return right(signedInUser);
         } else {
-          return left('Unknown Authentication Error');
+          return left('Unknown Google Authentication Error');
         }
       } else {
-        return left('Unknown Authentication Error');
+        return left('Unknown Google Authentication Error');
       }
     } on FirebaseAuthException catch (e) {
       // Handle FirebaseAuthException
@@ -149,27 +152,25 @@ class AuthRepository {
       } else if (e.code == 'wrong-password') {
         return left('Incorrect password for this Email address!');
       } else if (e.code == 'account-exists-with-different-credential') {
-        return left(
-            'An account already exists with a different authentication method.');
+        return left('An account already exists with this email!');
       } else if (e.code == 'invalid-credential') {
-        return left('The provided credential is invalid.');
+        return left('Credentials Invalid!');
       } else if (e.code == 'operation-not-allowed') {
-        return left('This operation is not allowed.');
+        return left('This operation is not allowed!');
       } else if (e.code == 'user-mismatch') {
         return left(
-            'The provided credential does not match the authenticated user.');
+            'The provided credential does not match the authenticated user!');
       } else if (e.code == 'credential-already-in-use') {
-        return left(
-            'This credential is already associated with a different user.');
+        return left('An account already exists with these Credentials!');
       } else {
-        return left('An unknown error occurred. Please try again later.');
+        return left('An Error occurred. Please try again later!');
       }
     } on FirebaseException catch (_) {
       // Handle other Firebase exceptions
-      return left('Another bad error occurred. Please try again later.');
+      return left('Another Bad error occurred. Please try again later!');
     } catch (_) {
       // Handle other exceptions
-      return left('Fatal Error occurred. Please try again later.');
+      return left('Fatal Error occurred. Please try again later!');
     }
   }
 
@@ -207,39 +208,42 @@ class AuthRepository {
       }
     } on FirebaseException catch (_) {
       // Handle Firebase exceptions
-      return left('An error occurred. Please try again later.');
+      return left('An error occurred. Please try again later!');
     } catch (_) {
       // Handle other exceptions
-      return left('Fatal Error occurred. Please try again later.');
+      return left('Bad Error occurred. Please try again later!');
     }
   }
 
-Future<Either<String, User?>> sendPasswordResetLink({required String emailAddress}) async {
-  try {
-    final user = _auth.currentUser;
-    if (user != null) {
-      await _auth.sendPasswordResetEmail(email: emailAddress);
+  Future<Either<String, User?>> sendPasswordResetLinkFromSignIn(
+      {required String emailAddress}) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        await _auth.sendPasswordResetEmail(email: emailAddress);
 
-      return right(user);
-    } else {
-      return left('User not found.');
+        return right(user);
+      } else {
+        return left('User not found.');
+      }
+    } on FirebaseException catch (_) {
+      // Handle Firebase exceptions
+      return left('An error occurred. Please try again later!');
+    } catch (_) {
+      // Handle other exceptions
+      return left('Fatal Error occurred. Please try again later!');
     }
-  } on FirebaseException catch (_) {
-    // Handle Firebase exceptions
-    return left('An error occurred. Please try again later.');
-  } catch (_) {
-    // Handle other exceptions
-    return left('Fatal Error occurred. Please try again later.');
   }
-}
 
   // Triggers Sign Out sequence
   Future<void> signOut() async {
+    final googleSignIn = GoogleSignIn();
     try {
+      await googleSignIn.signOut();
       await _auth.signOut();
     } catch (e) {
       // Handle sign-out exception
-      print('Error signing out: $e');
+      logger.i('Error signing out: $e');
     }
   }
 }

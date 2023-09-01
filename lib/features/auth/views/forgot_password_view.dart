@@ -27,6 +27,7 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
 
   @override
   void initState() {
+    // Call the updateSendLinkButtonState function whenever either of the text fields changes via listeners.
     super.initState();
     _forgotPasswordFieldController.addListener(updateSendLinkButton);
     _forgotPasswordFieldController.addListener(updateEmailValidationState);
@@ -39,16 +40,20 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
   }
 
   void updateSendLinkButton() {
+    // Update the Send Link Button inactivity state based on conditions 
     final sendLinkButtonNotifier = ref.read(activeButtonStateProvider.notifier);
+    // Only update the state if there is a change to avoid unnecessary rebuilds.
     sendLinkButtonNotifier.updateButtonState([_forgotPasswordFieldController]);
   }
 
   void resetButtonState() {
+    // Reset the "Send Link" button inactivity state
     final resetButtonState = ref.read(activeButtonStateProvider.notifier);
     resetButtonState.resetButtonState();
   }
 
   void updateEmailValidationState() {
+    // Email Validator status updater via suffix icon
     final emailValidationNotifier = ref.read(emailValidatorProvider.notifier);
     emailValidationNotifier
         .updateEmailValidatorState(_forgotPasswordFieldController);
@@ -59,6 +64,7 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
     final isSendLinkButtonActive = ref.watch(activeButtonStateProvider);
     final isEmailValid = ref.watch(emailValidatorProvider);
     return Scaffold(
+      // AppBar
       appBar: AppBar(
         title: "Back".txtStyled(fontSize: 16),
         elevation: 0,
@@ -78,40 +84,41 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // Screen Header
                       "Forgot Password"
                           .txtStyled(fontSize: 20, fontWeight: FontWeight.bold),
                       15.sbH,
                       "Enter your Email to Reset your Password".txtStyled(
                           fontSize: 14.sp, textAlign: TextAlign.center),
                       20.sbH,
-                      SizedBox(
-                        height: 95,
-                        child: ViNewsAppTextFormField(
-                            controller: _forgotPasswordFieldController,
-                            hintText: "Your Email",
-                            obscureText: false,
-                            validator: emailValidator,
-                            prefixIconString: ViNewsAppImagesPath.emailIcon,
-                            prefixIconColor: Pallete.appButtonColor,
-                            suffixIconString: _forgotPasswordFieldController
-                                        .text.isNotEmpty &&
-                                    isEmailValid
-                                ? ViNewsAppImagesPath.validIcon
-                                : ViNewsAppImagesPath.invalidIcon,
-                            suffixIconColor: Pallete.appButtonColor),
-                      ),
+                      // Screen Textfield
+                      ViNewsAppTextFormField(
+                          controller: _forgotPasswordFieldController,
+                          hintText: "Your Email",
+                          obscureText: false,
+                          validator: emailValidator,
+                          prefixIconString: ViNewsAppImagesPath.emailIcon,
+                          prefixIconColor: Pallete.appButtonColor,
+                          suffixIconString: _forgotPasswordFieldController
+                                      .text.isNotEmpty &&
+                                  isEmailValid
+                              ? ViNewsAppImagesPath.validIcon
+                              : ViNewsAppImagesPath.invalidIcon,
+                          suffixIconColor: Pallete.appButtonColor),
+                      8.sbH,
+                      // "Send Link" Button
                       ViNewsAppIconButton(
                           onButtonPress: () {
                             dropKeyboard();
                             if (_forgotPasswordFormKey.currentState
                                     ?.validate() ==
                                 true) {
-                              // ref
-                              //     .read(authNotifierProvider.notifier)
-                              //     .sendUserForgotPasswordLink(
-                              //         emailAddress:
-                              //             _forgotPasswordFieldController.text
-                              //                 .trim());
+                              ref
+                                  .read(authNotifierProvider.notifier)
+                                  .sendUserForgotPasswordLinkFromSignIn(
+                                      emailAddress:
+                                          _forgotPasswordFieldController.text
+                                              .trim());
                               showMaterialBanner(context, ViNewsAppTexts.passwordResetSuccessTitle, ViNewsAppTexts.passwordResetSuccessBody, Pallete.appButtonColor);
                               resetButtonState();
                             }

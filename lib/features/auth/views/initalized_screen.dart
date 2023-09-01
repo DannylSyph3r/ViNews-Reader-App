@@ -16,11 +16,14 @@ class InitializedAuthScreen extends ConsumerWidget {
     return authState.when(
       data: (user) {
         if (user == null) {
+          // Send user to Login Screen if no one is logged in
           return const UserLoginView();
         } else {
           if (user.emailVerified == true) {
+            // If the user's email is confirmed verified via Firebase send them to the Home Screen 
             return const ViNewsBottomNavBar();
           } else {
+            // If user's email is not verified
             // Send an email verification link first
             // Then redirect to the email verification screen
             return EmailVerificationView(
@@ -28,7 +31,9 @@ class InitializedAuthScreen extends ConsumerWidget {
           }
         }
       },
+      // In the case of an error send them to the Login Screen.
       error: ((error, stackTrace) => const UserLoginView()),
+      // Loading Screen purely for courtesy you never see it because i dont use a StreamBuilder.
       loading: () => const ViNewsLoadingScreen(),
     );
   }

@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -78,10 +77,12 @@ class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
                       child: GNav(
                         tabBorderRadius: 24,
                         tabMargin: const EdgeInsets.symmetric(
-                            vertical: 14, horizontal: 13),
+                            vertical: 10, horizontal: 10),
                         backgroundColor: Pallete.transparent,
                         activeColor: Pallete.whiteColor,
                         tabBackgroundColor: Pallete.blackColor,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeInToLinear,
                         gap: 8,
                         iconSize: 24,
                         selectedIndex: _page.value,

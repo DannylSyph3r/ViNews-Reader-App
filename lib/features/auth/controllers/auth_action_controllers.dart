@@ -45,7 +45,7 @@ class AuthNotifier extends StateNotifier<UserAuthenticationState> {
   Future<void> userLogin(
       {required String email, required String password}) async {
     state = const UserAuthenticationStateLoading();
-    final authResponse = await _authRepository.loginwithEmaillAndPassword(
+    final authResponse = await _authRepository.loginwithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -124,17 +124,15 @@ class AuthNotifier extends StateNotifier<UserAuthenticationState> {
     }
   }
 
-  Future<void> sendUserForgotPasswordLink(
+  Future<void> sendUserForgotPasswordLinkFromSignIn(
       {required String emailAddress}) async {
     state = const UserAuthenticationStateLoading();
-    final authResponse =
-        await _authRepository.sendPasswordResetLink(emailAddress: emailAddress);
+    final authResponse = await _authRepository.sendPasswordResetLinkFromSignIn(
+        emailAddress: emailAddress);
 
     state = authResponse.fold(
-      (error) => UserAuthenticationStateError(error.toString()),
-      (response) => UserAuthenticationStateSuccess(response!,
-          isEmailVerified: response.emailVerified),
-    );
+        (error) => UserAuthenticationStateError(error.toString()),
+        (response) => const UserAuthenticationStateInitial());
   }
 
   Future<void> userSignOut() async {
@@ -175,13 +173,11 @@ class EmailValidatorStateNotifier extends StateNotifier<bool> {
 class ResendTimerNotifier extends StateNotifier<int> {
   Timer? _timer;
 
-  ResendTimerNotifier() : super(120) {
-    startTimer();
-  }
+  ResendTimerNotifier() : super(0);
 
   void startTimer() {
+    state = 120; // Set the initial timer value
     const oneSecond = Duration(seconds: 1);
-    _timer?.cancel();
     _timer = Timer.periodic(oneSecond, (timer) {
       if (state > 0) {
         state = state - 1;
@@ -192,12 +188,9 @@ class ResendTimerNotifier extends StateNotifier<int> {
   }
 
   void resetTimer() {
-    state = 120;
-    startTimer();
-  }
-
-  void pauseTimer() {
     _timer?.cancel();
+    state = 120; // Set the initial timer value
+    startTimer(); // Start a new timer
   }
 
   @override
@@ -208,14 +201,6 @@ class ResendTimerNotifier extends StateNotifier<int> {
 }
 
 // Providers
-
-// final authNotifierProvider =
-//     StateNotifierProvider<AuthNotifier, UserAuthenticationState>((ref) {
-//   final authNotifier = AuthNotifier(ref.read(authRepositoryProvider));
-//   authNotifier._startListeningToAuthStateChanges();
-//   return authNotifier;
-// });
-
 final authNotifierProvider =
     StateNotifierProvider<AuthNotifier, UserAuthenticationState>((ref) {
   final authRepository = ref.read(authRepositoryProvider);
@@ -238,7 +223,7 @@ final emailValidatorProvider =
 });
 
 final resendTimerProvider =
-    StateNotifierProvider<ResendTimerNotifier, int>((ref) {
+    StateNotifierProvider.autoDispose<ResendTimerNotifier, int>((ref) {
   return ResendTimerNotifier();
 });
 

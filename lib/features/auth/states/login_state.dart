@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+// UserAuthenticationStates (Success, Error, Initial and Loading)
 class UserAuthenticationState extends Equatable {
   const UserAuthenticationState();
 

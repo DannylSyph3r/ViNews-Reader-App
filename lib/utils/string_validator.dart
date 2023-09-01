@@ -1,3 +1,5 @@
+// Regex Validators for respective Necessary Auth Fields
+
 String? emailValidator(String? value) {
   final regex = RegExp(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)');
   if (value == null || value.isEmpty) {
@@ -15,7 +17,7 @@ String? passwordValidator(String? value) {
     return '⚠ Please enter a password!';
   }
   if (!regex.hasMatch(value)) {
-    return ' ⚠ Password must be 8 characters long, and contain at least one letter, number, and special character!';
+    return ' ⚠ Password must be 8 characters long and include a letter, number, and special character.';
   }
   return null;
 }
