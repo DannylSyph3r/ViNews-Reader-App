@@ -48,7 +48,7 @@ class ViNewsAppIconButton extends ConsumerWidget {
             : null, // Disable the button if isEnabled is false
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          fixedSize: Size(331.w, 60.w),
+          fixedSize: Size(390.w, 78.w),
           backgroundColor: buttonColor ?? Pallete.appButtonColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -69,7 +69,7 @@ class ViNewsAppIconButton extends ConsumerWidget {
               style: TextStyle(
                 color: textColor ?? Colors.white,
                 fontWeight: FontWeight.w600,
-                fontSize: 14.sp,
+                fontSize: 18.sp,
               ),
             ),
             if (suffixIcon != null) // Conditionally include the suffixIcon

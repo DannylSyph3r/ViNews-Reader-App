@@ -87,32 +87,33 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
                 children: [
                   // Screen Content
                   ViNewsIcons.emailVerifyIcon.iconslide(size: 100),
-                  10.sbH,
+                  20.sbH,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      "Hey!".txtStyled(fontSize: 15.sp),
-                      3.sbW,
+                      "Hey!".txtStyled(fontSize: 23.sp),
+                      5.sbW,
                       widget.userEmailAddress.txtStyled(
-                          fontSize: 15.sp, fontWeight: FontWeight.bold),
+                          fontSize: 23.sp, fontWeight: FontWeight.bold),
                     ],
                   ),
-                  20.sbH,
+                  30.sbH,
                   "Verify Your Email Address".txtStyled(
-                      fontSize: 25,
+                      fontSize: 30.sp,
                       fontWeight: FontWeight.bold,
                       textAlign: TextAlign.center),
-                  15.sbH,
+                  25.sbH,
                   "We have just sent an email with a verfication link to your inbox. Please check your mail, and click on the link to verify your Email Address!"
-                      .txtStyled(fontSize: 16.sp, textAlign: TextAlign.center),
+                      .txtStyled(fontSize: 20.sp, textAlign: TextAlign.center),
                   30.sbH,
                   "You will be automatically redirected after verifying your Email ;)"
-                      .txtStyled(fontSize: 16.sp, textAlign: TextAlign.center),
-                  50.sbH,
+                      .txtStyled(fontSize: 20.sp, textAlign: TextAlign.center),
+                  70.sbH,
                   const Divider(
                     thickness: 1.5,
+                    color: Pallete.appButtonColor,
                   ),
-                  18.sbH,
+                  20.sbH,
                   ViNewsAppImageIconButton(
                     onButtonPress: resendCodedButtonPress,
                     buttonColor: Pallete.appButtonColor,
@@ -125,7 +126,7 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
                         ? true
                         : false, // Enable the button when remainingTime is 0
                   ),
-                  30.sbH,
+                  50.sbH,
                   GestureDetector(
                       onTap: () {
                         ref.read(resendTimerProvider.notifier).resetTimer();
@@ -134,7 +135,7 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
                             ViNewsAppRouteConstants.authIntializer);
                       },
                       child: "Go Back to Login/Sign Up".txtStyled(
-                          fontSize: 15.sp, color: Pallete.blueColor)),
+                          fontSize: 18.sp, color: Pallete.blueColor)),
                   150.sbH,
                 ],
               ),

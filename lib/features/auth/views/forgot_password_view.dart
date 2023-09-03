@@ -66,7 +66,7 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
     return Scaffold(
       // AppBar
       appBar: AppBar(
-        title: "Back".txtStyled(fontSize: 16),
+        title: "Back".txtStyled(fontSize: 18.sp),
         elevation: 0,
         backgroundColor: Pallete.appButtonColor,
       ),
@@ -86,10 +86,10 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
                     children: [
                       // Screen Header
                       "Forgot Password"
-                          .txtStyled(fontSize: 20, fontWeight: FontWeight.bold),
+                          .txtStyled(fontSize: 35.sp, fontWeight: FontWeight.bold),
                       15.sbH,
                       "Enter your Email to Reset your Password".txtStyled(
-                          fontSize: 14.sp, textAlign: TextAlign.center),
+                          fontSize: 20.sp, textAlign: TextAlign.center),
                       20.sbH,
                       // Screen Textfield
                       ViNewsAppTextFormField(
@@ -105,7 +105,7 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
                               ? ViNewsAppImagesPath.validIcon
                               : ViNewsAppImagesPath.invalidIcon,
                           suffixIconColor: Pallete.appButtonColor),
-                      8.sbH,
+                      40.sbH,
                       // "Send Link" Button
                       ViNewsAppIconButton(
                           onButtonPress: () {

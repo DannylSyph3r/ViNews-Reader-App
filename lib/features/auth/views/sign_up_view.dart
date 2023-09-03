@@ -130,11 +130,11 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                         children: [
                           // Screen Headers
                           "Sign Up".txtStyled(
-                              fontSize: 25, fontWeight: FontWeight.bold),
+                              fontSize: 35.sp, fontWeight: FontWeight.bold),
                           15.sbH,
                           "Enter your Email to Register to the ViNews App"
                               .txtStyled(
-                                  fontSize: 14.sp, textAlign: TextAlign.center),
+                                  fontSize: 20.sp, textAlign: TextAlign.center),
                           40.sbH,
                           // Sign Up Screen TextFields
                           ViNewsAppTextFormField(
@@ -214,7 +214,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                               dropKeyboard();
                             },
                           ),
-                          30.sbH,
+                          50.sbH,
                           //  Sign Up Button
                           ViNewsAppImageIconButton(
                             onButtonPress: () {
@@ -260,13 +260,13 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                             textColor: Pallete.blackColor,
                             isEnabled: true,
                           ),
-                          195.sbH,
+                          200.sbH,
                           // Switch to Sign In Screen
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               "Joined us before already?"
-                                  .txtStyled(fontSize: 14.sp),
+                                  .txtStyled(fontSize: 18.sp),
                               2.sbW,
                               GestureDetector(
                                 onTap: () {
@@ -275,7 +275,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                                   resetButtonState();
                                 },
                                 child: "Sign In".txtStyled(
-                                    color: Pallete.blueColor, fontSize: 14.sp),
+                                    color: Pallete.blueColor, fontSize: 18.sp),
                               )
                             ],
                           ),

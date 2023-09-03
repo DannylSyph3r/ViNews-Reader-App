@@ -46,7 +46,7 @@ class ViNewsAppTextFormField extends ConsumerWidget {
       child: TextFormField(
         focusNode: focusNode,
         onChanged: onChanged,
-        style: TextStyle(fontSize: 14.sp),
+        style: TextStyle(fontSize: 18.sp),
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
@@ -71,7 +71,7 @@ class ViNewsAppTextFormField extends ConsumerWidget {
               borderRadius: BorderRadius.circular(12)),
           errorMaxLines: 2,
           errorStyle:
-              TextStyle(color: Pallete.redColor, fontSize: 13.sp, height: 1.0,),
+              TextStyle(color: Pallete.redColor, fontSize: 18.sp, height: 1.0,),
           errorBorder: OutlineInputBorder(
             borderSide: const BorderSide(
               color: Pallete.redColor,
@@ -89,7 +89,7 @@ class ViNewsAppTextFormField extends ConsumerWidget {
           fillColor: Colors.white,
           filled: true,
           hintText: hintText,
-          hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14.sp),
+          hintStyle: TextStyle(color: Colors.grey[500], fontSize: 18.sp),
         ),
         autocorrect: false,
         keyboardType: inputType,

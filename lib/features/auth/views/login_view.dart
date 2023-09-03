@@ -113,11 +113,11 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
                       children: [
                         // Screen Headers
                         "Sign In".txtStyled(
-                            fontSize: 25, fontWeight: FontWeight.bold),
+                            fontSize: 35.sp, fontWeight: FontWeight.bold),
                         10.sbH,
                         "Enter your Email to sign into the ViNews App"
                             .txtStyled(
-                                fontSize: 14.sp, textAlign: TextAlign.center),
+                                fontSize: 20.sp, textAlign: TextAlign.center),
                         40.sbH,
                         // Sign In screen TextFields
                         ViNewsAppTextFormField(
@@ -160,7 +160,7 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
                                     .forgotPasswordScreenRouteName);
                               },
                               child: "Forgot Password?".txtStyled(
-                                  fontSize: 13.sp, color: Pallete.blueColor),
+                                  fontSize: 19.sp, color: Pallete.blueColor),
                             )
                           ],
                         ),
@@ -202,12 +202,12 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
                           textColor: Pallete.blackColor,
                           isEnabled: true,
                         ),
-                        200.sbH,
+                        220.sbH,
                         // Switch to Sign Up Screen
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            "New to ViNews?".txtStyled(fontSize: 14.sp),
+                            "New to ViNews?".txtStyled(fontSize: 18.sp),
                             2.sbW,
                             GestureDetector(
                               onTap: () {
@@ -216,7 +216,7 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
                                 resetButtonState();
                               },
                               child: "Sign Up".txtStyled(
-                                  color: Pallete.blueColor, fontSize: 14.sp),
+                                  color: Pallete.blueColor, fontSize: 18.sp),
                             )
                           ],
                         ),

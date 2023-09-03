@@ -33,11 +33,11 @@ class ViNewsAppTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 60,
+      //height: 60,
       child: TextField(
         focusNode: focusNode,
         onChanged: onChanged,
-        style: TextStyle(fontSize: 14.sp),
+        style: TextStyle(fontSize: 18.sp),
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
@@ -61,7 +61,7 @@ class ViNewsAppTextField extends StatelessWidget {
           fillColor: Colors.white,
           filled: true,
           hintText: hintText,
-          hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14.sp),
+          hintStyle: TextStyle(color: Colors.grey[500], fontSize: 18.sp),
         ),
       ),
     );
