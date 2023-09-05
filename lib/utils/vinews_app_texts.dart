@@ -5,6 +5,7 @@ class ViNewsAppTexts {
   static const String onboardScreenTwoDescriptionText = "Tailor your news experience to match your interests and preferences. With our app, you're in control. Choose the topics and sources that matter most to you, and enjoy a curated news feed designed just for you.";
   static const String onboardScreenThreeTitleText = "Save and share Captivating stories and Articles with your friends!";
   static const String onboardScreenThreeDescriptionText = "Discover interesting stories and easily save them to your collection. Plus, share captivating articles with your friends and family effortlessly, fostering discussions and staying connected through the power of news.";
+  static const String newsInterestsSkipDialogWarningText = "Are you sure you want to skip this step now? Although you can always do this again later. Its important to help filter your news article suggestions!";
   static const settingsAppBarText = "App Settings";
   static const routeErrorScreenMessage = "If you are reading this. It is definitely too late!";
   static const darkModeText = "Dark Mode";

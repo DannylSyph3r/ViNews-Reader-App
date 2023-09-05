@@ -70,6 +70,17 @@ extension BoxDecorationExtensions on BoxDecoration {
   }
 }
 
+extension InkWellExtension on Widget {
+  Widget onTap(VoidCallback onTapCallback) {
+    return InkWell(
+      onTap: onTapCallback,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      child: this, // 'this' refers to the Widget that the extension is called on
+    );
+  }
+}
+
 //Text Extensions
 extension StyledTextExtension on String {
   Text txtStyled({

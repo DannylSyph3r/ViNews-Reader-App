@@ -5,7 +5,7 @@ class Pallete {
   static const whiteColor = Color.fromARGB(255, 226, 226, 226);
   static const blueColor = Color.fromARGB(255, 0, 140, 255);
   static const onboardDescTxtColor = Color(0xFF606060);
-  static const greyColor = Color.fromARGB(255, 173, 173, 173);
+  static const greyColor = Color.fromARGB(255, 212, 206, 206);
   static const greenColor = Color.fromARGB(255, 0, 253, 8);
   static const transparent = Colors.transparent;
   static const buttonOutineColorBlack = Color.fromRGBO(1, 1, 1, 1);
