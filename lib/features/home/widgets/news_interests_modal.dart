@@ -90,7 +90,7 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
                     }),
                   ),
                 ),
-                100.sbH,
+                315.sbH,
                 const Divider(color: Pallete.blackColor),
                 15.sbH,
                 Row(

@@ -4,6 +4,7 @@ class ViNewsAppImagesPath {
   static const String onboardScreenImageTwo = 'assets/images/onboard_6.svg';
   static const String onboardScreenImageThree = 'assets/images/onboard_3.svg';
   static const String emailIcon = 'assets/icons/email_icon.png';
+  static const String searchIcon = "assets/icons/search_icon.png";
   static const String passwordIcon = 'assets/icons/password_icon.png';
   static const String appleSignInIcon = 'assets/icons/apple_icon.png';
   static const String googleSignInIcon = 'assets/icons/google_icon.png';

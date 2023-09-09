@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:vinews_news_reader/features/articles/views/news_article_view.dart';
 import 'package:vinews_news_reader/features/auth/views/email_verification_view.dart';
 import 'package:vinews_news_reader/features/auth/views/forgot_password_view.dart';
 import 'package:vinews_news_reader/features/auth/views/initalized_screen.dart';
@@ -143,6 +144,30 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return CustomTransitionPage(
             key: state.pageKey,
             child: const UserHomePageView(),
+            transitionDuration: const Duration(milliseconds: 250),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(1.0, 0.0), // Slide from right
+                  end: Offset.zero, // Slide to the center
+                ).animate(CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeInOut,
+                )),
+                child: child,
+              );
+            },
+          );
+        },
+      ),
+      GoRoute(
+        name: ViNewsAppRouteConstants.newsArticleReadView,
+        path: '/articlereadview',
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: const NewsArticleReadView(),
             transitionDuration: const Duration(milliseconds: 250),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {

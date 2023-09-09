@@ -67,7 +67,7 @@ class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
                     filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Pallete.greyColor.withOpacity(
+                        color: const Color.fromARGB(255, 88, 88, 88).withOpacity(
                             0.2), // Adjust opacity for desired effect
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(24),
@@ -75,7 +75,7 @@ class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
                         ),
                       ),
                       child: GNav(
-                        tabBorderRadius: 24,
+                        tabBorderRadius: 22.5,
                         tabMargin: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 10),
                         backgroundColor: Pallete.transparent,
@@ -84,7 +84,7 @@ class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.easeInToLinear,
                         gap: 8,
-                        iconSize: 24,
+                        iconSize: 22,
                         selectedIndex: _page.value,
                         onTabChange: (index) {
                           _page.value = index;

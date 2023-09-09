@@ -49,6 +49,7 @@ dependencies:
   google_nav_bar: ^5.0.6
   google_sign_in: ^6.1.4
   http: ^1.1.0
+  intl: ^0.18.0
   logger: ^2.0.1
   phosphor_flutter: ^2.0.0
   pinput: ^2.2.31

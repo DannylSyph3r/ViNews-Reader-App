@@ -5,6 +5,7 @@ import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
 class ViNewsAppTextField extends StatelessWidget {
   final TextEditingController controller;
+  final double? textfieldHeight;
   final String hintText;
   final bool obscureText;
   final String prefixIconString;
@@ -18,6 +19,7 @@ class ViNewsAppTextField extends StatelessWidget {
   const ViNewsAppTextField({
     Key? key,
     required this.controller,
+    this.textfieldHeight,
     required this.hintText,
     required this.obscureText,
     required this.prefixIconString,
@@ -33,11 +35,11 @@ class ViNewsAppTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      //height: 60,
+      height: textfieldHeight,
       child: TextField(
         focusNode: focusNode,
         onChanged: onChanged,
-        style: TextStyle(fontSize: 18.sp),
+        style: TextStyle(fontSize: 17.sp),
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
@@ -61,7 +63,7 @@ class ViNewsAppTextField extends StatelessWidget {
           fillColor: Colors.white,
           filled: true,
           hintText: hintText,
-          hintStyle: TextStyle(color: Colors.grey[500], fontSize: 18.sp),
+          hintStyle: TextStyle(color: Colors.grey[500], fontSize: 17.sp),
         ),
       ),
     );

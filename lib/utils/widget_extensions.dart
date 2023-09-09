@@ -122,10 +122,10 @@ extension CustomIcon on IconData {
 
 extension EdgeInsetsExtension on EdgeInsets {
   EdgeInsetsGeometry padSpec({
-    required double left,
-    required double top,
-    required double right,
-    required double bottom,
+    double left = 0,
+    double top = 0,
+    double right = 0,
+    double bottom = 0,
   }) {
     return EdgeInsets.only(
       left: ScreenUtil().setWidth(left.toInt()),
