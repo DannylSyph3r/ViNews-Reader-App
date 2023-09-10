@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/features/auth/controllers/auth_action_controllers.dart';
 import 'package:vinews_news_reader/features/home/widgets/news_interests_modal.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
@@ -100,7 +101,8 @@ class _UserProfileSettingsViewState
                           "Articles Read".txtStyled(
                               fontSize: 20.sp, fontWeight: FontWeight.w400),
                           7.sbH,
-                          320.toString().txtStyled(fontSize: 25.sp, fontWeight: FontWeight.w600)
+                          320.toString().txtStyled(
+                              fontSize: 25.sp, fontWeight: FontWeight.w600)
                         ],
                       ),
                       Column(
@@ -109,7 +111,8 @@ class _UserProfileSettingsViewState
                           "Claps".txtStyled(
                               fontSize: 20.sp, fontWeight: FontWeight.w400),
                           7.sbH,
-                          430.toString().txtStyled(fontSize: 25.sp, fontWeight: FontWeight.w600)
+                          430.toString().txtStyled(
+                              fontSize: 25.sp, fontWeight: FontWeight.w600)
                         ],
                       ),
                       Column(
@@ -118,23 +121,70 @@ class _UserProfileSettingsViewState
                           "Streak".txtStyled(
                               fontSize: 20.sp, fontWeight: FontWeight.w400),
                           7.sbH,
-                          "125 Days".txtStyled(fontSize: 25.sp, fontWeight: FontWeight.w600)
+                          "125 Days".txtStyled(
+                              fontSize: 25.sp, fontWeight: FontWeight.w600)
                         ],
                       )
                     ],
                   ),
                   30.sbH,
-                  const Divider(color: Pallete.greyColor, thickness: 1,),
+                  const Divider(
+                    color: Pallete.greyColor,
+                    thickness: 1,
+                  ),
                   30.sbH,
                   Row(
                     children: [
-                      "Reading History".txtStyled(fontSize: 20.sp),
+                      "Reading History".txtStyled(
+                          fontSize: 22.sp, fontWeight: FontWeight.w600),
+                    ],
+                  ),
+                  20.sbH,
+                  Column(
+                    children: [
+                      ListTile(
+                        title: "Liked Articles".txtStyled(fontSize: 20.sp),
+                        trailing: PhosphorIcons.bold.caretRight
+                            .iconslide(size: 20.sp, color: Pallete.blackColor),
+                      ),
+                      ListTile(
+                        title: "Clapped Articles".txtStyled(fontSize: 20.sp),
+                        trailing: PhosphorIcons.bold.caretRight
+                            .iconslide(size: 20.sp, color: Pallete.blackColor),
+                      ),
+                    ],
+                  ),
+                  30.sbH,
+                  Row(
+                    children: [
+                      "Settings".txtStyled(
+                          fontSize: 22.sp, fontWeight: FontWeight.w600),
+                    ],
+                  ),
+                  20.sbH,
+                  Column(
+                    children: [
+                      ListTile(
+                        title: "My Account".txtStyled(fontSize: 20.sp),
+                        trailing: PhosphorIcons.bold.caretRight
+                            .iconslide(size: 20.sp, color: Pallete.blackColor),
+                      ),
+                      ListTile(
+                        title: "Notifications".txtStyled(fontSize: 20.sp),
+                        trailing: PhosphorIcons.bold.caretRight
+                            .iconslide(size: 20.sp, color: Pallete.blackColor),
+                      ),
+                      ListTile(
+                        title: "About Us".txtStyled(fontSize: 20.sp),
+                        trailing: PhosphorIcons.bold.caretRight
+                            .iconslide(size: 20.sp, color: Pallete.blackColor),
+                      ),
                     ],
                   ),
                   100.sbH,
-                  Text(currentUserProvider.toString()),
-                  Text(currentUserEmailVerificationStatus.toString()),
-                  15.sbH,
+                  // Text(currentUserProvider.toString()),
+                  // Text(currentUserEmailVerificationStatus.toString()),
+                  // 15.sbH,
                   InkWell(
                     child: ViNewsAppIconButton(
                       onButtonPress: () {
@@ -147,14 +197,14 @@ class _UserProfileSettingsViewState
                     ),
                   ),
                   30.sbH,
-                  ViNewsAppIconButton(
-                    onButtonPress: () {
-                      showCustomModalBottomSheet(
-                          context, false, const NewsInterestsModal());
-                    },
-                    buttonPlaceholderText: "Choose Interests",
-                    isEnabled: true,
-                  )
+                  // ViNewsAppIconButton(
+                  //   onButtonPress: () {
+                  //     showCustomModalBottomSheet(
+                  //         context, false, const NewsInterestsModal());
+                  //   },
+                  //   buttonPlaceholderText: "Choose Interests",
+                  //   isEnabled: true,
+                  // )
                 ],
               ),
             ),

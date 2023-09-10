@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +8,7 @@ import 'package:vinews_news_reader/features/home/controllers/news_interest_contr
 import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
+import 'package:vinews_news_reader/widgets/vinews_search_text_fields.dart';
 
 class UserExploreView extends ConsumerStatefulWidget {
   const UserExploreView({super.key});
@@ -20,11 +20,11 @@ class UserExploreView extends ConsumerStatefulWidget {
 
 class _UserExploreViewState extends ConsumerState<UserExploreView> {
   String formattedDate = DateFormat('E d MMM, y').format(DateTime.now());
-  final _searchFieldController = TextEditingController();
+  final _exploreSearchFieldController = TextEditingController();
 
   @override
   void dispose() {
-    _searchFieldController.dispose();
+    _exploreSearchFieldController.dispose();
     super.dispose();
   }
 
@@ -32,230 +32,237 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
   Widget build(BuildContext context) {
     final newsInterests = ref.watch(newsInterestSelectionProvider);
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: Size(
-          double.infinity,
-          90.h,
-        ),
-        child: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: AppBar(
-              backgroundColor: Colors.black.withOpacity(0.7),
-              titleSpacing: 30.sp,
-              shape: ContinuousRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  bottomLeft:
-                      Radius.circular(25.r), // Adjust the radius as needed
-                  bottomRight:
-                      Radius.circular(25.r), // Adjust the radius as needed
-                ),
-              ),
-              title: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  13.sbH,
-                  "Explore"
-                      .txtStyled(fontSize: 32.sp, fontWeight: FontWeight.w700),
-                ],
-              ),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.only().padSpec(right: 30, top: 12),
-                  child: PhosphorIcons.regular.magnifyingGlass
-                      .iconslide(size: 30.sp),
-                )
-              ],
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              toolbarHeight: 90.h,
+              stretch: true,
+              backgroundColor: Pallete.blackColor,
               elevation: 0,
+              titleSpacing: 0,
+              title: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                child: Row(
+                  children: [
+                    PhosphorIcons.regular.globeHemisphereWest.iconslide(size: 35.sp),
+                    10.sbW,
+                    "Explore"
+                        .txtStyled(fontSize: 35.sp, fontWeight: FontWeight.w600),
+                  ],
+                ),
+              ),
+              bottom: AppBar(
+                toolbarHeight: 115.h,
+                backgroundColor: Pallete.blackColor,
+                titleSpacing: 0,
+                title: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30.w),
+                  child: ViNewsSearchTextField(
+                      textfieldHeight: 65.h,
+                      controller: _exploreSearchFieldController,
+                      hintText: "Search News & Articles",
+                      obscureText: false,
+                      prefixIcon: PhosphorIcons.regular.magnifyingGlass
+                          .iconslide(size: 26.sp, color: Pallete.blackColor)),
+                ),
+              ),
+              pinned: true,
+              floating: true,
+            )
+          ];
+        },
+        body: Container(
+          constraints: const BoxConstraints.expand(),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                "assets/images/background.png",
+              ),
+              opacity: 0.15,
+              fit: BoxFit.cover,
             ),
           ),
-        ),
-      ),
-      body: Container(
-        constraints: const BoxConstraints.expand(),
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-              "assets/images/background.png",
-            ),
-            opacity: 0.15,
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Scrollbar(
-          interactive: true,
-          thickness: 6,
-          radius: Radius.circular(12.r),
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                150.sbH,
-                SizedBox(
-                  height: 50.h,
-                  child: ListView(
-                    physics: const PageScrollPhysics(),
-                    padding: EdgeInsets.symmetric(horizontal: 18.w),
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      for (int index = 0; index < newsInterests.length; index++)
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5.w),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 24.w,
-                              vertical: 10.h,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Pallete.greyColor,
-                              borderRadius: BorderRadius.circular(27.r),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                newsInterests[index].txtStyled(
-                                  fontSize: 15.5.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: Pallete.appButtonColor,
+          child: Scrollbar(
+            interactive: true,
+            thickness: 6,
+            radius: Radius.circular(12.r),
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.only().padSpec(top: 30, bottom: 30),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 50.h,
+                      child: ListView(
+                        physics: const PageScrollPhysics(),
+                        padding: EdgeInsets.symmetric(horizontal: 18.w),
+                        scrollDirection: Axis.horizontal,
+                        children: <Widget>[
+                          for (int index = 0;
+                              index < newsInterests.length;
+                              index++)
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5.w),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 24.w,
+                                  vertical: 10.h,
                                 ),
-                              ],
+                                decoration: BoxDecoration(
+                                  color: Pallete.greyColor,
+                                  borderRadius: BorderRadius.circular(27.r),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    newsInterests[index].txtStyled(
+                                      fontSize: 15.5.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Pallete.appButtonColor,
+                                    ),
+                                  ],
+                                ),
+                              ).onTap(() {
+                                // Add your onTap logic here
+                              }),
                             ),
-                          ).onTap(() {
-                            // Add your onTap logic here
-                          }),
-                        ),
-                    ],
-                  ),
-                ),
-                25.sbH,
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.w),
-                  child: Container(
-                    width: double.infinity,
-                    height: 230.h,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15.r)),
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15.r),
-                        child: Image.asset(
-                          "assets/images/amazon_forest.png",
-                          fit: BoxFit.cover,
-                        )),
-                  ),
-                ),
-                15.sbH,
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.w),
-                  child: "Uncovering the Hidden Gems of the Amazon Forest"
-                      .txtStyled(
-                    fontSize: 32.sp,
-                    fontWeight: FontWeight.w700,
-                    maxLines: 2,
-                    textOverflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                15.sbH,
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          PhosphorIcons.bold.clockCountdown
-                              .iconslide(size: 18.sp),
-                          7.sbW,
-                          formattedDate.txtStyled(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
                         ],
                       ),
-                      PhosphorIcons.bold.dotsThree.iconslide(size: 27.sp),
-                    ],
-                  ),
-                ),
-                ListView.builder(
-                    padding: 15.padV,
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: 10,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 25.w, vertical: 13.h),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
+                    ),
+                    25.sbH,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 25.w),
+                      child: Container(
+                        width: double.infinity,
+                        height: 230.h,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.r)),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15.r),
+                            child: Image.asset(
+                              "assets/images/amazon_forest.png",
+                              fit: BoxFit.cover,
+                            )),
+                      ),
+                    ),
+                    15.sbH,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 25.w),
+                      child: "Uncovering the Hidden Gems of the Amazon Forest"
+                          .txtStyled(
+                        fontSize: 32.sp,
+                        fontWeight: FontWeight.w700,
+                        maxLines: 2,
+                        textOverflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    15.sbH,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 25.w),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              PhosphorIcons.bold.clockCountdown
+                                  .iconslide(size: 18.sp),
+                              7.sbW,
+                              formattedDate.txtStyled(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ],
+                          ),
+                          PhosphorIcons.bold.dotsThree.iconslide(size: 27.sp),
+                        ],
+                      ),
+                    ),
+                    ListView.builder(
+                        padding: 15.padV,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: 10,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 25.w, vertical: 10.h),
+                            child: Row(
                               mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  width: 125.w,
-                                  height: 110.h,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.r),
-                                    // color: Pallete.greyColor,
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.r),
-                                    child: Image.asset(
-                                      "assets/images/news_2.jpg",
-                                      fit: BoxFit.cover,
+                                Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Container(
+                                      width: 125.w,
+                                      height: 110.h,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.r),
+                                        // color: Pallete.greyColor,
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(10.r),
+                                        child: Image.asset(
+                                          "assets/images/news_2.jpg",
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
+                                  ],
+                                ),
+                                15.sbW,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      "Chasing the Northern Lights: A Winter in Finland: Experience the Serenity of Japan's Traditional Countryside"
+                                          .txtStyled(
+                                        fontSize: 21.sp,
+                                        fontWeight: FontWeight.w700,
+                                        maxLines: 2,
+                                        textOverflow: TextOverflow.ellipsis,
+                                      ),
+                                      15.sbH,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              PhosphorIcons.bold.clockCountdown
+                                                  .iconslide(size: 18.sp),
+                                              7.sbW,
+                                              formattedDate.txtStyled(
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ],
+                                          ),
+                                          5.sbW,
+                                          PhosphorIcons.bold.dotsThree
+                                              .iconslide(size: 27.sp),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
-                            ),
-                            15.sbW,
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  "Chasing the Northern Lights: A Winter in Finland: Experience the Serenity of Japan's Traditional Countryside"
-                                      .txtStyled(
-                                    fontSize: 21.sp,
-                                    fontWeight: FontWeight.w700,
-                                    maxLines: 2,
-                                    textOverflow: TextOverflow.ellipsis,
-                                  ),
-                                  15.sbH,
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          PhosphorIcons.bold.clockCountdown
-                                              .iconslide(size: 18.sp),
-                                          7.sbW,
-                                          formattedDate.txtStyled(
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ],
-                                      ),
-                                      5.sbW,
-                                      PhosphorIcons.bold.dotsThree
-                                          .iconslide(size: 27.sp),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ).onTap(() {
-                          context.pushNamed(
-                              ViNewsAppRouteConstants.newsArticleReadView);
-                        }),
-                      );
-                    })
-              ],
+                            ).onTap(() {
+                              context.pushNamed(
+                                  ViNewsAppRouteConstants.newsArticleReadView);
+                            }),
+                          );
+                        })
+                  ],
+                ),
+              ),
             ),
           ),
         ),
