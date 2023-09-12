@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vinews_news_reader/features/home/controllers/news_interest_controller.dart';
+import 'package:vinews_news_reader/core/provider/news_interest_provider.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
 import 'package:vinews_news_reader/utils/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/vinews_app_texts.dart';

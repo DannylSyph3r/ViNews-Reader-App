@@ -44,7 +44,9 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
   void resendCodedButtonPress() {
     // Call this fucnction to disable button and restart timer
     ref.read(authNotifierProvider.notifier).sendUserEmailVerificationLink();
-    ref.read(resendTimerProvider.notifier).resetTimer();// Start or pause the timer
+    ref
+        .read(resendTimerProvider.notifier)
+        .resetTimer(); // Start or pause the timer
   }
 
   String getFormattedRemainingTime(int remainingTime) {
@@ -76,68 +78,81 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
     });
     final remainingTime = ref.watch(resendTimerProvider);
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.only()
-                  .padSpec(left: 25, top: 40, right: 25, bottom: 50),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Screen Content
-                  ViNewsIcons.emailVerifyIcon.iconslide(size: 100),
-                  20.sbH,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      "Hey!".txtStyled(fontSize: 23.sp),
-                      5.sbW,
-                      widget.userEmailAddress.txtStyled(
-                          fontSize: 23.sp, fontWeight: FontWeight.bold),
-                    ],
-                  ),
-                  30.sbH,
-                  "Verify Your Email Address".txtStyled(
-                      fontSize: 30.sp,
-                      fontWeight: FontWeight.bold,
-                      textAlign: TextAlign.center),
-                  25.sbH,
-                  "We have just sent an email with a verfication link to your inbox. Please check your mail, and click on the link to verify your Email Address!"
-                      .txtStyled(fontSize: 20.sp, textAlign: TextAlign.center),
-                  30.sbH,
-                  "You will be automatically redirected after verifying your Email ;)"
-                      .txtStyled(fontSize: 20.sp, textAlign: TextAlign.center),
-                  70.sbH,
-                  const Divider(
-                    thickness: 1.5,
-                    color: Pallete.appButtonColor,
-                  ),
-                  20.sbH,
-                  ViNewsAppImageIconButton(
-                    onButtonPress: resendCodedButtonPress,
-                    buttonColor: Pallete.appButtonColor,
-                    iconColor: Pallete.blackColor,
-                    buttonPlaceholderText: remainingTime == 0
-                        ? "Resend Link"
-                        : getFormattedRemainingTime(
-                            remainingTime),
-                    isEnabled: remainingTime == 0
-                        ? true
-                        : false, // Enable the button when remainingTime is 0
-                  ),
-                  50.sbH,
-                  GestureDetector(
-                      onTap: () {
-                        ref.read(resendTimerProvider.notifier).resetTimer();
-                        ref.read(authNotifierProvider.notifier).userSignOut();
-                        context.pushReplacementNamed(
-                            ViNewsAppRouteConstants.authIntializer);
-                      },
-                      child: "Go Back to Login/Sign Up".txtStyled(
-                          fontSize: 18.sp, color: Pallete.blueColor)),
-                  150.sbH,
-                ],
+      body: Container(
+        constraints: const BoxConstraints.expand(),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              "assets/images/background.png",
+            ),
+            opacity: 0.15,
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only()
+                    .padSpec(left: 25, top: 40, right: 25, bottom: 50),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Screen Content
+                    ViNewsIcons.emailVerifyIcon.iconslide(size: 100),
+                    20.sbH,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        "Hey!".txtStyled(fontSize: 23.sp),
+                        5.sbW,
+                        widget.userEmailAddress.txtStyled(
+                            fontSize: 23.sp, fontWeight: FontWeight.bold),
+                      ],
+                    ),
+                    30.sbH,
+                    "Verify Your Email Address".txtStyled(
+                        fontSize: 30.sp,
+                        fontWeight: FontWeight.bold,
+                        textAlign: TextAlign.center),
+                    25.sbH,
+                    "We have just sent an email with a verfication link to your inbox. Please check your mail, and click on the link to verify your Email Address!"
+                        .txtStyled(
+                            fontSize: 20.sp, textAlign: TextAlign.center),
+                    30.sbH,
+                    "You will be automatically redirected after verifying your Email ;)"
+                        .txtStyled(
+                            fontSize: 20.sp, textAlign: TextAlign.center),
+                    70.sbH,
+                    const Divider(
+                      thickness: 1.5,
+                      color: Pallete.appButtonColor,
+                    ),
+                    20.sbH,
+                    ViNewsAppImageIconButton(
+                      onButtonPress: resendCodedButtonPress,
+                      buttonColor: Pallete.appButtonColor,
+                      iconColor: Pallete.blackColor,
+                      buttonPlaceholderText: remainingTime == 0
+                          ? "Resend Link"
+                          : getFormattedRemainingTime(remainingTime),
+                      isEnabled: remainingTime == 0
+                          ? true
+                          : false, // Enable the button when remainingTime is 0
+                    ),
+                    50.sbH,
+                    GestureDetector(
+                        onTap: () {
+                          ref.read(resendTimerProvider.notifier).resetTimer();
+                          ref.read(authNotifierProvider.notifier).userSignOut();
+                          context.pushReplacementNamed(
+                              ViNewsAppRouteConstants.authIntializer);
+                        },
+                        child: "Go Back to Login/Sign Up".txtStyled(
+                            fontSize: 18.sp, color: Pallete.blueColor)),
+                    150.sbH,
+                  ],
+                ),
               ),
             ),
           ),

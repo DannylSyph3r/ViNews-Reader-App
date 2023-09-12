@@ -9,9 +9,9 @@ class ViNewsIcons {
   static IconData googleSignInIcon = PhosphorIcons.fill.googleLogo;
   static IconData sendLinkIcon = PhosphorIcons.bold.paperPlaneTilt;
   static IconData redoIcon = PhosphorIcons.bold.arrowClockwise;
+  static IconData activeSwitchIcon = PhosphorIcons.bold.check;
+  static IconData inactiveSwitchIcon = PhosphorIcons.bold.x;
   // static IconData solutionIcon = PhosphorIcons.bold.equals;
   // static IconData settingsIcon  = PhosphorIcons.bold.gear;
   // static IconData activeSwitchIcon = PhosphorIcons.bold.check;
-  // static IconData inactiveSwitchIcon = PhosphorIcons.bold.x;
-  // static IconData caretDownIcon = PhosphorIcons.bold.caretDown;
 }

@@ -1,12 +1,15 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:vinews_news_reader/features/base_navbar/navigation_bar_build_widget.dart';
+import 'package:vinews_news_reader/features/bookmarks/views/bookmarks_search_view.dart';
 import 'package:vinews_news_reader/features/bookmarks/views/bookmarks_views.dart';
+import 'package:vinews_news_reader/features/explore/views/explore_search_view.dart';
 import 'package:vinews_news_reader/features/explore/views/explore_view.dart';
 import 'package:vinews_news_reader/features/home/views/home_screen.dart';
+import 'package:vinews_news_reader/features/settings/views/user_account_view.dart';
 import 'package:vinews_news_reader/features/settings/views/user_profile_settings.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
@@ -20,110 +23,92 @@ class ViNewsBottomNavBar extends ConsumerStatefulWidget {
 }
 
 class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
-  List<Widget> pages = const [
-    UserHomePageView(),
-    UserExploreView(),
-    UserBookmarksView(),
-    UserProfileSettingsView()
-  ];
+  final PersistentTabController _navController =
+      PersistentTabController(initialIndex: 0);
 
-  final ValueNotifier<int> _page = ValueNotifier(0);
-
-  @override
-  void initState() {
-    _page.value = 0;
-    super.initState();
+  List<Widget> _buildScreens() {
+    return const [
+      UserHomePageView(),
+      UserExploreView(),
+      UserBookmarksView(),
+      UserProfileSettingsView(),
+    ];
   }
 
-  @override
-  void dispose() {
-    _page.dispose();
-    super.dispose();
+  List<PersistentBottomNavBarItem> _navBarSelection() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: PhosphorIcons.fill.house.iconslide(),
+        title: "Home",
+        activeColorPrimary: Pallete.blackColor,
+        inactiveColorPrimary: const Color.fromARGB(255, 142, 142, 142),
+        inactiveColorSecondary: Pallete.greyColor,
+      ),
+      PersistentBottomNavBarItem(
+          icon: PhosphorIcons.fill.globeHemisphereWest.iconslide(),
+          title: "Explore",
+          activeColorPrimary: Pallete.blackColor,
+          inactiveColorPrimary: const Color.fromARGB(255, 142, 142, 142),
+          inactiveColorSecondary: Pallete.greyColor,
+          routeAndNavigatorSettings:
+              RouteAndNavigatorSettings(initialRoute: '/', routes: {
+            '/exploreSearchScreen': (context) =>
+                const ExploreScreenSearchView(),
+          })),
+      PersistentBottomNavBarItem(
+          icon: PhosphorIcons.fill.bookmarks.iconslide(),
+          title: "Bookmarks",
+          activeColorPrimary: Pallete.blackColor,
+          inactiveColorPrimary: const Color.fromARGB(255, 142, 142, 142),
+          inactiveColorSecondary: Pallete.greyColor,
+          routeAndNavigatorSettings:
+              RouteAndNavigatorSettings(initialRoute: '/', routes: {
+            '/bookmarkSearchScreen': (context) => const BookmarksSearchView(),
+          })),
+      PersistentBottomNavBarItem(
+          icon: PhosphorIcons.fill.user.iconslide(),
+          title: "Profile",
+          activeColorPrimary: Pallete.blackColor,
+          inactiveColorPrimary: const Color.fromARGB(255, 142, 142, 142),
+          inactiveColorSecondary: Pallete.greyColor,
+          routeAndNavigatorSettings:
+              RouteAndNavigatorSettings(initialRoute: '/', routes: {
+            '/accountSettings': (context) => const UserAccountSettingsView(),
+          })),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ValueListenableBuilder(
-          valueListenable: _page,
-          builder: (context, value, child) => pages[_page.value]),
-      bottomNavigationBar: ValueListenableBuilder(
-          valueListenable: _page,
-          builder: (context, value, child) => Material(
-                  child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
-                  ),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 88, 88, 88).withOpacity(
-                            0.2), // Adjust opacity for desired effect
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(24),
-                          topRight: Radius.circular(24),
-                        ),
-                      ),
-                      child: GNav(
-                        tabBorderRadius: 22.5,
-                        tabMargin: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10),
-                        backgroundColor: Pallete.transparent,
-                        activeColor: Pallete.whiteColor,
-                        tabBackgroundColor: Pallete.blackColor,
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.easeInToLinear,
-                        gap: 8,
-                        iconSize: 22,
-                        selectedIndex: _page.value,
-                        onTabChange: (index) {
-                          _page.value = index;
-                        },
-                        tabs: [
-                          GButton(
-                            icon: PhosphorIcons.bold.house,
-                            text: "Home",
-                            textStyle: TextStyle(
-                                fontSize: 14.sp, color: Pallete.whiteColor),
-                            padding: 12.0.padA,
-                          ),
-                          GButton(
-                            icon: PhosphorIcons.bold.globeHemisphereWest,
-                            text: "Explore",
-                            textStyle: TextStyle(
-                                fontSize: 14.sp, color: Pallete.whiteColor),
-                            padding: 12.0.padA,
-                          ),
-                          GButton(
-                            icon: PhosphorIcons.bold.bookmarks,
-                            text: "Bookmark",
-                            textStyle: TextStyle(
-                                fontSize: 14.sp, color: Pallete.whiteColor),
-                            padding: 12.0.padA,
-                          ),
-                          GButton(
-                            icon: PhosphorIcons.bold.user,
-                            text: "Profile",
-                            textStyle: TextStyle(
-                                fontSize: 14.sp, color: Pallete.whiteColor),
-                            padding: 12.0.padA,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ))),
+      body: PersistentTabView.custom(
+        context,
+        controller: _navController,
+        screens: _buildScreens(),
+        items: _navBarSelection(),
+        itemCount: 4,
+        confineInSafeArea: true,
+        handleAndroidBackButtonPress: true, // Default is true.
+        resizeToAvoidBottomInset:
+            true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+        stateManagement: true, // Default is true.
+        hideNavigationBarWhenKeyboardShows:
+            true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+        popAllScreensOnTapOfSelectedTab: true,
+        screenTransitionAnimation: const ScreenTransitionAnimation(
+          // Screen transition animation on change of selected tab.
+          animateTabTransition: true,
+          curve: Curves.ease,
+          duration: Duration(milliseconds: 200),
+        ),
+        navBarHeight: 75.h,
+        customWidget: (navBarLineUp) => CustomNavBarStyle(
+            _navController.index, _navBarSelection(), (index) {
+          setState(() {
+            navBarLineUp.onItemSelected?.call(index);
+          });
+        }),
+      ),
     );
   }
 }

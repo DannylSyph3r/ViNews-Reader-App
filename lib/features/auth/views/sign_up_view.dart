@@ -25,7 +25,7 @@ class UserSignUpView extends ConsumerStatefulWidget {
 }
 
 class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
-  // Declerations 
+  // Declerations
   final _signUpFormKey = GlobalKey<FormState>();
   final _firstNameSignUpController = TextEditingController();
   final _lastNameSignUpController = TextEditingController();
@@ -54,7 +54,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
   }
 
   void updateSignupButton() {
-    // Update the Login Button inactivity state based on conditions 
+    // Update the Login Button inactivity state based on conditions
     final activesignUpButtonNotifier =
         ref.read(activeButtonStateProvider.notifier);
     // Only update the state if there is a change to avoid unnecessary rebuilds.
@@ -113,192 +113,210 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
     final confirmPasswordFieldObscured =
         ref.watch(showSignUpConfirmPasswordProvider);
     return Scaffold(
-      body: GestureDetector(
-        onTap: () => dropKeyboard(),
-        child: Stack(
-          children: [
-            SafeArea(
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only()
-                        .padSpec(left: 25, top: 30, right: 25, bottom: 50),
-                    child: Form(
-                      key: _signUpFormKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Screen Headers
-                          "Sign Up".txtStyled(
-                              fontSize: 35.sp, fontWeight: FontWeight.bold),
-                          15.sbH,
-                          "Enter your Email to Register to the ViNews App"
-                              .txtStyled(
-                                  fontSize: 20.sp, textAlign: TextAlign.center),
-                          40.sbH,
-                          // Sign Up Screen TextFields
-                          ViNewsAppTextFormField(
-                            controller: _firstNameSignUpController,
-                            hintText: "Firstname",
-                            obscureText: false,
-                            prefixIconString: ViNewsAppImagesPath.userIcon,
-                            prefixIconColor: Pallete.appButtonColor,
-                            validator: firstNameValidator,
-                          ),
-                          8.sbH,
-                          ViNewsAppTextFormField(
-                            controller: _lastNameSignUpController,
-                            hintText: "Lastname",
-                            obscureText: false,
-                            prefixIconString: ViNewsAppImagesPath.userIcon,
-                            prefixIconColor: Pallete.appButtonColor,
-                            validator: lastNameValidator,
-                          ),
-                          8.sbH,
-                          ViNewsAppTextFormField(
-                              controller: _emailSignUpAddressFieldController,
-                              hintText: "Your Email",
+      body: Container(
+        constraints: const BoxConstraints.expand(),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              "assets/images/background.png",
+            ),
+            opacity: 0.15,
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: GestureDetector(
+          onTap: () => dropKeyboard(),
+          child: Stack(
+            children: [
+              SafeArea(
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only()
+                          .padSpec(left: 25, top: 30, right: 25, bottom: 50),
+                      child: Form(
+                        key: _signUpFormKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Screen Headers
+                            "Sign Up".txtStyled(
+                                fontSize: 28.sp, fontWeight: FontWeight.bold),
+                            15.sbH,
+                            "Enter your Email to Register to the ViNews App"
+                                .txtStyled(
+                                    fontSize: 18.sp,
+                                    textAlign: TextAlign.center),
+                            40.sbH,
+                            // Sign Up Screen TextFields
+                            ViNewsAppTextFormField(
+                              controller: _firstNameSignUpController,
+                              hintText: "Firstname",
                               obscureText: false,
-                              prefixIconString: ViNewsAppImagesPath.emailIcon,
+                              prefixIconString: ViNewsAppImagesPath.userIcon,
                               prefixIconColor: Pallete.appButtonColor,
-                              validator: emailValidator,
+                              validator: firstNameValidator,
+                            ),
+                            8.sbH,
+                            ViNewsAppTextFormField(
+                              controller: _lastNameSignUpController,
+                              hintText: "Lastname",
+                              obscureText: false,
+                              prefixIconString: ViNewsAppImagesPath.userIcon,
+                              prefixIconColor: Pallete.appButtonColor,
+                              validator: lastNameValidator,
+                            ),
+                            8.sbH,
+                            ViNewsAppTextFormField(
+                                controller: _emailSignUpAddressFieldController,
+                                hintText: "Your Email",
+                                obscureText: false,
+                                prefixIconString: ViNewsAppImagesPath.emailIcon,
+                                prefixIconColor: Pallete.appButtonColor,
+                                validator: emailValidator,
+                                suffixIconString:
+                                    _emailSignUpAddressFieldController
+                                                .text.isNotEmpty &&
+                                            isEmailValid
+                                        ? ViNewsAppImagesPath.validIcon
+                                        : ViNewsAppImagesPath.invalidIcon,
+                                suffixIconColor: Pallete.appButtonColor),
+                            8.sbH,
+                            ViNewsAppTextFormField(
+                              controller: _passwordSignUpFieldController,
+                              hintText: "Password",
+                              obscureText: passwordFieldObscured,
+                              validator: passwordValidator,
+                              prefixIconString:
+                                  ViNewsAppImagesPath.passwordIcon,
+                              suffixIconString: passwordFieldObscured == true
+                                  ? ViNewsAppImagesPath.passwordShowIcon
+                                  : ViNewsAppImagesPath.passwordHideIcon,
+                              onIconTap: () {
+                                ref
+                                    .read(showSignUpPasswordProvider.notifier)
+                                    .update((state) => !state);
+                                dropKeyboard();
+                              },
+                            ),
+                            8.sbH,
+                            ViNewsAppTextFormField(
+                              controller: _confirmPasswordSignUpFieldController,
+                              hintText: "Confirm Password",
+                              obscureText: confirmPasswordFieldObscured,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '⚠ Please confirm your password';
+                                }
+                                if (value !=
+                                    _passwordSignUpFieldController.text) {
+                                  return '⚠ Passwords do not match';
+                                }
+                                return null;
+                              },
+                              prefixIconString:
+                                  ViNewsAppImagesPath.passwordIcon,
                               suffixIconString:
-                                  _emailSignUpAddressFieldController
-                                              .text.isNotEmpty &&
-                                          isEmailValid
-                                      ? ViNewsAppImagesPath.validIcon
-                                      : ViNewsAppImagesPath.invalidIcon,
-                              suffixIconColor: Pallete.appButtonColor),
-                          8.sbH,
-                          ViNewsAppTextFormField(
-                            controller: _passwordSignUpFieldController,
-                            hintText: "Password",
-                            obscureText: passwordFieldObscured,
-                            validator: passwordValidator,
-                            prefixIconString: ViNewsAppImagesPath.passwordIcon,
-                            suffixIconString: passwordFieldObscured == true
-                                ? ViNewsAppImagesPath.passwordShowIcon
-                                : ViNewsAppImagesPath.passwordHideIcon,
-                            onIconTap: () {
-                              ref
-                                  .read(showSignUpPasswordProvider.notifier)
-                                  .update((state) => !state);
-                              dropKeyboard();
-                            },
-                          ),
-                          8.sbH,
-                          ViNewsAppTextFormField(
-                            controller: _confirmPasswordSignUpFieldController,
-                            hintText: "Confirm Password",
-                            obscureText: confirmPasswordFieldObscured,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '⚠ Please confirm your password';
-                              }
-                              if (value !=
-                                  _passwordSignUpFieldController.text) {
-                                return '⚠ Passwords do not match';
-                              }
-                              return null;
-                            },
-                            prefixIconString: ViNewsAppImagesPath.passwordIcon,
-                            suffixIconString:
-                                confirmPasswordFieldObscured == true
-                                    ? ViNewsAppImagesPath.passwordShowIcon
-                                    : ViNewsAppImagesPath.passwordHideIcon,
-                            onIconTap: () {
-                              ref
-                                  .read(showSignUpConfirmPasswordProvider
-                                      .notifier)
-                                  .update((state) => !state);
-                              dropKeyboard();
-                            },
-                          ),
-                          50.sbH,
-                          //  Sign Up Button
-                          ViNewsAppImageIconButton(
-                            onButtonPress: () {
-                              // "Sign Up" buttton press to handle 3 processs
-                              dropKeyboard(); //1. Drop the keyboard
-                              if (_signUpFormKey.currentState?.validate() ==
-                                  true) {
-                                //2. Perform User Sign Up Process
+                                  confirmPasswordFieldObscured == true
+                                      ? ViNewsAppImagesPath.passwordShowIcon
+                                      : ViNewsAppImagesPath.passwordHideIcon,
+                              onIconTap: () {
+                                ref
+                                    .read(showSignUpConfirmPasswordProvider
+                                        .notifier)
+                                    .update((state) => !state);
+                                dropKeyboard();
+                              },
+                            ),
+                            50.sbH,
+                            //  Sign Up Button
+                            ViNewsAppImageIconButton(
+                              onButtonPress: () {
+                                // "Sign Up" buttton press to handle 3 processs
+                                dropKeyboard(); //1. Drop the keyboard
+                                if (_signUpFormKey.currentState?.validate() ==
+                                    true) {
+                                  //2. Perform User Sign Up Process
+                                  ref
+                                      .read(authNotifierProvider.notifier)
+                                      .userSignup(
+                                        email:
+                                            _emailSignUpAddressFieldController
+                                                .text
+                                                .trim(),
+                                        password: _passwordSignUpFieldController
+                                            .text
+                                            .trim(),
+                                        firstName: _firstNameSignUpController
+                                            .text
+                                            .trim(),
+                                        lastName: _lastNameSignUpController.text
+                                            .trim(),
+                                      );
+                                  resetButtonState(); //3. Reset the SIgn Up Button State
+                                }
+                              },
+                              buttonPlaceholderText: "Sign Up",
+                              isEnabled: isSignUpButtonActive,
+                            ),
+                            18.sbH,
+                            const CustomDivider(dividerText: "or"),
+                            18.sbH,
+                            // Sign Up with Google Button
+                            ViNewsAppImageIconButton(
+                              onButtonPress: () {
+                                dropKeyboard();
                                 ref
                                     .read(authNotifierProvider.notifier)
-                                    .userSignup(
-                                      email: _emailSignUpAddressFieldController
-                                          .text
-                                          .trim(),
-                                      password: _passwordSignUpFieldController
-                                          .text
-                                          .trim(),
-                                      firstName: _firstNameSignUpController.text
-                                          .trim(),
-                                      lastName:
-                                          _lastNameSignUpController.text.trim(),
-                                    );
-                                resetButtonState(); //3. Reset the SIgn Up Button State
-                              }
-                            },
-                            buttonPlaceholderText: "Sign Up",
-                            isEnabled: isSignUpButtonActive,
-                          ),
-                          18.sbH,
-                          const CustomDivider(dividerText: "or"),
-                          18.sbH,
-                          // Sign Up with Google Button
-                          ViNewsAppImageIconButton(
-                            onButtonPress: () {
-                              dropKeyboard();
-                              ref
-                                  .read(authNotifierProvider.notifier)
-                                  .continueAuthWithGoogle(isSignUp: true);
-                            },
-                            prefixIcon: ViNewsAppImagesPath.googleSignInIcon,
-                            buttonPlaceholderText: "Sign Up with Google",
-                            buttonColor: Pallete.whiteColor,
-                            textColor: Pallete.blackColor,
-                            isEnabled: true,
-                          ),
-                          200.sbH,
-                          // Switch to Sign In Screen
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              "Joined us before already?"
-                                  .txtStyled(fontSize: 18.sp),
-                              2.sbW,
-                              GestureDetector(
-                                onTap: () {
-                                  context.goNamed(ViNewsAppRouteConstants
-                                      .userLoginScreenRouteName);
-                                  resetButtonState();
-                                },
-                                child: "Sign In".txtStyled(
-                                    color: Pallete.blueColor, fontSize: 18.sp),
-                              )
-                            ],
-                          ),
-                          15.sbH
-                        ],
+                                    .continueAuthWithGoogle(isSignUp: true);
+                              },
+                              prefixIcon: ViNewsAppImagesPath.googleSignInIcon,
+                              buttonPlaceholderText: "Sign Up with Google",
+                              buttonColor: Pallete.whiteColor,
+                              textColor: Pallete.blackColor,
+                              isEnabled: true,
+                            ),
+                            200.sbH,
+                            // Switch to Sign In Screen
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                "Joined us before already?"
+                                    .txtStyled(fontSize: 17.sp),
+                                2.sbW,
+                                GestureDetector(
+                                  onTap: () {
+                                    context.goNamed(ViNewsAppRouteConstants
+                                        .userLoginScreenRouteName);
+                                    resetButtonState();
+                                  },
+                                  child: "Sign In".txtStyled(
+                                      color: Pallete.blueColor,
+                                      fontSize: 17.sp),
+                                )
+                              ],
+                            ),
+                            15.sbH
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            // Fancy Frosted Glass Loader ;)
-            Visibility(
-              visible: isLoading,
-              child: FrostedGlassBox(
-                  theWidth: MediaQuery.of(context).size.width,
-                  theHeight: MediaQuery.of(context).size.height,
-                  theChild: const SpinKitThreeBounce(
-                    color: Pallete.appButtonColor,
-                    size: 20,
-                  )),
-            ),
-          ],
+              // Fancy Frosted Glass Loader ;)
+              Visibility(
+                visible: isLoading,
+                child: FrostedGlassBox(
+                    theWidth: MediaQuery.of(context).size.width,
+                    theHeight: MediaQuery.of(context).size.height,
+                    theChild: const SpinKitThreeBounce(
+                      color: Pallete.appButtonColor,
+                      size: 20,
+                    )),
+              ),
+            ],
+          ),
         ),
       ),
     );

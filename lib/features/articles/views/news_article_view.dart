@@ -7,8 +7,13 @@ import 'package:vinews_news_reader/themes/color_pallete.dart';
 import 'package:vinews_news_reader/utils/vinews_app_texts.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
+// News Article View
+
 class NewsArticleReadView extends ConsumerStatefulWidget {
-  const NewsArticleReadView({super.key});
+  final String articleImage;
+  final String heroTag;
+  const NewsArticleReadView(
+      {required this.articleImage, required this.heroTag, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -22,6 +27,7 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
       body: Scrollbar(
         thickness: 6,
         radius: Radius.circular(12.r),
+        // Nested Scrollview for slivers (innerBoxIsScrolled) controls action buttonz and title visibility
         child: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
@@ -32,6 +38,7 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                   context.pop();
                 }),
                 toolbarHeight: 90.h,
+                stretch: true,
                 backgroundColor: Pallete.blackColor,
                 elevation: 0,
                 shape: ContinuousRectangleBorder(
@@ -45,7 +52,7 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                 // collapsedHeight: 90.h, //AppBar height
                 actions: [
                   Visibility(
-                    visible: innerBoxIsScrolled, // Show when not scrolled
+                    visible: innerBoxIsScrolled, // Do not show when scrolled
                     maintainState:
                         true, // Preserve the state of the child widget
                     maintainAnimation: true, // Preserve animations
@@ -89,9 +96,13 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                               fontSize: 25.sp, fontWeight: FontWeight.w600)),
                       stretchModes: const [StretchMode.blurBackground],
                       centerTitle: false,
-                      background: const Image(
-                        image: AssetImage("assets/images/article_image.png"),
-                        fit: BoxFit.cover,
+                      // News Article Image
+                      background: Hero(
+                        tag: widget.heroTag,
+                        child: Image(
+                          image: AssetImage(widget.articleImage),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     );
                   },
@@ -112,62 +123,80 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
               ),
             ),
             child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              // Content Column holder
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   30.sbH,
+                  // Article Title
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.w),
                     child: "No, staring at a screen won’t damage your eyes!"
                         .txtStyled(
-                            fontSize: 34.sp, fontWeight: FontWeight.w800),
+                            fontSize: 30.sp, fontWeight: FontWeight.w800),
                   ),
                   30.sbH,
+                  // Article Credentials, Author, Date Posted, Article read time.
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.w),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                PhosphorIcons.regular.notePencil.iconslide(size: 19.sp),
-                                5.sbW,
-                                "Author: Not Included".txtStyled(fontSize: 19.sp, fontWeight: FontWeight.w600),
-                              ],
-                            ),
-                            7.sbH,
-                            Row(
-                              children: [
-                                PhosphorIcons.regular.paperPlaneTilt.iconslide(size: 19.sp),
-                                5.sbW,
-                                "Posted: Sun 7 Sep, 2023".txtStyled(fontSize: 19.sp, fontWeight: FontWeight.w500),
-                              ],
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                          PhosphorIcons.bold.clockCountdown.iconslide(size: 19.sp),
-                          5.sbW,
-                          "10 mins".txtStyled(fontSize: 19.sp, fontWeight: FontWeight.w500)
-                        ],)
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  PhosphorIcons.regular.notePencil
+                                      .iconslide(size: 19.sp),
+                                  5.sbW,
+                                  "Author: Not Included".txtStyled(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w600),
+                                ],
+                              ),
+                              7.sbH,
+                              Row(
+                                children: [
+                                  PhosphorIcons.regular.paperPlaneTilt
+                                      .iconslide(size: 19.sp),
+                                  5.sbW,
+                                  "Posted: Sun 7 Sep, 2023".txtStyled(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w500),
+                                ],
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              PhosphorIcons.bold.clockCountdown
+                                  .iconslide(size: 19.sp),
+                              5.sbW,
+                              "10 mins".txtStyled(
+                                  fontSize: 18.sp, fontWeight: FontWeight.w500)
+                            ],
+                          )
                         ]),
                   ),
                   30.sbH,
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.w),
-                    child: const Divider(color: Pallete.blackColor, thickness: 1,),
+                    child: const Divider(
+                      color: Pallete.blackColor,
+                      thickness: 1,
+                    ),
                   ),
                   30.sbH,
+                  // Article Content
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.w),
-                    child: ViNewsAppTexts.newsReadArticlePagePlaceholderText.txtStyled(fontSize: 18.sp),
+                    child: ViNewsAppTexts.newsReadArticlePagePlaceholderText
+                        .txtStyled(fontSize: 18.sp),
                   ),
                   20.sbH
                 ],

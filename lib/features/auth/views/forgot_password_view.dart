@@ -40,7 +40,7 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
   }
 
   void updateSendLinkButton() {
-    // Update the Send Link Button inactivity state based on conditions 
+    // Update the Send Link Button inactivity state based on conditions
     final sendLinkButtonNotifier = ref.read(activeButtonStateProvider.notifier);
     // Only update the state if there is a change to avoid unnecessary rebuilds.
     sendLinkButtonNotifier.updateButtonState([_forgotPasswordFieldController]);
@@ -66,70 +66,87 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
     return Scaffold(
       // AppBar
       appBar: AppBar(
-        title: "Back".txtStyled(fontSize: 18.sp),
+        centerTitle: true,
+        title: "Reset Password".txtStyled(fontSize: 18.sp),
         elevation: 0,
         backgroundColor: Pallete.appButtonColor,
       ),
-      body: GestureDetector(
-        onTap: () => dropKeyboard(),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: SafeArea(
-              child: Center(
-                  child: Padding(
-                padding: const EdgeInsets.only()
-                    .padSpec(left: 25, top: 30, right: 25, bottom: 50),
-                child: Form(
-                  key: _forgotPasswordFormKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Screen Header
-                      "Forgot Password"
-                          .txtStyled(fontSize: 35.sp, fontWeight: FontWeight.bold),
-                      15.sbH,
-                      "Enter your Email to Reset your Password".txtStyled(
-                          fontSize: 20.sp, textAlign: TextAlign.center),
-                      20.sbH,
-                      // Screen Textfield
-                      ViNewsAppTextFormField(
-                          controller: _forgotPasswordFieldController,
-                          hintText: "Your Email",
-                          obscureText: false,
-                          validator: emailValidator,
-                          prefixIconString: ViNewsAppImagesPath.emailIcon,
-                          prefixIconColor: Pallete.appButtonColor,
-                          suffixIconString: _forgotPasswordFieldController
-                                      .text.isNotEmpty &&
-                                  isEmailValid
-                              ? ViNewsAppImagesPath.validIcon
-                              : ViNewsAppImagesPath.invalidIcon,
-                          suffixIconColor: Pallete.appButtonColor),
-                      40.sbH,
-                      // "Send Link" Button
-                      ViNewsAppIconButton(
-                          onButtonPress: () {
-                            dropKeyboard();
-                            if (_forgotPasswordFormKey.currentState
-                                    ?.validate() ==
-                                true) {
-                              ref
-                                  .read(authNotifierProvider.notifier)
-                                  .sendUserForgotPasswordLinkFromSignIn(
-                                      emailAddress:
-                                          _forgotPasswordFieldController.text
-                                              .trim());
-                              showMaterialBanner(context, ViNewsAppTexts.passwordResetSuccessTitle, ViNewsAppTexts.passwordResetSuccessBody, Pallete.appButtonColor);
-                              resetButtonState();
-                            }
-                          },
-                          buttonPlaceholderText: "Send Link",
-                          suffixIcon: ViNewsIcons.sendLinkIcon,
-                          isEnabled: isSendLinkButtonActive),
-                    ],
+      body: Container(
+        constraints: const BoxConstraints.expand(),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              "assets/images/background.png",
+            ),
+            opacity: 0.15,
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: GestureDetector(
+          onTap: () => dropKeyboard(),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: SafeArea(
+                child: Center(
+                    child: Padding(
+                  padding: const EdgeInsets.only()
+                      .padSpec(left: 25, top: 30, right: 25, bottom: 50),
+                  child: Form(
+                    key: _forgotPasswordFormKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Screen Header
+                        "Forgot Password".txtStyled(
+                            fontSize: 28.sp, fontWeight: FontWeight.bold),
+                        15.sbH,
+                        "Enter your Email to Reset your Password".txtStyled(
+                            fontSize: 18.sp, textAlign: TextAlign.center),
+                        20.sbH,
+                        // Screen Textfield
+                        ViNewsAppTextFormField(
+                            controller: _forgotPasswordFieldController,
+                            hintText: "Your Email",
+                            obscureText: false,
+                            validator: emailValidator,
+                            prefixIconString: ViNewsAppImagesPath.emailIcon,
+                            prefixIconColor: Pallete.appButtonColor,
+                            suffixIconString: _forgotPasswordFieldController
+                                        .text.isNotEmpty &&
+                                    isEmailValid
+                                ? ViNewsAppImagesPath.validIcon
+                                : ViNewsAppImagesPath.invalidIcon,
+                            suffixIconColor: Pallete.appButtonColor),
+                        40.sbH,
+                        // "Send Link" Button
+                        ViNewsAppIconButton(
+                            onButtonPress: () {
+                              dropKeyboard();
+                              if (_forgotPasswordFormKey.currentState
+                                      ?.validate() ==
+                                  true) {
+                                ref
+                                    .read(authNotifierProvider.notifier)
+                                    .sendUserForgotPasswordLinkFromSignIn(
+                                        emailAddress:
+                                            _forgotPasswordFieldController.text
+                                                .trim());
+                                showMaterialBanner(
+                                    context,
+                                    ViNewsAppTexts.passwordResetSuccessTitle,
+                                    ViNewsAppTexts.passwordResetSuccessBody,
+                                    Pallete.appButtonColor);
+                                resetButtonState();
+                              }
+                            },
+                            buttonPlaceholderText: "Send Link",
+                            suffixIcon: ViNewsIcons.sendLinkIcon,
+                            isEnabled: isSendLinkButtonActive),
+                      ],
+                    ),
                   ),
-                ),
-              )),
+                )),
+              ),
             ),
           ),
         ),

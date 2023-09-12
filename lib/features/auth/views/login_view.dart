@@ -26,7 +26,7 @@ class UserLoginView extends ConsumerStatefulWidget {
 }
 
 class _UserLoginViewState extends ConsumerState<UserLoginView> {
-  // Declerations 
+  // Declerations
   final _loginFormKey = GlobalKey<FormState>();
   final _emailAddressFieldController = TextEditingController();
   final _passwordFieldController = TextEditingController();
@@ -49,7 +49,7 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
   }
 
   void updateLoginButtonState() {
-    // Update the Login Button inactivity state based on conditions 
+    // Update the Login Button inactivity state based on conditions
     final activeloginButtonNotifier =
         ref.read(activeButtonStateProvider.notifier);
     // Only update the state if there is a change to avoid unnecessary rebuilds.
@@ -95,149 +95,166 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
     final isEmailValid = ref.watch(emailValidatorProvider);
     final isPasswordObscured = ref.watch(showLoginPasswordProvider);
     return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          dropKeyboard();
-        },
-        child: Stack(children: [
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only()
-                      .padSpec(left: 25, top: 30, right: 25, bottom: 50),
-                  child: Form(
-                    key: _loginFormKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Screen Headers
-                        "Sign In".txtStyled(
-                            fontSize: 35.sp, fontWeight: FontWeight.bold),
-                        10.sbH,
-                        "Enter your Email to sign into the ViNews App"
-                            .txtStyled(
-                                fontSize: 20.sp, textAlign: TextAlign.center),
-                        40.sbH,
-                        // Sign In screen TextFields
-                        ViNewsAppTextFormField(
-                            controller: _emailAddressFieldController,
-                            hintText: "Your Email",
-                            obscureText: false,
-                            validator: emailValidator,
-                            prefixIconString: ViNewsAppImagesPath.emailIcon,
-                            prefixIconColor: Pallete.appButtonColor,
-                            suffixIconString:
-                                _emailAddressFieldController.text.isNotEmpty &&
-                                        isEmailValid
-                                    ? ViNewsAppImagesPath.validIcon
-                                    : ViNewsAppImagesPath.invalidIcon,
-                            suffixIconColor: Pallete.appButtonColor),
-                        8.sbH,
-                        ViNewsAppTextField(
-                          controller: _passwordFieldController,
-                          hintText: "Passsword",
-                          obscureText: isPasswordObscured,
-                          prefixIconString: ViNewsAppImagesPath.passwordIcon,
-                          suffixIconString: isPasswordObscured == true
-                              ? ViNewsAppImagesPath.passwordShowIcon
-                              : ViNewsAppImagesPath.passwordHideIcon,
-                          onIconTap: () {
-                            ref
-                                .read(showLoginPasswordProvider.notifier)
-                                .update((state) => !state);
-                            dropKeyboard();
-                          },
-                        ),
-                        15.sbH,
-                        // Forgot Password Button!
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                context.pushNamed(ViNewsAppRouteConstants
-                                    .forgotPasswordScreenRouteName);
-                              },
-                              child: "Forgot Password?".txtStyled(
-                                  fontSize: 19.sp, color: Pallete.blueColor),
-                            )
-                          ],
-                        ),
-                        30.sbH,
-                        // Sign In Button
-                        ViNewsAppImageIconButton(
-                            onButtonPress: () {
-                              // "Sign In" buttton press to handle 3 processs
-                              dropKeyboard(); //1. Drop the keyboard
-                              if (_loginFormKey.currentState?.validate() ==
-                                  true) {
-                              //2. Perform User Sign Up Process
-                                ref
-                                    .read(authNotifierProvider.notifier)
-                                    .userLogin(
-                                        email: _emailAddressFieldController.text
-                                            .trim(),
-                                        password: _passwordFieldController.text
-                                            .trim());
-                                resetButtonState(); //3. Reset the SIgn Up Button State
-                              }
+      body: Container(
+        constraints: const BoxConstraints.expand(),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              "assets/images/background.png",
+            ),
+            opacity: 0.15,
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: GestureDetector(
+          onTap: () {
+            dropKeyboard();
+          },
+          child: Stack(children: [
+            SafeArea(
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only()
+                        .padSpec(left: 25, top: 30, right: 25, bottom: 50),
+                    child: Form(
+                      key: _loginFormKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Screen Headers
+                          "Sign In".txtStyled(
+                              fontSize: 28.sp, fontWeight: FontWeight.bold),
+                          10.sbH,
+                          "Enter your Email to sign into the ViNews App"
+                              .txtStyled(
+                                  fontSize: 18.sp, textAlign: TextAlign.center),
+                          40.sbH,
+                          // Sign In screen TextFields
+                          ViNewsAppTextFormField(
+                              controller: _emailAddressFieldController,
+                              hintText: "Your Email",
+                              obscureText: false,
+                              validator: emailValidator,
+                              prefixIconString: ViNewsAppImagesPath.emailIcon,
+                              prefixIconColor: Pallete.appButtonColor,
+                              suffixIconString: _emailAddressFieldController
+                                          .text.isNotEmpty &&
+                                      isEmailValid
+                                  ? ViNewsAppImagesPath.validIcon
+                                  : ViNewsAppImagesPath.invalidIcon,
+                              suffixIconColor: Pallete.appButtonColor),
+                          8.sbH,
+                          ViNewsAppTextField(
+                            controller: _passwordFieldController,
+                            hintText: "Passsword",
+                            obscureText: isPasswordObscured,
+                            prefixIconString: ViNewsAppImagesPath.passwordIcon,
+                            suffixIconString: isPasswordObscured == true
+                                ? ViNewsAppImagesPath.passwordShowIcon
+                                : ViNewsAppImagesPath.passwordHideIcon,
+                            onIconTap: () {
+                              ref
+                                  .read(showLoginPasswordProvider.notifier)
+                                  .update((state) => !state);
+                              dropKeyboard();
                             },
-                            buttonPlaceholderText: "Sign In",
-                            isEnabled: isLoginButtonActive),
-                        18.sbH,
-                        const CustomDivider(dividerText: "or"),
-                        18.sbH,
-                        // Sign In with Google Button
-                        ViNewsAppImageIconButton(
-                          onButtonPress: () {
-                            dropKeyboard();
-                            ref
-                                .read(authNotifierProvider.notifier)
-                                .continueAuthWithGoogle(isSignUp: false);
-                          },
-                          prefixIcon: ViNewsAppImagesPath.googleSignInIcon,
-                          buttonPlaceholderText: "Sign In with Google",
-                          buttonColor: Pallete.whiteColor,
-                          textColor: Pallete.blackColor,
-                          isEnabled: true,
-                        ),
-                        220.sbH,
-                        // Switch to Sign Up Screen
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            "New to ViNews?".txtStyled(fontSize: 18.sp),
-                            2.sbW,
-                            GestureDetector(
-                              onTap: () {
-                                context.goNamed(ViNewsAppRouteConstants
-                                    .userSignUpcreenRouteName);
-                                resetButtonState();
+                          ),
+                          15.sbH,
+                          // Forgot Password Button!
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  context.pushNamed(ViNewsAppRouteConstants
+                                      .forgotPasswordScreenRouteName);
+                                },
+                                child: "Forgot Password?".txtStyled(
+                                    fontSize: 16.sp, color: Pallete.blueColor),
+                              )
+                            ],
+                          ),
+                          30.sbH,
+                          // Sign In Button
+                          ViNewsAppImageIconButton(
+                              onButtonPress: () {
+                                // "Sign In" buttton press to handle 3 processs
+                                dropKeyboard(); //1. Drop the keyboard
+                                if (_loginFormKey.currentState?.validate() ==
+                                    true) {
+                                  //2. Perform User Sign Up Process
+                                  ref
+                                      .read(authNotifierProvider.notifier)
+                                      .userLogin(
+                                          email:
+                                              _emailAddressFieldController
+                                                  .text
+                                                  .trim(),
+                                          password: _passwordFieldController
+                                              .text
+                                              .trim());
+                                  resetButtonState(); //3. Reset the SIgn Up Button State
+                                }
                               },
-                              child: "Sign Up".txtStyled(
-                                  color: Pallete.blueColor, fontSize: 18.sp),
-                            )
-                          ],
-                        ),
-                        10.sbH
-                      ],
+                              buttonPlaceholderText: "Sign In",
+                              isEnabled: isLoginButtonActive),
+                          18.sbH,
+                          const CustomDivider(dividerText: "or"),
+                          18.sbH,
+                          // Sign In with Google Button
+                          ViNewsAppImageIconButton(
+                            onButtonPress: () {
+                              dropKeyboard();
+                              ref
+                                  .read(authNotifierProvider.notifier)
+                                  .continueAuthWithGoogle(isSignUp: false);
+                            },
+                            prefixIcon: ViNewsAppImagesPath.googleSignInIcon,
+                            buttonPlaceholderText: "Sign In with Google",
+                            buttonColor: Pallete.whiteColor,
+                            textColor: Pallete.blackColor,
+                            isEnabled: true,
+                          ),
+                          220.sbH,
+                          // Switch to Sign Up Screen
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              "New to ViNews?".txtStyled(fontSize: 17.sp),
+                              2.sbW,
+                              GestureDetector(
+                                onTap: () {
+                                  context.goNamed(ViNewsAppRouteConstants
+                                      .userSignUpcreenRouteName);
+                                  resetButtonState();
+                                },
+                                child: "Sign Up".txtStyled(
+                                    color: Pallete.blueColor, fontSize: 17.sp),
+                              )
+                            ],
+                          ),
+                          10.sbH
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          // Fancy Frosted Glass Loader ;)
-          Visibility(
-            visible: isLoading,
-            child: FrostedGlassBox(
-              theWidth: MediaQuery.of(context).size.width,
-              theHeight: MediaQuery.of(context).size.height,
-              theChild: const SpinKitThreeBounce(color: Pallete.appButtonColor, size: 20,)
+            // Fancy Frosted Glass Loader ;)
+            Visibility(
+              visible: isLoading,
+              child: FrostedGlassBox(
+                  theWidth: MediaQuery.of(context).size.width,
+                  theHeight: MediaQuery.of(context).size.height,
+                  theChild: const SpinKitThreeBounce(
+                    color: Pallete.appButtonColor,
+                    size: 20,
+                  )),
             ),
-          ),
-        ]),
+          ]),
+        ),
       ),
     );
   }

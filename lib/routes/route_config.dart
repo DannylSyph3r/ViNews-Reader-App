@@ -163,25 +163,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         name: ViNewsAppRouteConstants.newsArticleReadView,
-        path: '/articlereadview',
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          return CustomTransitionPage(
-            key: state.pageKey,
-            child: const NewsArticleReadView(),
-            transitionDuration: const Duration(milliseconds: 250),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(1.0, 0.0), // Slide from right
-                  end: Offset.zero, // Slide to the center
-                ).animate(CurvedAnimation(
-                  parent: animation,
-                  curve: Curves.easeInOut,
-                )),
-                child: child,
-              );
-            },
+        path: '/articlereadview/:articleImage/:heroTag',
+        builder: (BuildContext context, GoRouterState state) {
+          return NewsArticleReadView(
+            articleImage: state.pathParameters['articleImage']!,
+            heroTag: state.pathParameters['heroTag']!,
           );
         },
       ),

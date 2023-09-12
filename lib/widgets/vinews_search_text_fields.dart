@@ -12,6 +12,7 @@ class ViNewsSearchTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final Color? suffixIconColor;
   final FocusNode? focusNode;
+  final bool autoFocus;
   final Function()? onIconTap;
   final void Function(String)? onChanged;
 
@@ -27,6 +28,7 @@ class ViNewsSearchTextField extends StatelessWidget {
     this.suffixIconColor,
     this.onChanged, 
     this.focusNode, 
+    this.autoFocus = false,
     this.onIconTap,
   }) : super(key: key);
 
@@ -37,8 +39,9 @@ class ViNewsSearchTextField extends StatelessWidget {
       height: textfieldHeight,
       child: TextField(
         focusNode: focusNode,
+        autofocus: autoFocus,
         onChanged: onChanged,
-        style: TextStyle(fontSize: 20.sp),
+        style: TextStyle(fontSize: 18.sp),
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
@@ -60,7 +63,7 @@ class ViNewsSearchTextField extends StatelessWidget {
           fillColor: Colors.white,
           filled: true,
           hintText: hintText,
-          hintStyle: TextStyle(color: const Color.fromARGB(255, 116, 114, 114), fontSize: 20.sp),
+          hintStyle: TextStyle(color: const Color.fromARGB(255, 116, 114, 114), fontSize: 18.sp),
         ),
       ),
     );
