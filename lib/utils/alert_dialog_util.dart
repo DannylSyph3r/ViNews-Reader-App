@@ -30,14 +30,14 @@ void showAlertDialog(BuildContext context, String title, Widget leadingIcon, Str
               onPressed: () {
                 context.pop();
               },
-              child: actionButtonTextLeft.txtStyled(fontSize: 18.sp, fontWeight: FontWeight.w700, color: Pallete.appButtonColor),
+              child: actionButtonTextLeft.txtStyled(fontSize: 18.sp, fontWeight: FontWeight.w700, color: Pallete.blackColor),
             ),
             TextButton(
               onPressed: () {
                 context.pop();
                 context.pop();
               },
-              child: actionButtonTextRight.txtStyled(fontSize: 18.sp, fontWeight: FontWeight.w700,color: Pallete.appButtonColor),
+              child: actionButtonTextRight.txtStyled(fontSize: 18.sp, fontWeight: FontWeight.w700,color: Pallete.blackColor),
             ),
           ],
         );

@@ -9,6 +9,7 @@ import 'package:vinews_news_reader/features/auth/states/login_state.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
 import 'package:vinews_news_reader/utils/vinews_icons.dart';
+import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 import 'package:vinews_news_reader/widgets/vinews_image_icon_button.dart';
 
@@ -83,7 +84,7 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
-              "assets/images/background.png",
+              ViNewsAppImagesPath.appBackgroundImage,
             ),
             opacity: 0.15,
             fit: BoxFit.cover,
@@ -126,12 +127,12 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
                     70.sbH,
                     const Divider(
                       thickness: 1.5,
-                      color: Pallete.appButtonColor,
+                      color: Pallete.blackColor,
                     ),
                     20.sbH,
                     ViNewsAppImageIconButton(
                       onButtonPress: resendCodedButtonPress,
-                      buttonColor: Pallete.appButtonColor,
+                      buttonColor: Pallete.blackColor,
                       iconColor: Pallete.blackColor,
                       buttonPlaceholderText: remainingTime == 0
                           ? "Resend Link"

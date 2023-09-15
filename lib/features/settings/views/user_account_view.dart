@@ -7,6 +7,7 @@ import 'package:vinews_news_reader/features/auth/controllers/auth_action_control
 import 'package:vinews_news_reader/features/settings/widgets/settings_custom_divider.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
 class UserAccountSettingsView extends ConsumerStatefulWidget {
@@ -26,14 +27,14 @@ class _UserAccountSettingsViewState
         backgroundColor: Pallete.blackColor,
         elevation: 0,
         centerTitle: true,
-        title: "My Account".txtStyled(fontSize: 18.sp),
+        title: "Account Settings".txtStyled(fontSize: 18.sp),
       ),
       body: Container(
           constraints: const BoxConstraints.expand(),
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage(
-                "assets/images/background.png",
+                ViNewsAppImagesPath.appBackgroundImage,
               ),
               opacity: 0.15,
               fit: BoxFit.cover,
@@ -59,6 +60,13 @@ class _UserAccountSettingsViewState
                           "d********001@gmail.com".txtStyled(fontSize: 15.sp)
                         ],
                       ),
+                      trailing: PhosphorIcons.bold.caretRight
+                          .iconslide(size: 18.sp, color: Pallete.blackColor),
+                    ),
+                    const CustomSettingsDivider(),
+                    ListTile(
+                      title:
+                          "Customize News Interests".txtStyled(fontSize: 18.sp),
                       trailing: PhosphorIcons.bold.caretRight
                           .iconslide(size: 18.sp, color: Pallete.blackColor),
                     ),

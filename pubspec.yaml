@@ -32,6 +32,7 @@ dependencies:
   change_app_package_name: ^1.1.0
   cloud_firestore: ^4.8.4
   cupertino_icons: ^1.0.2
+  dash_flags: ^0.1.1
   email_validator: ^2.1.17
   equatable: ^2.0.5
   firebase_auth: ^4.7.2

@@ -34,7 +34,7 @@ class ViNewsAppIconButton extends ConsumerWidget {
       decoration: BoxDecoration(
         // boxShadow: [
         //   BoxShadow(
-        //     color: boxShadowColor ?? Pallete.appButtonColor,
+        //     color: boxShadowColor ?? Pallete.blackColor,
         //     blurRadius: 16,
         //     offset: const Offset(0, 2),
         //     spreadRadius: 0,
@@ -49,7 +49,7 @@ class ViNewsAppIconButton extends ConsumerWidget {
         style: ElevatedButton.styleFrom(
           elevation: 0,
           fixedSize: Size(390.w, 78.w),
-          backgroundColor: buttonColor ?? Pallete.appButtonColor,
+          backgroundColor: buttonColor ?? Pallete.blackColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

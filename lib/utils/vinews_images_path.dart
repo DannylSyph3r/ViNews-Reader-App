@@ -1,5 +1,6 @@
 
 class ViNewsAppImagesPath {
+  static const String appBackgroundImage = "assets/images/background.png";
   static const String onboardScreenImageOne = 'assets/images/onboard_4.svg';
   static const String onboardScreenImageTwo = 'assets/images/onboard_6.svg';
   static const String onboardScreenImageThree = 'assets/images/onboard_3.svg';

@@ -101,7 +101,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
       if (state is UserAuthenticationStateError) {
         isLoading = false;
         showMaterialBanner(
-            context, "Sign Up Error :(", state.error, Pallete.appButtonColor);
+            context, "Sign Up Error :(", state.error, Pallete.blackColor);
       } else if (state is UserAuthenticationStateSuccess) {
         isLoading = false;
         context.pushReplacementNamed(ViNewsAppRouteConstants.authIntializer);
@@ -118,7 +118,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
-              "assets/images/background.png",
+              ViNewsAppImagesPath.appBackgroundImage,
             ),
             opacity: 0.15,
             fit: BoxFit.cover,
@@ -154,7 +154,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                               hintText: "Firstname",
                               obscureText: false,
                               prefixIconString: ViNewsAppImagesPath.userIcon,
-                              prefixIconColor: Pallete.appButtonColor,
+                              prefixIconColor: Pallete.blackColor,
                               validator: firstNameValidator,
                             ),
                             8.sbH,
@@ -163,7 +163,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                               hintText: "Lastname",
                               obscureText: false,
                               prefixIconString: ViNewsAppImagesPath.userIcon,
-                              prefixIconColor: Pallete.appButtonColor,
+                              prefixIconColor: Pallete.blackColor,
                               validator: lastNameValidator,
                             ),
                             8.sbH,
@@ -172,7 +172,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                                 hintText: "Your Email",
                                 obscureText: false,
                                 prefixIconString: ViNewsAppImagesPath.emailIcon,
-                                prefixIconColor: Pallete.appButtonColor,
+                                prefixIconColor: Pallete.blackColor,
                                 validator: emailValidator,
                                 suffixIconString:
                                     _emailSignUpAddressFieldController
@@ -180,7 +180,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                                             isEmailValid
                                         ? ViNewsAppImagesPath.validIcon
                                         : ViNewsAppImagesPath.invalidIcon,
-                                suffixIconColor: Pallete.appButtonColor),
+                                suffixIconColor: Pallete.blackColor),
                             8.sbH,
                             ViNewsAppTextFormField(
                               controller: _passwordSignUpFieldController,
@@ -311,7 +311,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                     theWidth: MediaQuery.of(context).size.width,
                     theHeight: MediaQuery.of(context).size.height,
                     theChild: const SpinKitThreeBounce(
-                      color: Pallete.appButtonColor,
+                      color: Pallete.blackColor,
                       size: 20,
                     )),
               ),

@@ -41,7 +41,7 @@ class ViNewsAppImageIconButton extends ConsumerWidget {
         style: ElevatedButton.styleFrom(
           elevation: 0,
           fixedSize: Size(390.w, 78.w),
-          backgroundColor: buttonColor ?? Pallete.appButtonColor,
+          backgroundColor: buttonColor ?? Pallete.blackColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

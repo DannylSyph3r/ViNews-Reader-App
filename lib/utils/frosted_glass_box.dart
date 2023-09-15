@@ -30,9 +30,9 @@ class FrostedGlassBox extends StatelessWidget {
             BackdropFilter(
               filter: ImageFilter.blur(
                 //sigmaX is the Horizontal blur
-                sigmaX: 4.0,
+                sigmaX: 3.5,
                 //sigmaY is the Vertical blur
-                sigmaY: 4.0,
+                sigmaY: 3.5,
               ),
               //we use this container to scale up the blur effect to fit its
               //  parent, without this container the blur effect doesn't appear.

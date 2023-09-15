@@ -163,11 +163,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         name: ViNewsAppRouteConstants.newsArticleReadView,
-        path: '/articlereadview/:articleImage/:heroTag',
+        path:
+            '/articlereadview/:articleImage/:articleCategory/:heroTag/:articleTitle/:articleAuthor/:articlePublicationDate',
         builder: (BuildContext context, GoRouterState state) {
           return NewsArticleReadView(
             articleImage: state.pathParameters['articleImage']!,
+            articleCategory: state.pathParameters['articleCategory']!,
             heroTag: state.pathParameters['heroTag']!,
+            articleTitle: state.pathParameters["articleTitle"]!,
+            articleAuthor: state.pathParameters["articleAuthor"]!,
+            articlePublicationDate:
+                state.pathParameters["articlePublicationDate"]!,
           );
         },
       ),

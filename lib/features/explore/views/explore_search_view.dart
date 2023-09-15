@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 import 'package:vinews_news_reader/widgets/vinews_search_text_fields.dart';
 
@@ -29,17 +30,16 @@ class _ExploreScreenSearchViewState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 90.h,
-        backgroundColor: Pallete.blackColor,
+          toolbarHeight: 90.h,
+          backgroundColor: Pallete.blackColor,
           // The search area here
           title: Hero(
             tag: 'exploreSearchHeroTag',
             child: ViNewsSearchTextField(
-              textfieldHeight: 65.h,
+                textfieldHeight: 65.h,
                 controller: _exploreSearchFieldController,
                 hintText: "What do you want to search for?",
                 obscureText: false,
-                autoFocus: true,
                 suffixIcon: PhosphorIcons.regular.x.iconslide(size: 20.sp),
                 prefixIcon: PhosphorIcons.regular.magnifyingGlass
                     .iconslide(size: 26.sp, color: Pallete.blackColor)),
@@ -49,7 +49,7 @@ class _ExploreScreenSearchViewState
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage(
-                "assets/images/background.png",
+                ViNewsAppImagesPath.appBackgroundImage,
               ),
               opacity: 0.15,
               fit: BoxFit.cover,

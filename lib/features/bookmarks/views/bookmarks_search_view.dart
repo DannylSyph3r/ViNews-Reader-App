@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 import 'package:vinews_news_reader/widgets/vinews_search_text_fields.dart';
 
@@ -38,7 +39,6 @@ class _BookmarksSearchViewState extends ConsumerState<BookmarksSearchView> {
                 controller: _bookmarkSearchFieldController,
                 hintText: "What article are you looking for?",
                 obscureText: false,
-                autoFocus: true,
                 suffixIcon: PhosphorIcons.regular.x.iconslide(size: 20.sp),
                 prefixIcon: PhosphorIcons.regular.magnifyingGlass
                     .iconslide(size: 26.sp, color: Pallete.blackColor)),
@@ -48,7 +48,7 @@ class _BookmarksSearchViewState extends ConsumerState<BookmarksSearchView> {
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage(
-                "assets/images/background.png",
+                ViNewsAppImagesPath.appBackgroundImage,
               ),
               opacity: 0.15,
               fit: BoxFit.cover,

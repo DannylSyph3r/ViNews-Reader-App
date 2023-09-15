@@ -9,6 +9,10 @@ import 'package:vinews_news_reader/features/bookmarks/views/bookmarks_views.dart
 import 'package:vinews_news_reader/features/explore/views/explore_search_view.dart';
 import 'package:vinews_news_reader/features/explore/views/explore_view.dart';
 import 'package:vinews_news_reader/features/home/views/home_screen.dart';
+import 'package:vinews_news_reader/features/settings/views/about_vinews_view.dart';
+import 'package:vinews_news_reader/features/settings/views/liked_articles_view.dart';
+import 'package:vinews_news_reader/features/settings/views/news_language_picker_screen.dart';
+import 'package:vinews_news_reader/features/settings/views/read_articles_view.dart';
 import 'package:vinews_news_reader/features/settings/views/user_account_view.dart';
 import 'package:vinews_news_reader/features/settings/views/user_profile_settings.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
@@ -38,12 +42,15 @@ class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
   List<PersistentBottomNavBarItem> _navBarSelection() {
     return [
       PersistentBottomNavBarItem(
-        icon: PhosphorIcons.fill.house.iconslide(),
-        title: "Home",
-        activeColorPrimary: Pallete.blackColor,
-        inactiveColorPrimary: const Color.fromARGB(255, 142, 142, 142),
-        inactiveColorSecondary: Pallete.greyColor,
-      ),
+          icon: PhosphorIcons.fill.house.iconslide(),
+          title: "Home",
+          activeColorPrimary: Pallete.blackColor,
+          inactiveColorPrimary: const Color.fromARGB(255, 142, 142, 142),
+          inactiveColorSecondary: Pallete.greyColor,
+          routeAndNavigatorSettings:
+              RouteAndNavigatorSettings(initialRoute: '/', routes: {
+            '/accountSettings': (context) => const UserAccountSettingsView(),
+          })),
       PersistentBottomNavBarItem(
           icon: PhosphorIcons.fill.globeHemisphereWest.iconslide(),
           title: "Explore",
@@ -73,7 +80,11 @@ class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
           inactiveColorSecondary: Pallete.greyColor,
           routeAndNavigatorSettings:
               RouteAndNavigatorSettings(initialRoute: '/', routes: {
+            'readArticles': (context) => const ReadArticlesView(),
+            '/likedArticles': (context) => const LikedArticlesView(),
             '/accountSettings': (context) => const UserAccountSettingsView(),
+            '/languageSelector': (context) => const NewsLanguageSelectorView(),
+            '/aboutViNews': (context) => const AboutViNewsView(),
           })),
     ];
   }
@@ -88,10 +99,10 @@ class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
         items: _navBarSelection(),
         itemCount: 4,
         confineInSafeArea: true,
-        handleAndroidBackButtonPress: true, // Default is true.
+        handleAndroidBackButtonPress: true, 
         resizeToAvoidBottomInset:
             true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
-        stateManagement: true, // Default is true.
+        stateManagement: true,
         hideNavigationBarWhenKeyboardShows:
             true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
         popAllScreensOnTapOfSelectedTab: true,
@@ -99,9 +110,9 @@ class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
           // Screen transition animation on change of selected tab.
           animateTabTransition: true,
           curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
+          duration: Duration(milliseconds: 250),
         ),
-        navBarHeight: 75.h,
+        navBarHeight: 80.h,
         customWidget: (navBarLineUp) => CustomNavBarStyle(
             _navController.index, _navBarSelection(), (index) {
           setState(() {

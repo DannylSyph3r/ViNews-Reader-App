@@ -85,7 +85,7 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
       if (state is UserAuthenticationStateError) {
         isLoading = false;
         showMaterialBanner(
-            context, "Sign In Error :(", state.error, Pallete.appButtonColor);
+            context, "Sign In Error :(", state.error, Pallete.blackColor);
       } else if (state is UserAuthenticationStateSuccess) {
         isLoading = false;
         context.pushReplacementNamed(ViNewsAppRouteConstants.authIntializer);
@@ -100,7 +100,7 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
-              "assets/images/background.png",
+              ViNewsAppImagesPath.appBackgroundImage,
             ),
             opacity: 0.15,
             fit: BoxFit.cover,
@@ -137,13 +137,13 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
                               obscureText: false,
                               validator: emailValidator,
                               prefixIconString: ViNewsAppImagesPath.emailIcon,
-                              prefixIconColor: Pallete.appButtonColor,
+                              prefixIconColor: Pallete.blackColor,
                               suffixIconString: _emailAddressFieldController
                                           .text.isNotEmpty &&
                                       isEmailValid
                                   ? ViNewsAppImagesPath.validIcon
                                   : ViNewsAppImagesPath.invalidIcon,
-                              suffixIconColor: Pallete.appButtonColor),
+                              suffixIconColor: Pallete.blackColor),
                           8.sbH,
                           ViNewsAppTextField(
                             controller: _passwordFieldController,
@@ -249,7 +249,7 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
                   theWidth: MediaQuery.of(context).size.width,
                   theHeight: MediaQuery.of(context).size.height,
                   theChild: const SpinKitThreeBounce(
-                    color: Pallete.appButtonColor,
+                    color: Pallete.blackColor,
                     size: 20,
                   )),
             ),

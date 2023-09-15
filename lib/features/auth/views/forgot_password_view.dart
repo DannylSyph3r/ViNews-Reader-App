@@ -69,14 +69,14 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
         centerTitle: true,
         title: "Reset Password".txtStyled(fontSize: 18.sp),
         elevation: 0,
-        backgroundColor: Pallete.appButtonColor,
+        backgroundColor: Pallete.blackColor,
       ),
       body: Container(
         constraints: const BoxConstraints.expand(),
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
-              "assets/images/background.png",
+              ViNewsAppImagesPath.appBackgroundImage,
             ),
             opacity: 0.15,
             fit: BoxFit.cover,
@@ -110,13 +110,13 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
                             obscureText: false,
                             validator: emailValidator,
                             prefixIconString: ViNewsAppImagesPath.emailIcon,
-                            prefixIconColor: Pallete.appButtonColor,
+                            prefixIconColor: Pallete.blackColor,
                             suffixIconString: _forgotPasswordFieldController
                                         .text.isNotEmpty &&
                                     isEmailValid
                                 ? ViNewsAppImagesPath.validIcon
                                 : ViNewsAppImagesPath.invalidIcon,
-                            suffixIconColor: Pallete.appButtonColor),
+                            suffixIconColor: Pallete.blackColor),
                         40.sbH,
                         // "Send Link" Button
                         ViNewsAppIconButton(
@@ -135,7 +135,7 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
                                     context,
                                     ViNewsAppTexts.passwordResetSuccessTitle,
                                     ViNewsAppTexts.passwordResetSuccessBody,
-                                    Pallete.appButtonColor);
+                                    Pallete.blackColor);
                                 resetButtonState();
                               }
                             },

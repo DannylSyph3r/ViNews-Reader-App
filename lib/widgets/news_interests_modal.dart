@@ -66,7 +66,7 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
                         ),
                         decoration: BoxDecoration(
                           color: isSelected
-                              ? Pallete.appButtonColor
+                              ? Pallete.blackColor
                               : Pallete.whiteColor,
                           borderRadius: BorderRadius.circular(27.r),
                         ),
@@ -78,7 +78,7 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
                               fontWeight: FontWeight.w800,
                               color: isSelected
                                   ? Pallete.whiteColor
-                                  : Pallete.appButtonColor,
+                                  : Pallete.blackColor,
                             ),
                           ],
                         ),
@@ -108,7 +108,7 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
                         backgroundColor:
                             const Color.fromARGB(161, 237, 226, 226),
                         side: BorderSide(
-                            width: 2.5.w, color: Pallete.appButtonColor),
+                            width: 2.5.w, color: Pallete.blackColor),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(11),
                         ),
@@ -119,7 +119,7 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
                           "Skip".txtStyled(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w800,
-                            color: Pallete.appButtonColor,
+                            color: Pallete.blackColor,
                           ),
                         ],
                       ),
@@ -134,7 +134,7 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         fixedSize: Size(175.w, 62.w),
-                        backgroundColor: Pallete.appButtonColor,
+                        backgroundColor: Pallete.blackColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(11),
                         ),
@@ -186,7 +186,7 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
                       child: "Cancel".txtStyled(
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w700,
-                          color: Pallete.appButtonColor),
+                          color: Pallete.blackColor),
                     ),
                     TextButton(
                       onPressed: () {
@@ -198,7 +198,7 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
                       child: "Yes, I'm sure!".txtStyled(
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w700,
-                          color: Pallete.appButtonColor),
+                          color: Pallete.blackColor),
                     ),
                   ],
                 ),

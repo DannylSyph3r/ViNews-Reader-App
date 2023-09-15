@@ -85,7 +85,7 @@ class OnboardScreenLayoutWidgetState extends State<OnboardScreenLayoutWidget> {
               pageContents[index].title.txtStyled(
                     fontSize: 30.sp,
                     fontWeight: FontWeight.w800,
-                    color: Pallete.appButtonColor,
+                    color: Pallete.blackColor,
                     textAlign: TextAlign.center,
                   ),
               pageContents[index].description.txtStyled(

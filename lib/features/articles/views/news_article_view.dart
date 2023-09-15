@@ -5,15 +5,27 @@ import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
 import 'package:vinews_news_reader/utils/vinews_app_texts.dart';
+import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
 // News Article View
 
 class NewsArticleReadView extends ConsumerStatefulWidget {
   final String articleImage;
+  final String articleCategory;
+  final String articleTitle;
+  final String articleAuthor;
+  final String articlePublicationDate;
   final String heroTag;
+
   const NewsArticleReadView(
-      {required this.articleImage, required this.heroTag, super.key});
+      {super.key,
+      required this.articleImage,
+      required this.articleCategory,
+      required this.articleTitle,
+      required this.articleAuthor,
+      required this.articlePublicationDate,
+      required this.heroTag});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -92,18 +104,17 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                           // top == MediaQuery.of(context).padding.top + 90.h
                           //     ? 0
                           //     : 1.0,
-                          child: "Technology".txtStyled(
+                          child: widget.articleCategory.txtStyled(
                               fontSize: 25.sp, fontWeight: FontWeight.w600)),
                       stretchModes: const [StretchMode.blurBackground],
                       centerTitle: false,
                       // News Article Image
                       background: Hero(
-                        tag: widget.heroTag,
-                        child: Image(
-                          image: AssetImage(widget.articleImage),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                          tag: widget.heroTag,
+                          child: Image.network(
+                            widget.articleImage,
+                            fit: BoxFit.cover,
+                          )),
                     );
                   },
                 ),
@@ -115,9 +126,7 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
             constraints: const BoxConstraints.expand(),
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                  "assets/images/background.png",
-                ),
+                image: AssetImage(ViNewsAppImagesPath.appBackgroundImage),
                 opacity: 0.15,
                 fit: BoxFit.cover,
               ),
@@ -131,15 +140,14 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                   30.sbH,
                   // Article Title
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25.w),
-                    child: "No, staring at a screen won’t damage your eyes!"
-                        .txtStyled(
-                            fontSize: 30.sp, fontWeight: FontWeight.w800),
+                    padding: 25.padH,
+                    child: widget.articleTitle.txtStyled(
+                        fontSize: 30.sp, fontWeight: FontWeight.w800),
                   ),
                   30.sbH,
                   // Article Credentials, Author, Date Posted, Article read time.
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25.w),
+                    padding: 25.padH,
                     child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,7 +162,7 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                                   PhosphorIcons.regular.notePencil
                                       .iconslide(size: 19.sp),
                                   5.sbW,
-                                  "Author: Not Included".txtStyled(
+                                  "Author: ${widget.articleAuthor}".txtStyled(
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.w600),
                                 ],
@@ -165,9 +173,10 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                                   PhosphorIcons.regular.paperPlaneTilt
                                       .iconslide(size: 19.sp),
                                   5.sbW,
-                                  "Posted: Sun 7 Sep, 2023".txtStyled(
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w500),
+                                  "Posted: ${widget.articlePublicationDate}"
+                                      .txtStyled(
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w500),
                                 ],
                               )
                             ],
@@ -185,7 +194,7 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                   ),
                   30.sbH,
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25.w),
+                    padding: 25.padH,
                     child: const Divider(
                       color: Pallete.blackColor,
                       thickness: 1,
@@ -194,7 +203,7 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                   30.sbH,
                   // Article Content
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25.w),
+                    padding: 25.padH,
                     child: ViNewsAppTexts.newsReadArticlePagePlaceholderText
                         .txtStyled(fontSize: 18.sp),
                   ),

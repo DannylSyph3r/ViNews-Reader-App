@@ -39,8 +39,8 @@ class _OnboardViewState extends ConsumerState<OnboardView> {
       },
       backgroundColor: Pallete.greyColor,
       screenProgressIcon: PhosphorIcons.bold.caretRight,
-      circularProgressForegroundColor: Pallete.appButtonColor,
-      skipTextStyle: TextStyle(fontSize: 19.5.sp, color: Pallete.appButtonColor),
+      circularProgressForegroundColor: Pallete.blackColor,
+      skipTextStyle: TextStyle(fontSize: 19.5.sp, color: Pallete.blackColor),
     );
   }
 }
