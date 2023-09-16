@@ -105,7 +105,7 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                           //     ? 0
                           //     : 1.0,
                           child: widget.articleCategory.txtStyled(
-                              fontSize: 25.sp, fontWeight: FontWeight.w600)),
+                              fontSize: 22.sp, fontWeight: FontWeight.w600)),
                       stretchModes: const [StretchMode.blurBackground],
                       centerTitle: false,
                       // News Article Image

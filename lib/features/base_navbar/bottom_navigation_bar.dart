@@ -8,7 +8,7 @@ import 'package:vinews_news_reader/features/bookmarks/views/bookmarks_search_vie
 import 'package:vinews_news_reader/features/bookmarks/views/bookmarks_views.dart';
 import 'package:vinews_news_reader/features/explore/views/explore_search_view.dart';
 import 'package:vinews_news_reader/features/explore/views/explore_view.dart';
-import 'package:vinews_news_reader/features/home/views/home_screen.dart';
+import 'package:vinews_news_reader/features/home/views/home_screen_listview.dart';
 import 'package:vinews_news_reader/features/settings/views/about_vinews_view.dart';
 import 'package:vinews_news_reader/features/settings/views/liked_articles_view.dart';
 import 'package:vinews_news_reader/features/settings/views/news_language_picker_screen.dart';

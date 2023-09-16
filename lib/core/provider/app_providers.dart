@@ -34,6 +34,16 @@ class SelectedNewsInterestsNotifier extends StateNotifier<List<String>> {
 
 final dialogOpenProvider = StateProvider<bool>((ref) => false);
 
+final homeScreenOverlayActiveProvider = StateProvider<bool>((ref) => false);
+
+final exploreScreenOverlayActiveProider = StateProvider<bool>((ref) => false);
+
+final bookmarksScreenOverlayActiveProvider = StateProvider<bool>((ref) => false);
+
+final readArticlesScreenOverlayActiveProvider = StateProvider<bool>((ref) => false);
+
+final likedArticlesScreenOverlayActiveProvider = StateProvider<bool>((ref) => false);
+
 final selectedNewsInterestsProvider =
     StateNotifierProvider<SelectedNewsInterestsNotifier, List<String>>(
   (ref) => SelectedNewsInterestsNotifier(),
