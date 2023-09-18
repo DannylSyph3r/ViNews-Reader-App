@@ -11,8 +11,10 @@ import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
 import 'package:vinews_news_reader/utils/banner_util.dart';
 import 'package:vinews_news_reader/utils/frosted_glass_box.dart';
+import 'package:vinews_news_reader/utils/modal_bottom_sheet_util.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
+import 'package:vinews_news_reader/widgets/news_interests_modal.dart';
 
 class UserAccountSettingsView extends ConsumerStatefulWidget {
   const UserAccountSettingsView({super.key});
@@ -28,7 +30,7 @@ class _UserAccountSettingsViewState
 
   @override
   Widget build(BuildContext context) {
-    // Handling Loading State for user logout 
+    // Handling Loading State for user logout
     ref.listen<UserAuthenticationState>(authNotifierProvider,
         (previous, state) {
       setState(() {
@@ -42,14 +44,22 @@ class _UserAccountSettingsViewState
         isLoading = false;
         showMaterialBanner(
             context, "Something happened :(", state.error, Pallete.blackColor);
-      } 
+      }
     });
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Pallete.blackColor,
         elevation: 0,
         centerTitle: true,
-        title: "Account Settings".txtStyled(fontSize: 18.sp),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            "Account Settings".txtStyled(fontSize: 18.sp),
+            5.sbW,
+            PhosphorIcons.regular.gear.iconslide(size: 19.sp),
+          ],
+        ),
       ),
       body: Container(
           constraints: const BoxConstraints.expand(),
@@ -88,6 +98,10 @@ class _UserAccountSettingsViewState
                       ),
                       const CustomSettingsDivider(),
                       ListTile(
+                        onTap: () {
+                          // showCustomModalBottomSheet(
+                          //     context, false, const NewsInterestsModal());
+                        },
                         title: "Customize News Interests"
                             .txtStyled(fontSize: 18.sp),
                         trailing: PhosphorIcons.bold.caretRight

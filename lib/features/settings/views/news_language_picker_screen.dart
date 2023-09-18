@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/features/settings/controller/language_list_controller.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
@@ -17,7 +18,15 @@ class NewsLanguageSelectorView extends ConsumerWidget {
         backgroundColor: Pallete.blackColor,
         elevation: 0,
         centerTitle: true,
-        title: "News Language".txtStyled(fontSize: 18.sp),
+        title: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              "News Language".txtStyled(fontSize: 18.sp),
+              5.sbW,
+              PhosphorIcons.regular.globe.iconslide(size: 19.sp),
+            ],
+          ),
       ),
       body: Container(
           constraints: const BoxConstraints.expand(),

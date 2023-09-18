@@ -42,13 +42,21 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
     final List newsInterests = ref.watch(newsInterestSelectionProvider);
     final isOverlayActive = ref.watch(likedArticlesScreenOverlayActiveProvider);
     return DefaultTabController(
-      length: newsInterests.length,
+      length: newsInterests.length + 1 ,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Pallete.blackColor,
           elevation: 0,
           centerTitle: true,
-          title: "Liked Articles".txtStyled(fontSize: 18.sp),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              "Liked Articles".txtStyled(fontSize: 18.sp),
+              5.sbW,
+              PhosphorIcons.regular.heartStraight.iconslide(size: 19.sp),
+            ],
+          ),
           bottom: AppBar(
             automaticallyImplyLeading: false,
             toolbarHeight: 100.h,
@@ -66,8 +74,13 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
               indicatorSize: TabBarIndicatorSize.label,
               splashFactory: NoSplash.splashFactory,
               enableFeedback: true,
-              tabs:
-                  newsInterests.map((interest) => Tab(text: interest)).toList(),
+              tabs: [
+                // "All" Tab added in front of existing newInterest tabs
+                const Tab(text: "All"), // Add the "All" tab
+                ...newsInterests
+                    .map((interest) => Tab(text: interest))
+                    .toList(),
+              ],
             ),
           ),
         ),
@@ -81,177 +94,167 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
             ),
           ),
           child: Stack(children: [
-            Scrollbar(
-              interactive: true,
-              thickness: 6,
-              radius: Radius.circular(12.r),
-              child: SingleChildScrollView(
-                physics: isOverlayActive
-                    ? const NeverScrollableScrollPhysics()
-                    : const BouncingScrollPhysics(),
-                child: Padding(
-                  padding: 30.padV,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // News List View via ListView.builder
-                      ListView.builder(
-                        padding: 0
-                            .padV, //Zero Padding Needed just needed to offset default value
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: articleDisplayList.length,
-                        // The number of times you want to duplicate the widget
-                        itemBuilder: (BuildContext context, int index) {
-                          ArticleSelections articleDisplay =
-                              articleDisplayList[index];
-                          return Padding(
-                            padding: const EdgeInsets.only().padSpec(
-                                top: 13, bottom: 13, right: 25, left: 25),
-                            child: GestureDetector(
-                              onTap: () {
-                                context.pushNamed(
-                                    ViNewsAppRouteConstants.newsArticleReadView,
-                                    pathParameters: {
-                                      "articleImage": articleDisplay.urlImage,
-                                      "articleCategory":
-                                          articleDisplay.articleCategory,
-                                      "heroTag":
-                                          'likedArticlesScreentagImage$index',
-                                      "articleTitle":
-                                          articleDisplay.articleTitle,
-                                      "articleAuthor":
-                                          articleDisplay.articleCategory,
-                                      "articlePublicationDate":
-                                          formattedDate.toString()
-                                    });
-                              },
-                              child: Row(
+            Padding(
+              padding: 30.padV,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // News List View via ListView.builder
+                  ListView.builder(
+                    padding: 0
+                        .padV, //Zero Padding Needed just needed to offset default value
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: articleDisplayList.length,
+                    // The number of times you want to duplicate the widget
+                    itemBuilder: (BuildContext context, int index) {
+                      ArticleSelections articleDisplay =
+                          articleDisplayList[index];
+                      return Padding(
+                        padding: const EdgeInsets.only().padSpec(
+                            top: 13, bottom: 13, right: 25, left: 25),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.pushNamed(
+                                ViNewsAppRouteConstants.newsArticleReadView,
+                                pathParameters: {
+                                  "articleImage": articleDisplay.urlImage,
+                                  "articleCategory":
+                                      articleDisplay.articleCategory,
+                                  "heroTag":
+                                      'likedArticlesScreentagImage$index',
+                                  "articleTitle":
+                                      articleDisplay.articleTitle,
+                                  "articleAuthor":
+                                      articleDisplay.articleCategory,
+                                  "articlePublicationDate":
+                                      formattedDate.toString()
+                                });
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
                                 mainAxisSize: MainAxisSize.max,
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      // News Article Image
-                                      Hero(
-                                        tag:
-                                            'likedArticlesScreentagImage$index',
-                                        child: Container(
-                                          width: 125.w,
-                                          height: 110.h,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10.r),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10.r),
-                                            child: Image.network(
-                                              articleDisplay.urlImage,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
+                                  // News Article Image
+                                  Hero(
+                                    tag:
+                                        'likedArticlesScreentagImage$index',
+                                    child: Container(
+                                      width: 125.w,
+                                      height: 110.h,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.r),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(10.r),
+                                        child: Image.network(
+                                          articleDisplay.urlImage,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                  15.sbW,
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      mainAxisSize: MainAxisSize.max,
+                                ],
+                              ),
+                              15.sbW,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    // News Article Title
+                                    articleDisplay.articleTitle.txtStyled(
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w700,
+                                      maxLines: 2,
+                                      textOverflow: TextOverflow.ellipsis,
+                                    ),
+                                    3.sbH,
+                                    Row(
                                       children: [
-                                        // News Article Title
-                                        articleDisplay.articleTitle.txtStyled(
-                                          fontSize: 20.sp,
-                                          fontWeight: FontWeight.w700,
-                                          maxLines: 2,
-                                          textOverflow: TextOverflow.ellipsis,
-                                        ),
-                                        3.sbH,
                                         Row(
                                           children: [
-                                            Row(
-                                              children: [
-                                                PhosphorIcons.bold.tag
-                                                    .iconslide(size: 18.sp),
-                                                7.sbW,
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Pallete.blackColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            7.r),
-                                                  ),
-                                                  // News Article Category
-                                                  child: Padding(
-                                                    padding: 6.0.padA,
-                                                    child: articleDisplay
-                                                        .articleCategory
-                                                        .txtStyled(
-                                                      fontSize: 14.sp,
-                                                      color: Pallete.whiteColor,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                                  ),
+                                            PhosphorIcons.bold.tag
+                                                .iconslide(size: 18.sp),
+                                            7.sbW,
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: Pallete.blackColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        7.r),
+                                              ),
+                                              // News Article Category
+                                              child: Padding(
+                                                padding: 6.0.padA,
+                                                child: articleDisplay
+                                                    .articleCategory
+                                                    .txtStyled(
+                                                  fontSize: 14.sp,
+                                                  color: Pallete.whiteColor,
+                                                  fontWeight:
+                                                      FontWeight.w600,
                                                 ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        3.sbH,
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            // Article Publication Date
-                                            Row(
-                                              children: [
-                                                PhosphorIcons
-                                                    .bold.paperPlaneTilt
-                                                    .iconslide(size: 18.sp),
-                                                7.sbW,
-                                                formattedDate.txtStyled(
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ],
-                                            ),
-                                            5.sbW,
-                                            // More Options
-                                            GestureDetector(
-                                              onTap: () {
-                                                // Update the ValueNotifier with the index of the selected news article for the overlay.
-                                                _selectedOptionIndexValueNotifier
-                                                    .value = index;
-                                                ref
-                                                    .read(
-                                                        likedArticlesScreenOverlayActiveProvider
-                                                            .notifier)
-                                                    .update((state) => !state);
-                                              },
-                                              child: PhosphorIcons
-                                                  .bold.dotsThree
-                                                  .iconslide(size: 27.sp),
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ],
+                                    3.sbH,
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        // Article Publication Date
+                                        Row(
+                                          children: [
+                                            PhosphorIcons
+                                                .bold.paperPlaneTilt
+                                                .iconslide(size: 18.sp),
+                                            7.sbW,
+                                            formattedDate.txtStyled(
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ],
+                                        ),
+                                        5.sbW,
+                                        // More Options
+                                        GestureDetector(
+                                          onTap: () {
+                                            // Update the ValueNotifier with the index of the selected news article for the overlay.
+                                            _selectedOptionIndexValueNotifier
+                                                .value = index;
+                                            ref
+                                                .read(
+                                                    likedArticlesScreenOverlayActiveProvider
+                                                        .notifier)
+                                                .update((state) => !state);
+                                          },
+                                          child: PhosphorIcons
+                                              .bold.dotsThree
+                                              .iconslide(size: 27.sp),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                      20.sbH
-                    ],
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ),
+                  20.sbH
+                ],
               ),
             ),
             // News Article Frosted Glass Preview Overlay

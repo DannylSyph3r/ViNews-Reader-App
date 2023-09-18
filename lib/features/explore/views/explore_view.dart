@@ -124,29 +124,31 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
               ),
             ),
             child: Stack(children: [
-              Scrollbar(
-                interactive: true,
-                thickness: 6,
-                radius: Radius.circular(12.r),
-                child: SingleChildScrollView(
-                  physics: isOverlayActive
-                      ? const NeverScrollableScrollPhysics()
-                      : const BouncingScrollPhysics(),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only().padSpec(top: 30, bottom: 30),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // News Article ListView
-                        ListView.builder(
-                            padding: 5.padV,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: 10,
-                            itemBuilder: (BuildContext context, int index) {
+              Center(
+                child: Padding(
+                  padding: 30.padV,
+                  child: TabBarView(
+                      children: newsInterests.map((interest) {
+                    // Filter the articles based on the selected category
+                    final filteredExploreArticles = articleDisplayList
+                        .where((article) => article.articleCategory == interest)
+                        .toList();
+                    return Scrollbar(
+                      interactive: true,
+                      thickness: 6,
+                      radius: Radius.circular(12.r),
+                      child: ListView.builder(
+                          padding: 5.padV,
+                          physics: isOverlayActive
+                              ? const NeverScrollableScrollPhysics()
+                              : const BouncingScrollPhysics(
+                                  parent: AlwaysScrollableScrollPhysics()),
+                          shrinkWrap: true,
+                          itemCount: 10,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index < filteredExploreArticles.length) {
                               ArticleSelections articleDisplayExplore =
-                                  articleDisplayList[index];
+                                  filteredExploreArticles[index];
                               if (index == 0) {
                                 // Explore page Headliner Article
                                 return Padding(
@@ -226,8 +228,16 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                                             // Headliner article (More Options)
                                             GestureDetector(
                                               onTap: () {
+                                                final selectedHeadlinerArticle =
+                                                    filteredExploreArticles[
+                                                        index];
+                                                final originalIndex =
+                                                    articleDisplayList.indexOf(
+                                                        selectedHeadlinerArticle);
+                                                // Update Index for Overlay Display
                                                 _selectedOptionIndexValueNotifier
-                                                    .value = index;
+                                                    .value = originalIndex;
+                                                // Display Overlay
                                                 ref
                                                     .read(
                                                         exploreScreenOverlayActiveProider
@@ -244,7 +254,7 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                                     ),
                                   ),
                                 );
-                              } else {
+                              } else if (index > 0) {
                                 return Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 25.w, vertical: 10.h),
@@ -348,8 +358,18 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                                                     // More Options
                                                     GestureDetector(
                                                       onTap: () {
+                                                        final selectedArticle =
+                                                            filteredExploreArticles[
+                                                                index];
+                                                        final originalIndex =
+                                                            articleDisplayList
+                                                                .indexOf(
+                                                                    selectedArticle);
+                                                        // Update Index for Overlay Display
                                                         _selectedOptionIndexValueNotifier
-                                                            .value = index;
+                                                                .value =
+                                                            originalIndex;
+                                                        // Display Overlay
                                                         ref
                                                             .read(
                                                                 exploreScreenOverlayActiveProider
@@ -371,10 +391,13 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                                       )),
                                 );
                               }
-                            })
-                      ],
-                    ),
-                  ),
+                            } else {
+                              return const SizedBox.shrink();
+                            }
+                            return null;
+                          }),
+                    );
+                  }).toList()),
                 ),
               ),
               // News Article Frosted Glass Preview Overlay
@@ -396,7 +419,7 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                               theChild: Padding(
                                 padding: 20.0.padA,
                                 child: Container(
-                                  height: 550.h,
+                                  height: 590.h,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20.r),
@@ -501,7 +524,7 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                                                     ),
                                                     // News Article Category
                                                     child: Padding(
-                                                      padding: 6.0.padA,
+                                                      padding: 7.0.padA,
                                                       child:
                                                           articleOverlayDisplay
                                                               .articleCategory
@@ -534,15 +557,19 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                                           Row(
                                             children: [
                                               PhosphorIcons.bold.bookmarks
-                                                  .iconslide(size: 32.sp),
+                                                  .iconslide(size: 35.sp),
                                               5.sbW,
-                                              PhosphorIcons.bold.heart
-                                                  .iconslide(size: 32.sp)
+                                              PhosphorIcons.bold.heartStraight
+                                                  .iconslide(size: 35.sp)
                                             ],
                                           )
                                         ],
                                       ),
                                       20.sbH,
+                                      const Divider(
+                                        thickness: 1,
+                                      ),
+                                      15.sbH,
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,

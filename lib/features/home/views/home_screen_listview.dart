@@ -371,7 +371,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                             theChild: Padding(
                               padding: 20.0.padA,
                               child: Container(
-                                height: 550.h,
+                                height: 590.h,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.r),
@@ -475,7 +475,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                                   ),
                                                   // News Article Category
                                                   child: Padding(
-                                                    padding: 6.0.padA,
+                                                    padding: 7.0.padA,
                                                     child: articleOverlayDisplay
                                                         .articleCategory
                                                         .txtStyled(
@@ -506,15 +506,19 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                         Row(
                                           children: [
                                             PhosphorIcons.bold.bookmarks
-                                                .iconslide(size: 32.sp),
+                                                .iconslide(size: 35.sp),
                                             5.sbW,
-                                            PhosphorIcons.bold.heart
-                                                .iconslide(size: 32.sp)
+                                            PhosphorIcons.bold.heartStraight
+                                                .iconslide(size: 35.sp)
                                           ],
                                         )
                                       ],
                                     ),
                                     20.sbH,
+                                    const Divider(
+                                      thickness: 1,
+                                    ),
+                                    15.sbH,
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,

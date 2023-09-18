@@ -28,7 +28,7 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
       child: Stack(
         children: [
           Container(
-            height: 875.h,
+            height: 720.h,
             decoration: BoxDecoration(
                 color: Pallete.greyColor,
                 borderRadius: BorderRadius.only(
@@ -37,7 +37,9 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
                 )),
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 15.h),
-              child: Column(children: [
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
                 Container(
                   height: 5,
                   width: 120,
@@ -47,9 +49,9 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
                 ),
                 40.sbH,
                 "Choose Your News Interests"
-                    .txtStyled(fontSize: 28.sp, fontWeight: FontWeight.w800),
+                    .txtStyled(fontSize: 24.sp, fontWeight: FontWeight.w800),
                 15.sbH,
-                "Get better News Recommendations".txtStyled(fontSize: 20.sp),
+                "Get better News Recommendations".txtStyled(fontSize: 18.sp),
                 40.sbH,
                 Padding(
                   padding: 23.padH,
@@ -74,7 +76,7 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             newsInterests[index].txtStyled(
-                              fontSize: 18.5.sp,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.w800,
                               color: isSelected
                                   ? Pallete.whiteColor
@@ -90,66 +92,69 @@ class _NewsInterestsModalState extends ConsumerState<NewsInterestsModal> {
                     }),
                   ),
                 ),
-                315.sbH,
+                100.sbH,
                 const Divider(color: Pallete.blackColor),
-                15.sbH,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        ref
-                            .read(dialogOpenProvider.notifier)
-                            .update((state) => !state);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        fixedSize: Size(175.w, 62.w),
-                        backgroundColor:
-                            const Color.fromARGB(161, 237, 226, 226),
-                        side: BorderSide(
-                            width: 2.5.w, color: Pallete.blackColor),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(11),
+                10.sbH,
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          ref
+                              .read(dialogOpenProvider.notifier)
+                              .update((state) => !state);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          fixedSize: Size(175.w, 62.w),
+                          backgroundColor:
+                              const Color.fromARGB(161, 237, 226, 226),
+                          side: BorderSide(
+                              width: 2.5.w, color: Pallete.blackColor),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(11),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            "Skip".txtStyled(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w800,
+                              color: Pallete.blackColor,
+                            ),
+                          ],
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          "Skip".txtStyled(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w800,
-                            color: Pallete.blackColor,
+                      17.sbW,
+                      ElevatedButton(
+                        onPressed: selectedNewsInterests.isEmpty
+                            ? null
+                            : () {
+                                print(selectedNewsInterests);
+                              },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          fixedSize: Size(175.w, 62.w),
+                          backgroundColor: Pallete.blackColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(11),
                           ),
-                        ],
-                      ),
-                    ),
-                    17.sbW,
-                    ElevatedButton(
-                      onPressed: selectedNewsInterests.isEmpty
-                          ? null
-                          : () {
-                              print(selectedNewsInterests);
-                            },
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        fixedSize: Size(175.w, 62.w),
-                        backgroundColor: Pallete.blackColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(11),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            "Next".txtStyled(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ],
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          "Next".txtStyled(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 )
               ]),
             ),
