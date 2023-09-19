@@ -42,7 +42,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
     final List newsInterests = ref.watch(newsInterestSelectionProvider);
     final isOverlayActive = ref.watch(likedArticlesScreenOverlayActiveProvider);
     return DefaultTabController(
-      length: newsInterests.length + 1 ,
+      length: newsInterests.length + 1,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Pallete.blackColor,
@@ -94,42 +94,189 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
             ),
           ),
           child: Stack(children: [
-            Padding(
-              padding: 30.padV,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // News List View via ListView.builder
-                  ListView.builder(
-                    padding: 0
-                        .padV, //Zero Padding Needed just needed to offset default value
+            TabBarView(children: [
+              // ListView for "All" tab
+              ListView.builder(
+                padding: 20
+                    .padV, //Zero Padding Needed just needed to offset default value
+                shrinkWrap: true,
+                physics: isOverlayActive
+                    ? const NeverScrollableScrollPhysics()
+                    : const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                itemCount: articleDisplayList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  ArticleSelections articleDisplay = articleDisplayList[index];
+                  return Padding(
+                    padding: const EdgeInsets.only()
+                        .padSpec(top: 13, bottom: 13, right: 25, left: 25),
+                    child: GestureDetector(
+                      onTap: () {
+                        context.pushNamed(
+                            ViNewsAppRouteConstants.newsArticleReadView,
+                            pathParameters: {
+                              "articleImage": articleDisplay.urlImage,
+                              "articleCategory": articleDisplay.articleCategory,
+                              "heroTag": 'likedArticlesScreentagImage$index',
+                              "articleTitle": articleDisplay.articleTitle,
+                              "articleAuthor": articleDisplay.articleCategory,
+                              "articlePublicationDate": formattedDate.toString()
+                            });
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              // News Article Image
+                              Hero(
+                                tag: 'likedArticlesScreentagImage$index',
+                                child: Container(
+                                  width: 125.w,
+                                  height: 110.h,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.r),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.r),
+                                    child: Image.network(
+                                      articleDisplay.urlImage,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          15.sbW,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                // News Article Title
+                                articleDisplay.articleTitle.txtStyled(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w700,
+                                  maxLines: 2,
+                                  textOverflow: TextOverflow.ellipsis,
+                                ),
+                                3.sbH,
+                                Row(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        PhosphorIcons.bold.tag
+                                            .iconslide(size: 18.sp),
+                                        7.sbW,
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Pallete.blackColor,
+                                            borderRadius:
+                                                BorderRadius.circular(7.r),
+                                          ),
+                                          // News Article Category
+                                          child: Padding(
+                                            padding: 6.0.padA,
+                                            child: articleDisplay
+                                                .articleCategory
+                                                .txtStyled(
+                                              fontSize: 14.sp,
+                                              color: Pallete.whiteColor,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                3.sbH,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    // Article Publication Date
+                                    Row(
+                                      children: [
+                                        PhosphorIcons.bold.paperPlaneTilt
+                                            .iconslide(size: 18.sp),
+                                        7.sbW,
+                                        formattedDate.txtStyled(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ],
+                                    ),
+                                    5.sbW,
+                                    // More Options
+                                    GestureDetector(
+                                      onTap: () {
+                                        // Update the ValueNotifier with the index of the selected news article for the overlay.
+                                        _selectedOptionIndexValueNotifier
+                                            .value = index;
+                                        ref
+                                            .read(
+                                                likedArticlesScreenOverlayActiveProvider
+                                                    .notifier)
+                                            .update((state) => !state);
+                                      },
+                                      child: PhosphorIcons.bold.dotsThree
+                                          .iconslide(size: 27.sp),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+              // The rest of the News Interest tabs
+              ...newsInterests.map((interest) {
+                // Filter the articles based on the selected category
+                final filteredArticles = articleDisplayList
+                    .where((article) => article.articleCategory == interest)
+                    .toList();
+
+                return Scrollbar(
+                  interactive: true,
+                  thickness: 6,
+                  radius: Radius.circular(12.r),
+                  child: ListView.builder(
+                    padding: 20.padV,
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: articleDisplayList.length,
-                    // The number of times you want to duplicate the widget
+                    physics: isOverlayActive
+                        ? const NeverScrollableScrollPhysics()
+                        : const BouncingScrollPhysics(
+                            parent: AlwaysScrollableScrollPhysics()),
+                    itemCount: filteredArticles.length,
                     itemBuilder: (BuildContext context, int index) {
                       ArticleSelections articleDisplay =
-                          articleDisplayList[index];
+                          filteredArticles[index];
                       return Padding(
-                        padding: const EdgeInsets.only().padSpec(
-                            top: 13, bottom: 13, right: 25, left: 25),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 13.h, horizontal: 25.w),
                         child: GestureDetector(
                           onTap: () {
                             context.pushNamed(
-                                ViNewsAppRouteConstants.newsArticleReadView,
-                                pathParameters: {
-                                  "articleImage": articleDisplay.urlImage,
-                                  "articleCategory":
-                                      articleDisplay.articleCategory,
-                                  "heroTag":
-                                      'likedArticlesScreentagImage$index',
-                                  "articleTitle":
-                                      articleDisplay.articleTitle,
-                                  "articleAuthor":
-                                      articleDisplay.articleCategory,
-                                  "articlePublicationDate":
-                                      formattedDate.toString()
-                                });
+                              ViNewsAppRouteConstants.newsArticleReadView,
+                              pathParameters: {
+                                "articleImage": articleDisplay.urlImage,
+                                "articleCategory":
+                                    articleDisplay.articleCategory,
+                                "heroTag": 'likedArticlesScreentagImage$index',
+                                "articleTitle": articleDisplay.articleTitle,
+                                "articleAuthor": articleDisplay.articleCategory,
+                                "articlePublicationDate":
+                                    formattedDate.toString(),
+                              },
+                            );
                           },
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
@@ -140,8 +287,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                 children: [
                                   // News Article Image
                                   Hero(
-                                    tag:
-                                        'likedArticlesScreentagImage$index',
+                                    tag: 'likedArticlesScreentagImage$index',
                                     child: Container(
                                       width: 125.w,
                                       height: 110.h,
@@ -168,7 +314,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                       CrossAxisAlignment.stretch,
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    // News Article Title
+                                    // News Article Image
                                     articleDisplay.articleTitle.txtStyled(
                                       fontSize: 20.sp,
                                       fontWeight: FontWeight.w700,
@@ -185,21 +331,18 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                             7.sbW,
                                             Container(
                                               decoration: BoxDecoration(
-                                                color: Pallete.blackColor,
+                                                color: Pallete.appButtonColor,
                                                 borderRadius:
-                                                    BorderRadius.circular(
-                                                        7.r),
+                                                    BorderRadius.circular(7.r),
                                               ),
-                                              // News Article Category
                                               child: Padding(
                                                 padding: 6.0.padA,
                                                 child: articleDisplay
                                                     .articleCategory
                                                     .txtStyled(
-                                                  fontSize: 14.sp,
+                                                  fontSize: 13.sp,
                                                   color: Pallete.whiteColor,
-                                                  fontWeight:
-                                                      FontWeight.w600,
+                                                  fontWeight: FontWeight.w600,
                                                 ),
                                               ),
                                             ),
@@ -212,12 +355,13 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        // Article Publication Date
                                         Row(
                                           children: [
-                                            PhosphorIcons
-                                                .bold.paperPlaneTilt
-                                                .iconslide(size: 18.sp),
+                                            // Article Publication Date
+                                            PhosphorIcons.bold.paperPlaneTilt
+                                                .iconslide(
+                                              size: 18.sp,
+                                            ),
                                             7.sbW,
                                             formattedDate.txtStyled(
                                               fontSize: 16.sp,
@@ -229,18 +373,25 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                         // More Options
                                         GestureDetector(
                                           onTap: () {
-                                            // Update the ValueNotifier with the index of the selected news article for the overlay.
+                                            final selectedArticle =
+                                                filteredArticles[index];
+                                            final originalIndex =
+                                                articleDisplayList
+                                                    .indexOf(selectedArticle);
+                                            // Update Index for Overlay Display
                                             _selectedOptionIndexValueNotifier
-                                                .value = index;
+                                                .value = originalIndex;
+                                            // Display Overlay
                                             ref
                                                 .read(
                                                     likedArticlesScreenOverlayActiveProvider
                                                         .notifier)
                                                 .update((state) => !state);
                                           },
-                                          child: PhosphorIcons
-                                              .bold.dotsThree
-                                              .iconslide(size: 27.sp),
+                                          child: PhosphorIcons.bold.dotsThree
+                                              .iconslide(
+                                            size: 27.sp,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -253,10 +404,9 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                       );
                     },
                   ),
-                  20.sbH
-                ],
-              ),
-            ),
+                );
+              }).toList(),
+            ]),
             // News Article Frosted Glass Preview Overlay
             AnimatedOpacity(
                 duration: const Duration(milliseconds: 400),
@@ -273,10 +423,11 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                         return FrostedGlassBox(
                             theWidth: MediaQuery.of(context).size.width,
                             theHeight: MediaQuery.of(context).size.height,
+                            theChildAlignment: MainAxisAlignment.end,
                             theChild: Padding(
                               padding: 20.0.padA,
                               child: Container(
-                                height: 550.h,
+                                height: 590.h,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.r),
@@ -380,7 +531,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                   ),
                                                   // News Article Category
                                                   child: Padding(
-                                                    padding: 6.0.padA,
+                                                    padding: 7.0.padA,
                                                     child: articleOverlayDisplay
                                                         .articleCategory
                                                         .txtStyled(
@@ -411,15 +562,19 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                         Row(
                                           children: [
                                             PhosphorIcons.bold.bookmarks
-                                                .iconslide(size: 32.sp),
+                                                .iconslide(size: 35.sp),
                                             5.sbW,
-                                            PhosphorIcons.bold.heart
-                                                .iconslide(size: 32.sp)
+                                            PhosphorIcons.bold.heartStraight
+                                                .iconslide(size: 35.sp)
                                           ],
                                         )
                                       ],
                                     ),
                                     20.sbH,
+                                    const Divider(
+                                      thickness: 1,
+                                    ),
+                                    15.sbH,
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,

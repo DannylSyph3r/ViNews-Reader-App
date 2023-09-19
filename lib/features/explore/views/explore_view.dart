@@ -416,10 +416,11 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                           return FrostedGlassBox(
                               theWidth: MediaQuery.of(context).size.width,
                               theHeight: MediaQuery.of(context).size.height,
+                              theChildAlignment: MainAxisAlignment.end,
                               theChild: Padding(
                                 padding: 20.0.padA,
                                 child: Container(
-                                  height: 590.h,
+                                  height: 550.h,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20.r),
@@ -565,11 +566,11 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                                           )
                                         ],
                                       ),
-                                      20.sbH,
+                                      10.sbH,
                                       const Divider(
                                         thickness: 1,
                                       ),
-                                      15.sbH,
+                                      10.sbH,
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,

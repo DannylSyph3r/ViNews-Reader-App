@@ -14,6 +14,7 @@ import 'package:vinews_news_reader/features/settings/views/liked_articles_view.d
 import 'package:vinews_news_reader/features/settings/views/news_language_picker_screen.dart';
 import 'package:vinews_news_reader/features/settings/views/read_articles_view.dart';
 import 'package:vinews_news_reader/features/settings/views/user_account_view.dart';
+import 'package:vinews_news_reader/features/settings/views/user_news_interest.dart';
 import 'package:vinews_news_reader/features/settings/views/user_profile_settings.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
@@ -80,11 +81,12 @@ class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
           inactiveColorSecondary: Pallete.greyColor,
           routeAndNavigatorSettings:
               RouteAndNavigatorSettings(initialRoute: '/', routes: {
-            'readArticles': (context) => const ReadArticlesView(),
+            '/readArticles': (context) => const ReadArticlesView(),
             '/likedArticles': (context) => const LikedArticlesView(),
             '/accountSettings': (context) => const UserAccountSettingsView(),
             '/languageSelector': (context) => const NewsLanguageSelectorView(),
             '/aboutViNews': (context) => const AboutViNewsView(),
+            '/newInterests': (context) => const NewsInterestSelectionView(),
           })),
     ];
   }

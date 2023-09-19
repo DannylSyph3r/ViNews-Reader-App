@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 
 class FrostedGlassBox extends StatelessWidget {
-  
   final double theWidth;
   final double theHeight;
+  final MainAxisAlignment? theChildAlignment;
   final Widget theChild;
   const FrostedGlassBox(
       {Key? key,
       required this.theWidth,
       required this.theHeight,
+      this.theChildAlignment = MainAxisAlignment.center,
       required this.theChild})
       : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class FrostedGlassBox extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      //begin color  
+                      //begin color
                       Colors.white.withOpacity(0.15),
                       //end color
                       Colors.white.withOpacity(0.05),
@@ -55,7 +55,10 @@ class FrostedGlassBox extends StatelessWidget {
               ),
             ),
             //child ==> the first/top layer of stack
-            Center(child: theChild),
+            Center(
+                child: Column(
+                    mainAxisAlignment: theChildAlignment!,
+                    children: [theChild])),
           ],
         ),
       ),

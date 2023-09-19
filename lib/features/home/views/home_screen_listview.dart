@@ -368,10 +368,11 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                         return FrostedGlassBox(
                             theWidth: MediaQuery.of(context).size.width,
                             theHeight: MediaQuery.of(context).size.height,
+                            theChildAlignment: MainAxisAlignment.end,
                             theChild: Padding(
                               padding: 20.0.padA,
                               child: Container(
-                                height: 590.h,
+                                height: 580.h,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.r),

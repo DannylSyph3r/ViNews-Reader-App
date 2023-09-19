@@ -3,18 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/features/auth/controllers/auth_action_controllers.dart';
 import 'package:vinews_news_reader/features/auth/states/login_state.dart';
+import 'package:vinews_news_reader/features/settings/views/user_news_interest.dart';
 import 'package:vinews_news_reader/features/settings/widgets/settings_custom_divider.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/themes/color_pallete.dart';
 import 'package:vinews_news_reader/utils/banner_util.dart';
 import 'package:vinews_news_reader/utils/frosted_glass_box.dart';
-import 'package:vinews_news_reader/utils/modal_bottom_sheet_util.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
-import 'package:vinews_news_reader/widgets/news_interests_modal.dart';
 
 class UserAccountSettingsView extends ConsumerStatefulWidget {
   const UserAccountSettingsView({super.key});
@@ -99,8 +99,7 @@ class _UserAccountSettingsViewState
                       const CustomSettingsDivider(),
                       ListTile(
                         onTap: () {
-                          // showCustomModalBottomSheet(
-                          //     context, false, const NewsInterestsModal());
+                           navigateToNewsSelectionPage(context);
                         },
                         title: "Customize News Interests"
                             .txtStyled(fontSize: 18.sp),
@@ -156,5 +155,11 @@ class _UserAccountSettingsViewState
             ),
           ])),
     );
+  }
+
+  void navigateToNewsSelectionPage(BuildContext context) {
+    pushNewScreenWithRouteSettings(context,
+        screen: const NewsInterestSelectionView(),
+        settings: const RouteSettings(name: "/newInterests"));
   }
 }
