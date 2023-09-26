@@ -102,18 +102,10 @@ class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
         itemCount: 4,
         confineInSafeArea: true,
         handleAndroidBackButtonPress: true, 
-        resizeToAvoidBottomInset:
-            true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
-        stateManagement: true,
-        hideNavigationBarWhenKeyboardShows:
-            true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
+        resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
+        stateManagement: false,
+        hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
         popAllScreensOnTapOfSelectedTab: true,
-        screenTransitionAnimation: const ScreenTransitionAnimation(
-          // Screen transition animation on change of selected tab.
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 250),
-        ),
         navBarHeight: 80.h,
         customWidget: (navBarLineUp) => CustomNavBarStyle(
             _navController.index, _navBarSelection(), (index) {

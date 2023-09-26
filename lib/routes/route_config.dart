@@ -8,9 +8,10 @@ import 'package:vinews_news_reader/features/auth/views/initalized_screen.dart';
 import 'package:vinews_news_reader/features/auth/views/login_view.dart';
 import 'package:vinews_news_reader/features/auth/views/sign_up_view.dart';
 import 'package:vinews_news_reader/features/base_navbar/bottom_navigation_bar.dart';
+import 'package:vinews_news_reader/features/bookmarks/views/bookmarks_search_results_screen.dart';
+import 'package:vinews_news_reader/features/explore/views/explore_search_results_view.dart';
 import 'package:vinews_news_reader/features/onboard/views/onboard_view.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/features/home/views/home_screen_listview.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -138,46 +139,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        name: ViNewsAppRouteConstants.homeScreenRouteName,
-        path: '/home',
-        pageBuilder: (BuildContext context, GoRouterState state) {
-          return CustomTransitionPage(
-            key: state.pageKey,
-            child: const UserHomePageView(),
-            transitionDuration: const Duration(milliseconds: 250),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(1.0, 0.0), // Slide from right
-                  end: Offset.zero, // Slide to the center
-                ).animate(CurvedAnimation(
-                  parent: animation,
-                  curve: Curves.easeInOut,
-                )),
-                child: child,
-              );
-            },
-          );
-        },
-      ),
-      GoRoute(
-        name: ViNewsAppRouteConstants.newsArticleReadView,
-        path:
-            '/articlereadview/:articleImage/:articleCategory/:heroTag/:articleTitle/:articleAuthor/:articlePublicationDate',
-        builder: (BuildContext context, GoRouterState state) {
-          return NewsArticleReadView(
-            articleImage: state.pathParameters['articleImage']!,
-            articleCategory: state.pathParameters['articleCategory']!,
-            heroTag: state.pathParameters['heroTag']!,
-            articleTitle: state.pathParameters["articleTitle"]!,
-            articleAuthor: state.pathParameters["articleAuthor"]!,
-            articlePublicationDate:
-                state.pathParameters["articlePublicationDate"]!,
-          );
-        },
-      ),
-      GoRoute(
         name: ViNewsAppRouteConstants.forgotPasswordScreenRouteName,
         path: '/forgotpassword',
         pageBuilder: (BuildContext context, GoRouterState state) {
@@ -223,6 +184,40 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 child: child,
               );
             },
+          );
+        },
+      ),
+      GoRoute(
+        name: ViNewsAppRouteConstants.newsArticleReadView,
+        path:
+            '/articlereadview/:articleImage/:articleCategory/:heroTag/:articleTitle/:articleAuthor/:articlePublicationDate',
+        builder: (BuildContext context, GoRouterState state) {
+          return NewsArticleReadView(
+            articleImage: state.pathParameters['articleImage']!,
+            articleCategory: state.pathParameters['articleCategory']!,
+            heroTag: state.pathParameters['heroTag']!,
+            articleTitle: state.pathParameters["articleTitle"]!,
+            articleAuthor: state.pathParameters["articleAuthor"]!,
+            articlePublicationDate:
+                state.pathParameters["articlePublicationDate"]!,
+          );
+        },
+      ),
+      GoRoute(
+        name: ViNewsAppRouteConstants.userExploreSearchResultsRouteName,
+        path: '/userexploresearchresults/:searchedWord',
+        builder: (BuildContext context, GoRouterState state) {
+          return ExploreSearchResultsView(
+            searchedWord: state.pathParameters['searchedWord']!,
+          );
+        },
+      ),
+      GoRoute(
+        name: ViNewsAppRouteConstants.userBookmarksSearchResultsRouteName,
+        path: '/userbookmarkssearchresults/:searchedWord',
+        builder: (BuildContext context, GoRouterState state) {
+          return BookmarkSearchResultsView(
+            searchedWord: state.pathParameters['searchedWord']!,
           );
         },
       ),

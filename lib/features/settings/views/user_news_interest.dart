@@ -68,7 +68,7 @@ class _NewsInterestSelectionViewState
                               fontSize: 24.sp, fontWeight: FontWeight.w800),
                           15.sbH,
                           "Get better News Recommendations on your Home Screen"
-                              .txtStyled(fontSize: 18.sp),
+                              .txtStyled(fontSize: 18.sp, textAlign: TextAlign.center),
                           50.sbH,
                           Wrap(
                             spacing: 15.w,
@@ -92,7 +92,7 @@ class _NewsInterestSelectionViewState
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     newsInterests[index].txtStyled(
-                                      fontSize: 18.sp,
+                                      fontSize: 16.sp,
                                       fontWeight: FontWeight.w800,
                                       color: isSelected
                                           ? Pallete.whiteColor
@@ -112,7 +112,7 @@ class _NewsInterestSelectionViewState
                       ),
                       Column(
                         children: [
-                          const Divider(color: Pallete.blackColor),
+                          const Divider(color: Pallete.blackColor, thickness: 1),
                           10.sbH,
                           Align(
                             alignment: Alignment.bottomCenter,
@@ -141,7 +141,7 @@ class _NewsInterestSelectionViewState
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       "Skip".txtStyled(
-                                        fontSize: 18.sp,
+                                        fontSize: 16.sp,
                                         fontWeight: FontWeight.w800,
                                         color: Pallete.blackColor,
                                       ),
@@ -167,7 +167,7 @@ class _NewsInterestSelectionViewState
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       "Save".txtStyled(
-                                        fontSize: 18.sp,
+                                        fontSize: 16.sp,
                                         fontWeight: FontWeight.w800,
                                       ),
                                     ],

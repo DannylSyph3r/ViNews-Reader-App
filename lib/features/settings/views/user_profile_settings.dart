@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -247,6 +248,13 @@ class _UserProfileSettingsViewState
                               size: 18.sp, color: Pallete.blackColor),
                         ),
                         const CustomSettingsDivider(),
+                        ListTile(
+                          onTap: () => clearCache(),
+                          title: "Clear Cache".txtStyled(fontSize: 18.sp),
+                          trailing: PhosphorIcons.bold.caretRight.iconslide(
+                              size: 18.sp, color: Pallete.blackColor),
+                        ),
+                        const CustomSettingsDivider(),
                       ],
                     ),
                     100.sbH,
@@ -300,5 +308,11 @@ class _UserProfileSettingsViewState
     pushNewScreenWithRouteSettings(context,
         screen: const AboutViNewsView(),
         settings: const RouteSettings(name: "/aboutViNews"));
+  }
+
+  void clearCache(){
+    DefaultCacheManager().emptyCache();
+    imageCache.clear();
+    imageCache.clearLiveImages();
   }
 }

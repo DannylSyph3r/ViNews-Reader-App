@@ -136,3 +136,33 @@ extension EdgeInsetsExtension on EdgeInsets {
   }
 }
 
+// Duration Extension
+extension DurationExtension on int {
+  Duration get milliseconds => Duration(milliseconds: this);
+  Duration get seconds => Duration(seconds: this);
+  Duration get minutes => Duration(minutes: this);
+  Duration get hours => Duration(hours: this);
+  Duration get days => Duration(days: this);
+}
+
+
+// Create a value notifier directly from an assigned value.
+extension ValueNotifierExtension<T> on T {
+  ValueNotifier<T> get notifier {
+    return ValueNotifier<T>(this);
+  }
+}
+
+// Value Listenable Builder Extension
+extension ValueNotifierBuilderExtension<T> on ValueNotifier<T> {
+  Widget sync({
+    required Widget Function(BuildContext context, T value, Widget? child)
+        builder,
+  }) {
+    return ValueListenableBuilder<T>(
+      valueListenable: this,
+      builder: builder,
+    );
+  }
+}
+

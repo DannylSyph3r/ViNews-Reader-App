@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -111,8 +112,9 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                       // News Article Image
                       background: Hero(
                           tag: widget.heroTag,
-                          child: Image.network(
-                            widget.articleImage,
+                          child: CachedNetworkImage(
+                            key: UniqueKey(),
+                            imageUrl: widget.articleImage,
                             fit: BoxFit.cover,
                           )),
                     );

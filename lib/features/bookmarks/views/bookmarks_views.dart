@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -78,10 +79,8 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                     padding: const EdgeInsets.only().padSpec(right: 30),
                     child: GestureDetector(
                         onTap: () => navigateToBookmarksSearchScreen(context),
-                        child: Hero(
-                            tag: 'bookmarksSearchHeroTag',
-                            child: PhosphorIcons.regular.magnifyingGlass
-                                .iconslide())),
+                        child: PhosphorIcons.regular.magnifyingGlass
+                            .iconslide()),
                   )
                 ],
                 // TabBar pinned on Sliver Collapse
@@ -104,10 +103,20 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                     enableFeedback: true,
                     tabs: [
                       // "All" Tab added in front of existing newInterest tabs
-                      const Tab(text: "All"), // Add the "All" tab
-                      ...newsInterests
-                          .map((interest) => Tab(text: interest))
-                          .toList(),
+                      Tab(
+                          text:
+                              "All (${articleDisplayList.length})"), // Add the "All" tab and display the article count
+                      ...newsInterests.asMap().entries.map((entry) {
+                        String interest = entry.value;
+                        int categoryCount = articleDisplayList
+                            .where((article) =>
+                                article.articleCategory == interest)
+                            .length;
+                        return Tab(
+                          text:
+                              "$interest ($categoryCount)", // Display the count
+                        );
+                      }),
                     ],
                   ),
                 ),
@@ -143,8 +152,8 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                       ArticleSelections articleDisplay =
                           articleDisplayList[index];
                       return Padding(
-                        padding: const EdgeInsets.only().padSpec(
-                            top: 13, bottom: 13, right: 25, left: 25),
+                        padding: const EdgeInsets.only()
+                            .padSpec(top: 13, bottom: 13, right: 25, left: 25),
                         child: GestureDetector(
                           onTap: () {
                             context.pushNamed(
@@ -181,8 +190,9 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(10.r),
-                                        child: Image.network(
-                                          articleDisplay.urlImage,
+                                        child: CachedNetworkImage(
+                                          key: UniqueKey(),
+                                          imageUrl: articleDisplay.urlImage,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -216,8 +226,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                               decoration: BoxDecoration(
                                                 color: Pallete.blackColor,
                                                 borderRadius:
-                                                    BorderRadius.circular(
-                                                        7.r),
+                                                    BorderRadius.circular(7.r),
                                               ),
                                               // News Article Category
                                               child: Padding(
@@ -283,8 +292,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                   ...newsInterests.map((interest) {
                     // Filter the articles based on the selected category
                     final filteredArticles = articleDisplayList
-                        .where(
-                            (article) => article.articleCategory == interest)
+                        .where((article) => article.articleCategory == interest)
                         .toList();
 
                     return Scrollbar(
@@ -313,10 +321,8 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                     "articleImage": articleDisplay.urlImage,
                                     "articleCategory":
                                         articleDisplay.articleCategory,
-                                    "heroTag":
-                                        'bookmarksScreentagImage$index',
-                                    "articleTitle":
-                                        articleDisplay.articleTitle,
+                                    "heroTag": 'bookmarksScreentagImage$index',
+                                    "articleTitle": articleDisplay.articleTitle,
                                     "articleAuthor":
                                         articleDisplay.articleCategory,
                                     "articlePublicationDate":
@@ -344,8 +350,9 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(10.r),
-                                            child: Image.network(
-                                              articleDisplay.urlImage,
+                                            child: CachedNetworkImage(
+                                              key: UniqueKey(),
+                                              imageUrl: articleDisplay.urlImage,
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -377,8 +384,8 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                 7.sbW,
                                                 Container(
                                                   decoration: BoxDecoration(
-                                                    color: Pallete
-                                                        .appButtonColor,
+                                                    color:
+                                                        Pallete.appButtonColor,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             7.r),
@@ -389,8 +396,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                         .articleCategory
                                                         .txtStyled(
                                                       fontSize: 13.sp,
-                                                      color:
-                                                          Pallete.whiteColor,
+                                                      color: Pallete.whiteColor,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                     ),
@@ -427,9 +433,8 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                 final selectedArticle =
                                                     filteredArticles[index];
                                                 final originalIndex =
-                                                    articleDisplayList
-                                                        .indexOf(
-                                                            selectedArticle);
+                                                    articleDisplayList.indexOf(
+                                                        selectedArticle);
                                                 // Update Index for Overlay Display
                                                 _selectedOptionIndexValueNotifier
                                                     .value = originalIndex;
@@ -438,8 +443,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                     .read(
                                                         bookmarksScreenOverlayActiveProvider
                                                             .notifier)
-                                                    .update(
-                                                        (state) => !state);
+                                                    .update((state) => !state);
                                               },
                                               child: PhosphorIcons
                                                   .bold.dotsThree
@@ -480,9 +484,10 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                               theHeight: MediaQuery.of(context).size.height,
                               theChildAlignment: MainAxisAlignment.end,
                               theChild: Padding(
-                                padding: 20.0.padA,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 25.w, vertical: 15.h),
                                 child: Container(
-                                  height: 550.h,
+                                  height: 590.h,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20.r),
@@ -495,231 +500,254 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                     ),
                                   ),
                                   child: Padding(
-                                    padding: 20.0.padA,
-                                    child: Column(children: [
-                                      articleOverlayDisplay.articleTitle
-                                          .txtStyled(
-                                              fontSize: 25.sp,
-                                              fontWeight: FontWeight.w700,
-                                              maxLines: 2,
-                                              textOverflow:
-                                                  TextOverflow.ellipsis),
-                                      15.sbH,
-                                      articleOverlayDisplay.articleDescription
-                                          .txtStyled(
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.w500,
-                                              maxLines: 3,
-                                              textOverflow:
-                                                  TextOverflow.ellipsis),
-                                      15.sbH,
-                                      Hero(
-                                        tag:
-                                            'bookmarksScreenOverlaytagImage${_selectedOptionIndexValueNotifier.value}',
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 150.h,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10.r),
-                                            // color: Pallete.greyColor,
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10.r),
-                                            child: Image.network(
-                                              articleOverlayDisplay.urlImage,
-                                              fit: BoxFit.cover,
+                                    padding: 15.0.padA,
+                                    child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          articleOverlayDisplay.articleTitle
+                                              .txtStyled(
+                                                  fontSize: 25.sp,
+                                                  fontWeight: FontWeight.w700,
+                                                  maxLines: 2,
+                                                  textOverflow:
+                                                      TextOverflow.ellipsis),
+                                          articleOverlayDisplay
+                                              .articleDescription
+                                              .txtStyled(
+                                                  fontSize: 18.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                  maxLines: 3,
+                                                  textOverflow:
+                                                      TextOverflow.ellipsis),
+                                          Hero(
+                                            tag:
+                                                'bookmarksScreenOverlaytagImage${_selectedOptionIndexValueNotifier.value}',
+                                            child: Container(
+                                              width: double.infinity,
+                                              height: 150.h,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                                // color: Pallete.greyColor,
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                                child: CachedNetworkImage(
+                                                  key: UniqueKey(),
+                                                  imageUrl:
+                                                      articleOverlayDisplay
+                                                          .urlImage,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      15.sbH,
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
                                           Row(
-                                            children: [
-                                              PhosphorIcons.bold.megaphone
-                                                  .iconslide(size: 18.sp),
-                                              7.sbW,
-                                              articleOverlayDisplay
-                                                  .articleSource
-                                                  .txtStyled(
-                                                fontSize: 18.sp,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              PhosphorIcons.bold.clockCountdown
-                                                  .iconslide(size: 19.sp),
-                                              5.sbW,
-                                              "10 mins".txtStyled(
-                                                  fontSize: 18.sp,
-                                                  fontWeight: FontWeight.w500)
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                      15.sbH,
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
                                               Row(
                                                 children: [
-                                                  PhosphorIcons.bold.tag
+                                                  PhosphorIcons.bold.megaphone
                                                       .iconslide(size: 18.sp),
                                                   7.sbW,
-                                                  Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Pallete.blackColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              7.r),
-                                                    ),
-                                                    // News Article Category
-                                                    child: Padding(
-                                                      padding: 7.0.padA,
-                                                      child:
-                                                          articleOverlayDisplay
-                                                              .articleCategory
-                                                              .txtStyled(
-                                                        fontSize: 14.sp,
-                                                        color:
-                                                            Pallete.whiteColor,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              5.sbH,
-                                              Row(
-                                                children: [
-                                                  PhosphorIcons
-                                                      .bold.paperPlaneTilt
-                                                      .iconslide(size: 18.sp),
-                                                  7.sbW,
-                                                  formattedDate.txtStyled(
-                                                    fontSize: 16.sp,
+                                                  articleOverlayDisplay
+                                                      .articleSource
+                                                      .txtStyled(
+                                                    fontSize: 18.sp,
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                                 ],
                                               ),
+                                              Row(
+                                                children: [
+                                                  PhosphorIcons
+                                                      .bold.clockCountdown
+                                                      .iconslide(size: 19.sp),
+                                                  5.sbW,
+                                                  "10 mins".txtStyled(
+                                                      fontSize: 18.sp,
+                                                      fontWeight:
+                                                          FontWeight.w500)
+                                                ],
+                                              )
                                             ],
                                           ),
                                           Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              PhosphorIcons.bold.bookmarks
-                                                  .iconslide(size: 35.sp),
-                                              5.sbW,
-                                              PhosphorIcons.bold.heartStraight
-                                                  .iconslide(size: 35.sp)
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      PhosphorIcons.bold.tag
+                                                          .iconslide(
+                                                              size: 18.sp),
+                                                      7.sbW,
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Pallete
+                                                              .blackColor,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      7.r),
+                                                        ),
+                                                        // News Article Category
+                                                        child: Padding(
+                                                          padding: 7.0.padA,
+                                                          child:
+                                                              articleOverlayDisplay
+                                                                  .articleCategory
+                                                                  .txtStyled(
+                                                            fontSize: 14.sp,
+                                                            color: Pallete
+                                                                .whiteColor,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  5.sbH,
+                                                  Row(
+                                                    children: [
+                                                      PhosphorIcons
+                                                          .bold.paperPlaneTilt
+                                                          .iconslide(
+                                                              size: 18.sp),
+                                                      7.sbW,
+                                                      formattedDate.txtStyled(
+                                                        fontSize: 16.sp,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  PhosphorIcons.bold.bookmarks
+                                                      .iconslide(size: 35.sp),
+                                                  5.sbW,
+                                                  PhosphorIcons
+                                                      .bold.heartStraight
+                                                      .iconslide(size: 35.sp)
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              5.sbH,
+                                              const Divider(
+                                                thickness: 1.5,
+                                              ),
+                                              5.sbH
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  ref
+                                                      .read(
+                                                          bookmarksScreenOverlayActiveProvider
+                                                              .notifier)
+                                                      .update(
+                                                          (state) => !state);
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  elevation: 0,
+                                                  fixedSize: Size(110.w, 45.w),
+                                                  backgroundColor:
+                                                      const Color.fromARGB(
+                                                          161, 237, 226, 226),
+                                                  side: BorderSide(
+                                                      width: 2.5.w,
+                                                      color:
+                                                          Pallete.blackColor),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            11),
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    "Back".txtStyled(
+                                                      fontSize: 15.sp,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                      color: Pallete.blackColor,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              17.sbW,
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  context.pushNamed(
+                                                      ViNewsAppRouteConstants
+                                                          .newsArticleReadView,
+                                                      pathParameters: {
+                                                        "articleImage":
+                                                            articleOverlayDisplay
+                                                                .urlImage,
+                                                        "articleCategory":
+                                                            articleOverlayDisplay
+                                                                .articleCategory,
+                                                        "heroTag":
+                                                            'bookmarksScreenOverlaytagImage${_selectedOptionIndexValueNotifier.value}',
+                                                        "articleTitle":
+                                                            articleOverlayDisplay
+                                                                .articleTitle,
+                                                        "articleAuthor":
+                                                            articleOverlayDisplay
+                                                                .articleCategory,
+                                                        "articlePublicationDate":
+                                                            formattedDate
+                                                                .toString()
+                                                      });
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  elevation: 0,
+                                                  fixedSize: Size(110.w, 45.w),
+                                                  backgroundColor:
+                                                      Pallete.blackColor,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            11),
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    "Read".txtStyled(
+                                                      fontSize: 15.sp,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             ],
                                           )
-                                        ],
-                                      ),
-                                      10.sbH,
-                                      const Divider(
-                                        thickness: 1,
-                                      ),
-                                      10.sbH,
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              ref
-                                                  .read(
-                                                      bookmarksScreenOverlayActiveProvider
-                                                          .notifier)
-                                                  .update((state) => !state);
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              elevation: 0,
-                                              fixedSize: Size(110.w, 45.w),
-                                              backgroundColor:
-                                                  const Color.fromARGB(
-                                                      161, 237, 226, 226),
-                                              side: BorderSide(
-                                                  width: 2.5.w,
-                                                  color: Pallete.blackColor),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(11),
-                                              ),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                "Back".txtStyled(
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w800,
-                                                  color: Pallete.blackColor,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          17.sbW,
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              context.pushNamed(
-                                                  ViNewsAppRouteConstants
-                                                      .newsArticleReadView,
-                                                  pathParameters: {
-                                                    "articleImage":
-                                                        articleOverlayDisplay
-                                                            .urlImage,
-                                                    "articleCategory":
-                                                        articleOverlayDisplay
-                                                            .articleCategory,
-                                                    "heroTag":
-                                                        'bookmarksScreenOverlaytagImage${_selectedOptionIndexValueNotifier.value}',
-                                                    "articleTitle":
-                                                        articleOverlayDisplay
-                                                            .articleTitle,
-                                                    "articleAuthor":
-                                                        articleOverlayDisplay
-                                                            .articleCategory,
-                                                    "articlePublicationDate":
-                                                        formattedDate.toString()
-                                                  });
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              elevation: 0,
-                                              fixedSize: Size(110.w, 45.w),
-                                              backgroundColor:
-                                                  Pallete.blackColor,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(11),
-                                              ),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                "Read".txtStyled(
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w800,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ]),
+                                        ]),
                                   ),
                                 ),
                               ));
@@ -736,5 +764,141 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
     pushNewScreenWithRouteSettings(context,
         screen: const BookmarksSearchView(),
         settings: const RouteSettings(name: "/bookmarksSearch"));
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate {
+  List<String> searchSuggestions = [
+    "Business",
+    "Entertainment",
+    "Food",
+    "Environment",
+    "Health",
+    "Politics",
+    "Science",
+    "Sports",
+    "Technology",
+    "Top News",
+    "Tourism",
+    "World",
+  ];
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      Padding(
+        padding: EdgeInsets.only(right: 10.w),
+        child: GestureDetector(
+          onTap: () {
+            query = '';
+          },
+          child: PhosphorIcons.bold.x.iconslide(),
+        ),
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        close(context, null);
+      },
+      child: PhosphorIcons.bold.arrowLeft.iconslide(),
+    );
+  }
+  
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<String> matchQuery = [];
+    for (var item in searchSuggestions) {
+      if (item.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(item);
+      }
+    }
+
+    return Padding(
+      padding: 10.padH,
+      child: ListView.builder(
+          itemCount: matchQuery.length,
+          itemBuilder: (context, index) {
+            var result = matchQuery[index];
+            return Padding(
+                padding: 10.padV,
+                child: Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 25.h, horizontal: 15.w),
+                    decoration: BoxDecoration(
+                        color: Pallete.whiteColor.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(15.r)),
+                    child: Row(
+                      children: [
+                        PhosphorIcons.bold.clockCounterClockwise
+                            .iconslide(size: 25.sp, color: Pallete.blackColor),
+                        10.sbW,
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            constraints: BoxConstraints(maxWidth: 250.w),
+                            child: result.txtStyled(
+                                fontSize: 18.sp,
+                                textOverflow: TextOverflow.ellipsis),
+                          ),
+                        ),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {},
+                          child: PhosphorIcons.bold.x
+                              .iconslide(size: 20.sp, color: Pallete.blackColor),
+                        ),
+                      ],
+                    )));
+          }),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    List<String> matchQuery = [];
+    for (var item in searchSuggestions) {
+      if (item.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(item);
+      }
+    }
+
+    return ListView.builder(
+        itemCount: matchQuery.length,
+        itemBuilder: (context, index) {
+          var result = matchQuery[index];
+          return Padding(
+              padding: 10.padV,
+              child: Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 25.h, horizontal: 15.w),
+                  decoration: BoxDecoration(
+                      color: Pallete.whiteColor.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(15.r)),
+                  child: Row(
+                    children: [
+                      PhosphorIcons.bold.clockCounterClockwise
+                          .iconslide(size: 25.sp, color: Pallete.blackColor),
+                      10.sbW,
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          constraints: BoxConstraints(maxWidth: 250.w),
+                          child: result.txtStyled(
+                              fontSize: 18.sp,
+                              textOverflow: TextOverflow.ellipsis),
+                        ),
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {},
+                        child: PhosphorIcons.bold.x
+                            .iconslide(size: 20.sp, color: Pallete.blackColor),
+                      ),
+                    ],
+                  )));
+        });
   }
 }
