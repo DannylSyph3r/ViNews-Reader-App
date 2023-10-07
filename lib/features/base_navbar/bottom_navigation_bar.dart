@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:vinews_news_reader/core/provider/app_providers.dart';
+import 'package:vinews_news_reader/features/base_navbar/controller/bottom_nav_controller.dart';
 import 'package:vinews_news_reader/features/base_navbar/navigation_bar_build_widget.dart';
-import 'package:vinews_news_reader/features/bookmarks/views/bookmarks_search_view.dart';
 import 'package:vinews_news_reader/features/bookmarks/views/bookmarks_views.dart';
-import 'package:vinews_news_reader/features/explore/views/explore_search_view.dart';
 import 'package:vinews_news_reader/features/explore/views/explore_view.dart';
 import 'package:vinews_news_reader/features/home/views/home_screen_listview.dart';
-import 'package:vinews_news_reader/features/settings/views/about_vinews_view.dart';
-import 'package:vinews_news_reader/features/settings/views/liked_articles_view.dart';
-import 'package:vinews_news_reader/features/settings/views/news_language_picker_screen.dart';
-import 'package:vinews_news_reader/features/settings/views/read_articles_view.dart';
-import 'package:vinews_news_reader/features/settings/views/user_account_view.dart';
-import 'package:vinews_news_reader/features/settings/views/user_news_interest.dart';
 import 'package:vinews_news_reader/features/settings/views/user_profile_settings.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_palette.dart';
+import 'package:vinews_news_reader/utils/nav_utils.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
 class ViNewsBottomNavBar extends ConsumerStatefulWidget {
@@ -28,90 +21,95 @@ class ViNewsBottomNavBar extends ConsumerStatefulWidget {
 }
 
 class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
-  final PersistentTabController _navController =
-      PersistentTabController(initialIndex: 0);
+  final ValueNotifier<bool> navBarVisible = true.notifier;
 
-  List<Widget> _buildScreens() {
-    return const [
-      UserHomePageView(),
-      UserExploreView(),
-      UserBookmarksView(),
-      UserProfileSettingsView(),
-    ];
+  @override
+  void dispose() {
+    navBarVisible.dispose();
+    super.dispose();
   }
 
-  List<PersistentBottomNavBarItem> _navBarSelection() {
-    return [
-      PersistentBottomNavBarItem(
-          icon: PhosphorIcons.fill.house.iconslide(),
-          title: "Home",
-          activeColorPrimary: Pallete.blackColor,
-          inactiveColorPrimary: const Color.fromARGB(255, 142, 142, 142),
-          inactiveColorSecondary: Pallete.greyColor,
-          routeAndNavigatorSettings:
-              RouteAndNavigatorSettings(initialRoute: '/', routes: {
-            '/accountSettings': (context) => const UserAccountSettingsView(),
-          })),
-      PersistentBottomNavBarItem(
-          icon: PhosphorIcons.fill.globeHemisphereWest.iconslide(),
-          title: "Explore",
-          activeColorPrimary: Pallete.blackColor,
-          inactiveColorPrimary: const Color.fromARGB(255, 142, 142, 142),
-          inactiveColorSecondary: Pallete.greyColor,
-          routeAndNavigatorSettings:
-              RouteAndNavigatorSettings(initialRoute: '/', routes: {
-            '/exploreSearchScreen': (context) =>
-                const ExploreScreenSearchView(),
-          })),
-      PersistentBottomNavBarItem(
-          icon: PhosphorIcons.fill.bookmarks.iconslide(),
-          title: "Bookmarks",
-          activeColorPrimary: Pallete.blackColor,
-          inactiveColorPrimary: const Color.fromARGB(255, 142, 142, 142),
-          inactiveColorSecondary: Pallete.greyColor,
-          routeAndNavigatorSettings:
-              RouteAndNavigatorSettings(initialRoute: '/', routes: {
-            '/bookmarkSearchScreen': (context) => const BookmarksSearchView(),
-          })),
-      PersistentBottomNavBarItem(
-          icon: PhosphorIcons.fill.user.iconslide(),
-          title: "Profile",
-          activeColorPrimary: Pallete.blackColor,
-          inactiveColorPrimary: const Color.fromARGB(255, 142, 142, 142),
-          inactiveColorSecondary: Pallete.greyColor,
-          routeAndNavigatorSettings:
-              RouteAndNavigatorSettings(initialRoute: '/', routes: {
-            '/readArticles': (context) => const ReadArticlesView(),
-            '/likedArticles': (context) => const LikedArticlesView(),
-            '/accountSettings': (context) => const UserAccountSettingsView(),
-            '/languageSelector': (context) => const NewsLanguageSelectorView(),
-            '/aboutViNews': (context) => const AboutViNewsView(),
-            '/newInterests': (context) => const NewsInterestSelectionView(),
-          })),
-    ];
+  void hideNav() {
+    navBarVisible.value = false;
+  }
+
+  void showNav() {
+    navBarVisible.value = true;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PersistentTabView.custom(
-        context,
-        controller: _navController,
-        screens: _buildScreens(),
-        items: _navBarSelection(),
-        itemCount: 4,
-        confineInSafeArea: true,
-        handleAndroidBackButtonPress: true, 
-        resizeToAvoidBottomInset: true, // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
-        stateManagement: false,
-        hideNavigationBarWhenKeyboardShows: true, // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
-        popAllScreensOnTapOfSelectedTab: true,
-        navBarHeight: 80.h,
-        customWidget: (navBarLineUp) => CustomNavBarStyle(
-            _navController.index, _navBarSelection(), (index) {
-          setState(() {
-            navBarLineUp.onItemSelected?.call(index);
-          });
+    int indexFromController = ref.watch(baseNavControllerProvider);
+    return WillPopScope(
+      onWillPop: stopWillPop,
+      child: Scaffold(
+        body: IndexedStack(
+          index: indexFromController,
+          children: [
+            UserHomePageView(
+              hideNavBar: hideNav,
+              showNavBar: showNav,
+            ),
+            UserExploreView(
+              hideNavBar: hideNav,
+              showNavBar: showNav,
+            ),
+            UserBookmarksView(
+              hideNavBar: hideNav,
+              showNavBar: showNav,
+            ),
+            UserProfileSettingsView(
+              hideNavBar: hideNav,
+              showNavBar: showNav,
+            )
+          ],
+        ),
+        bottomNavigationBar:
+            navBarVisible.sync(builder: (context, isVisible, child) {
+          return AnimatedContainer(
+            duration: 500.milliseconds,
+            curve: Curves.easeInOut,
+            height: isVisible ? 80.h : 0,
+            child: Material(
+              elevation: 1,
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25.r),
+                  topRight: Radius.circular(25.r),
+                ),
+                child: Container(
+                  padding: EdgeInsets.only(left: 60.w, right: 60.w),
+                  color: Palette.blackColor,
+                  height: 70.h,
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: List.generate(
+                      navItems.length, // Use navItems instead of nav
+                      (index) =>
+                          NavBarWidget(navItem: navItems[index]).onTap(() {
+                        moveToPage(
+                          context: context,
+                          ref: ref,
+                          index: index,
+                        );
+                        index != 0
+                            ? ref.invalidate(homeScreenOverlayActiveProvider)
+                            : null;
+                        index != 1
+                            ? ref.invalidate(exploreScreenOverlayActiveProider)
+                            : null;
+                        index != 2
+                            ? ref.invalidate(
+                                bookmarksScreenOverlayActiveProvider)
+                            : null;
+                      }), // Pass navItem
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
         }),
       ),
     );

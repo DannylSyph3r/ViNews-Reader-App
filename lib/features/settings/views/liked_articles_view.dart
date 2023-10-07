@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,8 +7,9 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/core/models/article_selections.dart';
 import 'package:vinews_news_reader/core/provider/app_providers.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
-import 'package:vinews_news_reader/utils/frosted_glass_box.dart';
+import 'package:vinews_news_reader/themes/color_palette.dart';
+import 'package:vinews_news_reader/utils/image_loader.dart';
+import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
@@ -46,7 +46,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
       length: newsInterests.length + 1,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Pallete.blackColor,
+          backgroundColor: Palette.blackColor,
           elevation: 0,
           centerTitle: true,
           title: Row(
@@ -61,7 +61,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
           bottom: AppBar(
             automaticallyImplyLeading: false,
             toolbarHeight: 100.h,
-            backgroundColor: Pallete.blackColor,
+            backgroundColor: Palette.blackColor,
             titleSpacing: 0,
             title: TabBar(
               isScrollable: true,
@@ -70,7 +70,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
               labelColor: Colors.white,
               unselectedLabelColor: const Color.fromARGB(255, 154, 146, 146),
               dividerColor: Colors.grey,
-              indicatorColor: Pallete.greenColor,
+              indicatorColor: Palette.greenColor,
               indicatorWeight: 3.5,
               indicatorSize: TabBarIndicatorSize.label,
               splashFactory: NoSplash.splashFactory,
@@ -79,7 +79,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                 // "All" Tab added in front of existing newInterest tabs
                 Tab(
                     text:
-                        "All (${articleDisplayList.length})"), // Add the "All" tab and display the article count 
+                        "All (${articleDisplayList.length})"), // Add the "All" tab and display the article count
                 ...newsInterests.asMap().entries.map((entry) {
                   String interest = entry.value;
                   int categoryCount = articleDisplayList
@@ -150,11 +150,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                   ),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10.r),
-                                    child: CachedNetworkImage(
-                                      key: UniqueKey(),
-                                      imageUrl: articleDisplay.urlImage,
-                                      fit: BoxFit.cover,
-                                    ),
+                                    child: ImageLoaderForOverlay(imageUrl: articleDisplay.urlImage)
                                   ),
                                 ),
                               ),
@@ -183,7 +179,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                         7.sbW,
                                         Container(
                                           decoration: BoxDecoration(
-                                            color: Pallete.blackColor,
+                                            color: Palette.blackColor,
                                             borderRadius:
                                                 BorderRadius.circular(7.r),
                                           ),
@@ -194,7 +190,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                 .articleCategory
                                                 .txtStyled(
                                               fontSize: 14.sp,
-                                              color: Pallete.whiteColor,
+                                              color: Palette.whiteColor,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -308,11 +304,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(10.r),
-                                        child: CachedNetworkImage(
-                                          key: UniqueKey(),
-                                          imageUrl: articleDisplay.urlImage,
-                                          fit: BoxFit.cover,
-                                        ),
+                                        child: ImageLoaderForOverlay(imageUrl: articleDisplay.urlImage)
                                       ),
                                     ),
                                   ),
@@ -342,7 +334,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                             7.sbW,
                                             Container(
                                               decoration: BoxDecoration(
-                                                color: Pallete.appButtonColor,
+                                                color: Palette.appButtonColor,
                                                 borderRadius:
                                                     BorderRadius.circular(7.r),
                                               ),
@@ -352,7 +344,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                     .articleCategory
                                                     .txtStyled(
                                                   fontSize: 13.sp,
-                                                  color: Pallete.whiteColor,
+                                                  color: Palette.whiteColor,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
@@ -443,7 +435,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.r),
-                                  color: Pallete.greyColor.withOpacity(0.75),
+                                  color: Palette.greyColor.withOpacity(0.75),
                                   image: const DecorationImage(
                                     image: AssetImage(
                                         ViNewsAppImagesPath.appBackgroundImage),
@@ -480,18 +472,25 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10.r),
-                                              // color: Pallete.greyColor,
+                                              // color: Palette.greyColor,
                                             ),
                                             child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.r),
-                                              child: CachedNetworkImage(
-                                                key: UniqueKey(),
-                                                imageUrl: articleOverlayDisplay.urlImage,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                                child: ImageLoaderForOverlay(
+                                                    imageUrl:
+                                                        articleOverlayDisplay
+                                                            .urlImage)),
                                           ),
+                                        ),
+                                        Column(
+                                          children: [
+                                            5.sbH,
+                                            const Divider(
+                                              thickness: 1.5,
+                                            ),
+                                            5.sbH
+                                          ],
                                         ),
                                         Row(
                                           mainAxisAlignment:
@@ -539,7 +538,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                     Container(
                                                       decoration: BoxDecoration(
                                                         color:
-                                                            Pallete.blackColor,
+                                                            Palette.blackColor,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(7.r),
@@ -552,7 +551,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                                 .articleCategory
                                                                 .txtStyled(
                                                           fontSize: 14.sp,
-                                                          color: Pallete
+                                                          color: Palette
                                                               .whiteColor,
                                                           fontWeight:
                                                               FontWeight.w600,
@@ -617,7 +616,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                         161, 237, 226, 226),
                                                 side: BorderSide(
                                                     width: 2.5.w,
-                                                    color: Pallete.blackColor),
+                                                    color: Palette.blackColor),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(11),
@@ -630,7 +629,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                   "Back".txtStyled(
                                                     fontSize: 15.sp,
                                                     fontWeight: FontWeight.w800,
-                                                    color: Pallete.blackColor,
+                                                    color: Palette.blackColor,
                                                   ),
                                                 ],
                                               ),
@@ -665,7 +664,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                 elevation: 0,
                                                 fixedSize: Size(110.w, 45.w),
                                                 backgroundColor:
-                                                    Pallete.blackColor,
+                                                    Palette.blackColor,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(11),

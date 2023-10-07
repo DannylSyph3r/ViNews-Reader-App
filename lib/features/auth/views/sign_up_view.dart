@@ -6,9 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:vinews_news_reader/features/auth/controllers/auth_action_controllers.dart';
 import 'package:vinews_news_reader/features/auth/states/login_state.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_Palette.dart';
 import 'package:vinews_news_reader/utils/banner_util.dart';
-import 'package:vinews_news_reader/utils/frosted_glass_box.dart';
+import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/keyboard_utils.dart';
 import 'package:vinews_news_reader/utils/string_validator.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
@@ -32,7 +32,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
   final _emailSignUpAddressFieldController = TextEditingController();
   final _passwordSignUpFieldController = TextEditingController();
   final _confirmPasswordSignUpFieldController = TextEditingController();
-  bool isLoading = false;
+  final ValueNotifier<bool> loadingOverlayActive = false.notifier;
 
   @override
   void initState() {
@@ -91,19 +91,17 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
     // Auth State Changes logic handler
     ref.listen<UserAuthenticationState>(authNotifierProvider,
         (previous, state) {
-      setState(() {
-        if (state is UserAuthenticationStateLoading) {
-          isLoading = true;
-        } else {
-          isLoading = false;
-        }
-      });
+      if (state is UserAuthenticationStateLoading) {
+        loadingOverlayActive.value = true;
+      } else {
+        loadingOverlayActive.value = false;
+      }
       if (state is UserAuthenticationStateError) {
-        isLoading = false;
+        loadingOverlayActive.value = false;
         showMaterialBanner(
-            context, "Sign Up Error :(", state.error, Pallete.blackColor);
+            context, "Sign Up Error :(", state.error, Palette.blackColor);
       } else if (state is UserAuthenticationStateSuccess) {
-        isLoading = false;
+        loadingOverlayActive.value = false;
         context.pushReplacementNamed(ViNewsAppRouteConstants.authIntializer);
       }
     });
@@ -113,6 +111,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
     final confirmPasswordFieldObscured =
         ref.watch(showSignUpConfirmPasswordProvider);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         constraints: const BoxConstraints.expand(),
         decoration: const BoxDecoration(
@@ -154,7 +153,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                               hintText: "Firstname",
                               obscureText: false,
                               prefixIconString: ViNewsAppImagesPath.userIcon,
-                              prefixIconColor: Pallete.blackColor,
+                              prefixIconColor: Palette.blackColor,
                               validator: firstNameValidator,
                             ),
                             8.sbH,
@@ -163,7 +162,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                               hintText: "Lastname",
                               obscureText: false,
                               prefixIconString: ViNewsAppImagesPath.userIcon,
-                              prefixIconColor: Pallete.blackColor,
+                              prefixIconColor: Palette.blackColor,
                               validator: lastNameValidator,
                             ),
                             8.sbH,
@@ -172,7 +171,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                                 hintText: "Your Email",
                                 obscureText: false,
                                 prefixIconString: ViNewsAppImagesPath.emailIcon,
-                                prefixIconColor: Pallete.blackColor,
+                                prefixIconColor: Palette.blackColor,
                                 validator: emailValidator,
                                 suffixIconString:
                                     _emailSignUpAddressFieldController
@@ -180,7 +179,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                                             isEmailValid
                                         ? ViNewsAppImagesPath.validIcon
                                         : ViNewsAppImagesPath.invalidIcon,
-                                suffixIconColor: Pallete.blackColor),
+                                suffixIconColor: Palette.blackColor),
                             8.sbH,
                             ViNewsAppTextFormField(
                               controller: _passwordSignUpFieldController,
@@ -272,8 +271,8 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                               },
                               prefixIcon: ViNewsAppImagesPath.googleSignInIcon,
                               buttonPlaceholderText: "Sign Up with Google",
-                              buttonColor: Pallete.whiteColor,
-                              textColor: Pallete.blackColor,
+                              buttonColor: Palette.whiteColor,
+                              textColor: Palette.blackColor,
                               isEnabled: true,
                             ),
                             200.sbH,
@@ -291,7 +290,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                                     resetButtonState();
                                   },
                                   child: "Sign In".txtStyled(
-                                      color: Pallete.blueColor,
+                                      color: Palette.blueColor,
                                       fontSize: 17.sp),
                                 )
                               ],
@@ -305,16 +304,22 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                 ),
               ),
               // Fancy Frosted Glass Loader ;)
-              Visibility(
-                visible: isLoading,
-                child: FrostedGlassBox(
-                    theWidth: MediaQuery.of(context).size.width,
-                    theHeight: MediaQuery.of(context).size.height,
-                    theChild: const SpinKitThreeBounce(
-                      color: Pallete.blackColor,
-                      size: 20,
-                    )),
-              ),
+              loadingOverlayActive.sync(
+                builder: (context, isVisible, child) {
+                  return Visibility(
+                    visible: isVisible,
+                    child: Positioned.fill(
+                      child: FrostedGlassBox(
+                        theWidth: MediaQuery.of(context).size.width,
+                        theHeight: MediaQuery.of(context).size.height,
+                        theChild: SpinKitFadingCircle(
+                          color: Palette.blackColor.withOpacity(0.3),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              )
             ],
           ),
         ),

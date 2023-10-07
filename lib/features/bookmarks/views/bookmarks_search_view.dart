@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/features/bookmarks/controllers/bookmarks_controllers.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_Palette.dart';
 import 'package:vinews_news_reader/utils/keyboard_utils.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
@@ -35,9 +35,10 @@ class _BookmarksSearchViewState extends ConsumerState<BookmarksSearchView> {
     final List<String> bookmarksSearchHistoryList =
         ref.watch(bookmarksSearchHistoryProvider);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         toolbarHeight: 90.h,
-        backgroundColor: Pallete.blackColor,
+        backgroundColor: Palette.blackColor,
         // The search area here
         title: ViNewsSearchTextField(
           textfieldHeight: 65.h,
@@ -91,7 +92,7 @@ class _BookmarksSearchViewState extends ConsumerState<BookmarksSearchView> {
           },
           prefixIcon: PhosphorIcons.regular.magnifyingGlass.iconslide(
             size: 26.sp,
-            color: Pallete.blackColor,
+            color: Palette.blackColor,
           ),
         ),
       ),
@@ -127,7 +128,7 @@ class _BookmarksSearchViewState extends ConsumerState<BookmarksSearchView> {
                                 padding: EdgeInsets.symmetric(
                                     vertical: 10.h, horizontal: 15.w),
                                 decoration: BoxDecoration(
-                                    color: Pallete.whiteColor.withOpacity(0.3),
+                                    color: Palette.whiteColor.withOpacity(0.3),
                                     borderRadius: BorderRadius.circular(15.r)),
                                 child: GestureDetector(
                                   onTap: () {
@@ -145,7 +146,7 @@ class _BookmarksSearchViewState extends ConsumerState<BookmarksSearchView> {
                                       PhosphorIcons.bold.clockCounterClockwise
                                           .iconslide(
                                               size: 25.sp,
-                                              color: Pallete.blackColor),
+                                              color: Palette.blackColor),
                                       10.sbW,
                                       Container(
                                         constraints:
@@ -174,7 +175,7 @@ class _BookmarksSearchViewState extends ConsumerState<BookmarksSearchView> {
                                                 .bold.arrowUpRight
                                                 .iconslide(
                                                     size: 25.sp,
-                                                    color: Pallete.blackColor),
+                                                    color: Palette.blackColor),
                                           ),
                                           IconButton(
                                             onPressed: () {
@@ -189,7 +190,7 @@ class _BookmarksSearchViewState extends ConsumerState<BookmarksSearchView> {
                                             icon: PhosphorIcons.bold.x
                                                 .iconslide(
                                                     size: 25.sp,
-                                                    color: Pallete.blackColor),
+                                                    color: Palette.blackColor),
                                           ),
                                         ],
                                       ),

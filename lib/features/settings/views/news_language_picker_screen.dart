@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/features/settings/controller/language_list_controller.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_palette.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
@@ -15,7 +15,7 @@ class NewsLanguageSelectorView extends ConsumerWidget {
     final languageOptions = ref.read(languageProvider);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Pallete.blackColor,
+        backgroundColor: Palette.blackColor,
         elevation: 0,
         centerTitle: true,
         title: Row(

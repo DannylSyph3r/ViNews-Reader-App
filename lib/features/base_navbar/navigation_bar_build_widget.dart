@@ -1,87 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:vinews_news_reader/features/base_navbar/controller/bottom_nav_controller.dart';
 
-class CustomNavBarStyle extends ConsumerWidget {
-  final int selectedIndex;
-  final List<PersistentBottomNavBarItem> navBarItems;
-  final ValueChanged<int>? onItemSelected;
-  const CustomNavBarStyle(
-      this.selectedIndex, this.navBarItems, this.onItemSelected,
-      {super.key});
+class NavBarWidget extends ConsumerWidget {
+  final NavItem navItem;
+  const NavBarWidget({
+    Key? key,
+    required this.navItem,
+  }) : super(key: key);
 
-  Widget _buildNavbarItem(
-      PersistentBottomNavBarItem item, bool isItemSelected) {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    int indexFromController = ref.watch(baseNavControllerProvider);
     return Container(
       alignment: Alignment.center,
-      height: kBottomNavigationBarHeight,
+      height: 70.h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Flexible(
             child: IconTheme(
               data: IconThemeData(
-                  size: 26.0,
-                  color: isItemSelected
-                      ? (item.activeColorSecondary ?? item.activeColorPrimary)
-                      : item.inactiveColorPrimary ?? item.activeColorPrimary),
-              child:
-                  isItemSelected ? item.icon : item.inactiveIcon ?? item.icon,
+                  size: 25.0,
+                  color: indexFromController == navItem.navEnum.index
+                      ? const Color.fromARGB(255, 255, 246, 246)
+                      : const Color.fromARGB(255, 143, 140, 140)),
+              child: Icon(navItem.iconData),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 5.0),
-            child: Material(
-              type: MaterialType.transparency,
-              child: FittedBox(
-                child: Text(
-                  item.title ?? "",
-                  style: TextStyle(
-                      color: isItemSelected
-                          ? (item.activeColorSecondary ??
-                              item.activeColorPrimary)
-                          : item.inactiveColorPrimary,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12.0),
-                ),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 6.0),
+          //   child: Material(
+          //     type: MaterialType.transparency,
+          //     child: FittedBox(
+          //       child: Text(
+          //         navItem.label,
+          //         style: TextStyle(
+          //           color: indexFromController == navItem.navEnum.index
+          //               ? const Color.fromARGB(255, 255, 246, 246)
+          //               : const Color.fromARGB(255, 143, 140, 140),
+          //           fontWeight: FontWeight.w400,
+          //           fontSize: 12.5,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ClipRRect(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20.r),
-        topRight: Radius.circular(20.r),
-      ),
-      child: Container(
-        color: const Color.fromARGB(255, 176, 171, 171).withOpacity(0.3),
-        width: double.infinity,
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: navBarItems.map((item) {
-              int index = navBarItems.indexOf(item);
-              return Expanded(
-                child: InkWell(
-                  onTap: () {
-                    onItemSelected?.call(index);
-                  },
-                  child: _buildNavbarItem(item, selectedIndex == index),
-                ),
-              );
-            }).toList(),
-          ),
-        ),
       ),
     );
   }

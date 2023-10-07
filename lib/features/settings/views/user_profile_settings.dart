@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,13 +12,19 @@ import 'package:vinews_news_reader/features/settings/views/news_language_picker_
 import 'package:vinews_news_reader/features/settings/views/read_articles_view.dart';
 import 'package:vinews_news_reader/features/settings/views/user_account_view.dart';
 import 'package:vinews_news_reader/features/settings/widgets/settings_custom_divider.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_palette.dart';
 import 'package:vinews_news_reader/utils/vinews_icons.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
 class UserProfileSettingsView extends ConsumerStatefulWidget {
-  const UserProfileSettingsView({super.key});
+  final VoidCallback showNavBar;
+  final VoidCallback hideNavBar;
+  const UserProfileSettingsView({
+    super.key,
+    required this.showNavBar,
+    required this.hideNavBar,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -27,6 +34,32 @@ class UserProfileSettingsView extends ConsumerStatefulWidget {
 class _UserProfileSettingsViewState
     extends ConsumerState<UserProfileSettingsView> {
   bool isToggled = false;
+  final ScrollController _userProfileScrollController = ScrollController();
+  @override
+  void initState() {
+    _userProfileScrollController.addListener(() {
+      if (_userProfileScrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        widget.showNavBar();
+      } else {
+        widget.hideNavBar();
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _userProfileScrollController.removeListener(() {
+      if (_userProfileScrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        widget.showNavBar();
+      } else {
+        widget.hideNavBar();
+      }
+    });
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +69,7 @@ class _UserProfileSettingsViewState
         return <Widget>[
           SliverAppBar(
             toolbarHeight: 90.h,
-            backgroundColor: Pallete.blackColor,
+            backgroundColor: Palette.blackColor,
             elevation: 0,
             titleSpacing: 0,
             title: Padding(
@@ -67,10 +100,12 @@ class _UserProfileSettingsViewState
           ),
         ),
         child: Scrollbar(
+          controller: _userProfileScrollController,
           interactive: true,
           thickness: 6,
           radius: Radius.circular(12.r),
           child: SingleChildScrollView(
+            controller: _userProfileScrollController,
             physics: const BouncingScrollPhysics(),
             child: Center(
               child: Padding(
@@ -172,14 +207,14 @@ class _UserProfileSettingsViewState
                           onTap: () => navigateToReadArticlesPage(context),
                           title: "Read Articles".txtStyled(fontSize: 18.sp),
                           trailing: PhosphorIcons.bold.caretRight.iconslide(
-                              size: 18.sp, color: Pallete.blackColor),
+                              size: 18.sp, color: Palette.blackColor),
                         ),
                         const CustomSettingsDivider(),
                         ListTile(
                           onTap: () => navigateToLikedArticlesPage(context),
                           title: "Liked Articles".txtStyled(fontSize: 18.sp),
                           trailing: PhosphorIcons.bold.caretRight.iconslide(
-                              size: 18.sp, color: Pallete.blackColor),
+                              size: 18.sp, color: Palette.blackColor),
                         ),
                         const CustomSettingsDivider(),
                       ],
@@ -198,7 +233,7 @@ class _UserProfileSettingsViewState
                           onTap: () => navigateToMyAccountSettings(context),
                           title: "Account Settings".txtStyled(fontSize: 18.sp),
                           trailing: PhosphorIcons.bold.caretRight.iconslide(
-                              size: 18.sp, color: Pallete.blackColor),
+                              size: 18.sp, color: Palette.blackColor),
                         ),
                         const CustomSettingsDivider(),
                         ListTile(
@@ -211,7 +246,7 @@ class _UserProfileSettingsViewState
                                   fontSize: 18.sp, fontWeight: FontWeight.w400),
                               5.sbW,
                               PhosphorIcons.bold.caretRight.iconslide(
-                                  size: 18.sp, color: Pallete.blackColor),
+                                  size: 18.sp, color: Palette.blackColor),
                             ],
                           ),
                         ),
@@ -224,8 +259,8 @@ class _UserProfileSettingsViewState
                                 padding: 2,
                                 height: 32.h,
                                 width: 58.w,
-                                activeColor: Pallete.blackColor,
-                                inactiveColor: Pallete.greyColor,
+                                activeColor: Palette.blackColor,
+                                inactiveColor: Palette.greyColor,
                                 activeIcon:
                                     ViNewsIcons.activeSwitchIcon.iconslide(),
                                 inactiveIcon:
@@ -245,14 +280,14 @@ class _UserProfileSettingsViewState
                           onTap: () => navigateToAboutViNewsPage(context),
                           title: "About Us".txtStyled(fontSize: 18.sp),
                           trailing: PhosphorIcons.bold.caretRight.iconslide(
-                              size: 18.sp, color: Pallete.blackColor),
+                              size: 18.sp, color: Palette.blackColor),
                         ),
                         const CustomSettingsDivider(),
                         ListTile(
                           onTap: () => clearCache(),
                           title: "Clear Cache".txtStyled(fontSize: 18.sp),
                           trailing: PhosphorIcons.bold.caretRight.iconslide(
-                              size: 18.sp, color: Pallete.blackColor),
+                              size: 18.sp, color: Palette.blackColor),
                         ),
                         const CustomSettingsDivider(),
                       ],
@@ -310,7 +345,7 @@ class _UserProfileSettingsViewState
         settings: const RouteSettings(name: "/aboutViNews"));
   }
 
-  void clearCache(){
+  void clearCache() {
     DefaultCacheManager().emptyCache();
     imageCache.clear();
     imageCache.clearLiveImages();

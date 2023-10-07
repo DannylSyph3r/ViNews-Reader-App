@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -10,13 +10,21 @@ import 'package:vinews_news_reader/core/models/article_selections.dart';
 import 'package:vinews_news_reader/core/provider/app_providers.dart';
 import 'package:vinews_news_reader/features/bookmarks/views/bookmarks_search_view.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
-import 'package:vinews_news_reader/utils/frosted_glass_box.dart';
+import 'package:vinews_news_reader/themes/color_Palette.dart';
+import 'package:vinews_news_reader/utils/image_loader.dart';
+import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
 class UserBookmarksView extends ConsumerStatefulWidget {
-  const UserBookmarksView({super.key});
+  final VoidCallback showNavBar;
+  final VoidCallback hideNavBar;
+
+  const UserBookmarksView({
+    super.key,
+    required this.showNavBar,
+    required this.hideNavBar,
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -24,6 +32,7 @@ class UserBookmarksView extends ConsumerStatefulWidget {
 }
 
 class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
+  final ScrollController _bookmarksScrollController = ScrollController();
   final ValueNotifier<int> _selectedOptionIndexValueNotifier =
       ValueNotifier<int>(0);
   String formattedDate = DateFormat('E d MMM, y').format(DateTime.now());
@@ -32,13 +41,28 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
 
   @override
   void initState() {
-    _selectedOptionIndexValueNotifier.value = 0;
+    _bookmarksScrollController.addListener(() {
+      if (_bookmarksScrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        widget.showNavBar();
+      } else {
+        widget.hideNavBar();
+      }
+    });
     super.initState();
   }
 
   // Dispose Bookmark Search Bar Controller
   @override
   void dispose() {
+    _bookmarksScrollController.removeListener(() {
+      if (_bookmarksScrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        widget.showNavBar();
+      } else {
+        widget.hideNavBar();
+      }
+    });
     _selectedOptionIndexValueNotifier.dispose();
     _searchBookmarksFieldController.dispose();
     super.dispose();
@@ -59,7 +83,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
             return <Widget>[
               SliverAppBar(
                 toolbarHeight: 90.h,
-                backgroundColor: Pallete.blackColor,
+                backgroundColor: Palette.blackColor,
                 elevation: 0,
                 titleSpacing: 0,
                 title: Padding(
@@ -79,14 +103,14 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                     padding: const EdgeInsets.only().padSpec(right: 30),
                     child: GestureDetector(
                         onTap: () => navigateToBookmarksSearchScreen(context),
-                        child: PhosphorIcons.regular.magnifyingGlass
-                            .iconslide()),
+                        child:
+                            PhosphorIcons.regular.magnifyingGlass.iconslide()),
                   )
                 ],
                 // TabBar pinned on Sliver Collapse
                 bottom: AppBar(
                   toolbarHeight: 100.h,
-                  backgroundColor: Pallete.blackColor,
+                  backgroundColor: Palette.blackColor,
                   titleSpacing: 0,
                   title: TabBar(
                     isScrollable: true,
@@ -96,7 +120,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                     unselectedLabelColor:
                         const Color.fromARGB(255, 154, 146, 146),
                     dividerColor: Colors.grey,
-                    indicatorColor: Pallete.greenColor,
+                    indicatorColor: Palette.greenColor,
                     indicatorWeight: 3.5,
                     indicatorSize: TabBarIndicatorSize.label,
                     splashFactory: NoSplash.splashFactory,
@@ -140,6 +164,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                 child: TabBarView(children: [
                   // ListView for "All" tab
                   ListView.builder(
+                              controller: _bookmarksScrollController,
                     padding: 30
                         .padV, //Zero Padding Needed just needed to offset default value
                     shrinkWrap: true,
@@ -188,14 +213,11 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                             BorderRadius.circular(10.r),
                                       ),
                                       child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.r),
-                                        child: CachedNetworkImage(
-                                          key: UniqueKey(),
-                                          imageUrl: articleDisplay.urlImage,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                          borderRadius:
+                                              BorderRadius.circular(10.r),
+                                          child: ImageLoaderForOverlay(
+                                              imageUrl:
+                                                  articleDisplay.urlImage)),
                                     ),
                                   ),
                                 ],
@@ -224,7 +246,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                             7.sbW,
                                             Container(
                                               decoration: BoxDecoration(
-                                                color: Pallete.blackColor,
+                                                color: Palette.blackColor,
                                                 borderRadius:
                                                     BorderRadius.circular(7.r),
                                               ),
@@ -235,7 +257,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                     .articleCategory
                                                     .txtStyled(
                                                   fontSize: 14.sp,
-                                                  color: Pallete.whiteColor,
+                                                  color: Palette.whiteColor,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
@@ -296,10 +318,12 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                         .toList();
 
                     return Scrollbar(
+                                controller: _bookmarksScrollController,
                       interactive: true,
                       thickness: 6,
                       radius: Radius.circular(12.r),
                       child: ListView.builder(
+                                  controller: _bookmarksScrollController,
                         padding: 30.padV,
                         shrinkWrap: true,
                         physics: isOverlayActive
@@ -348,14 +372,11 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                 BorderRadius.circular(10.r),
                                           ),
                                           child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10.r),
-                                            child: CachedNetworkImage(
-                                              key: UniqueKey(),
-                                              imageUrl: articleDisplay.urlImage,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.r),
+                                              child: ImageLoaderForOverlay(
+                                                  imageUrl:
+                                                      articleDisplay.urlImage)),
                                         ),
                                       ),
                                     ],
@@ -385,7 +406,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                 Container(
                                                   decoration: BoxDecoration(
                                                     color:
-                                                        Pallete.appButtonColor,
+                                                        Palette.appButtonColor,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             7.r),
@@ -396,7 +417,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                         .articleCategory
                                                         .txtStyled(
                                                       fontSize: 13.sp,
-                                                      color: Pallete.whiteColor,
+                                                      color: Palette.whiteColor,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                     ),
@@ -482,7 +503,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                           return FrostedGlassBox(
                               theWidth: MediaQuery.of(context).size.width,
                               theHeight: MediaQuery.of(context).size.height,
-                              theChildAlignment: MainAxisAlignment.end,
+                              theChildAlignment: MainAxisAlignment.center,
                               theChild: Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 25.w, vertical: 15.h),
@@ -491,7 +512,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20.r),
-                                    color: Pallete.greyColor.withOpacity(0.75),
+                                    color: Palette.greyColor.withOpacity(0.75),
                                     image: const DecorationImage(
                                       image: AssetImage(ViNewsAppImagesPath
                                           .appBackgroundImage),
@@ -529,20 +550,26 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(10.r),
-                                                // color: Pallete.greyColor,
+                                                // color: Palette.greyColor,
                                               ),
                                               child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.r),
-                                                child: CachedNetworkImage(
-                                                  key: UniqueKey(),
-                                                  imageUrl:
-                                                      articleOverlayDisplay
-                                                          .urlImage,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.r),
+                                                  child: ImageLoaderForOverlay(
+                                                      imageUrl:
+                                                          articleOverlayDisplay
+                                                              .urlImage)),
                                             ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              5.sbH,
+                                              const Divider(
+                                                thickness: 1.5,
+                                              ),
+                                              5.sbH
+                                            ],
                                           ),
                                           Row(
                                             mainAxisAlignment:
@@ -592,7 +619,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                       Container(
                                                         decoration:
                                                             BoxDecoration(
-                                                          color: Pallete
+                                                          color: Palette
                                                               .blackColor,
                                                           borderRadius:
                                                               BorderRadius
@@ -607,7 +634,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                                   .articleCategory
                                                                   .txtStyled(
                                                             fontSize: 14.sp,
-                                                            color: Pallete
+                                                            color: Palette
                                                                 .whiteColor,
                                                             fontWeight:
                                                                 FontWeight.w600,
@@ -676,7 +703,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                   side: BorderSide(
                                                       width: 2.5.w,
                                                       color:
-                                                          Pallete.blackColor),
+                                                          Palette.blackColor),
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -691,7 +718,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                       fontSize: 15.sp,
                                                       fontWeight:
                                                           FontWeight.w800,
-                                                      color: Pallete.blackColor,
+                                                      color: Palette.blackColor,
                                                     ),
                                                   ],
                                                 ),
@@ -726,7 +753,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                   elevation: 0,
                                                   fixedSize: Size(110.w, 45.w),
                                                   backgroundColor:
-                                                      Pallete.blackColor,
+                                                      Palette.blackColor,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -764,141 +791,5 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
     pushNewScreenWithRouteSettings(context,
         screen: const BookmarksSearchView(),
         settings: const RouteSettings(name: "/bookmarksSearch"));
-  }
-}
-
-class CustomSearchDelegate extends SearchDelegate {
-  List<String> searchSuggestions = [
-    "Business",
-    "Entertainment",
-    "Food",
-    "Environment",
-    "Health",
-    "Politics",
-    "Science",
-    "Sports",
-    "Technology",
-    "Top News",
-    "Tourism",
-    "World",
-  ];
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      Padding(
-        padding: EdgeInsets.only(right: 10.w),
-        child: GestureDetector(
-          onTap: () {
-            query = '';
-          },
-          child: PhosphorIcons.bold.x.iconslide(),
-        ),
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        close(context, null);
-      },
-      child: PhosphorIcons.bold.arrowLeft.iconslide(),
-    );
-  }
-  
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var item in searchSuggestions) {
-      if (item.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(item);
-      }
-    }
-
-    return Padding(
-      padding: 10.padH,
-      child: ListView.builder(
-          itemCount: matchQuery.length,
-          itemBuilder: (context, index) {
-            var result = matchQuery[index];
-            return Padding(
-                padding: 10.padV,
-                child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 25.h, horizontal: 15.w),
-                    decoration: BoxDecoration(
-                        color: Pallete.whiteColor.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(15.r)),
-                    child: Row(
-                      children: [
-                        PhosphorIcons.bold.clockCounterClockwise
-                            .iconslide(size: 25.sp, color: Pallete.blackColor),
-                        10.sbW,
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            constraints: BoxConstraints(maxWidth: 250.w),
-                            child: result.txtStyled(
-                                fontSize: 18.sp,
-                                textOverflow: TextOverflow.ellipsis),
-                          ),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: () {},
-                          child: PhosphorIcons.bold.x
-                              .iconslide(size: 20.sp, color: Pallete.blackColor),
-                        ),
-                      ],
-                    )));
-          }),
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var item in searchSuggestions) {
-      if (item.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(item);
-      }
-    }
-
-    return ListView.builder(
-        itemCount: matchQuery.length,
-        itemBuilder: (context, index) {
-          var result = matchQuery[index];
-          return Padding(
-              padding: 10.padV,
-              child: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 25.h, horizontal: 15.w),
-                  decoration: BoxDecoration(
-                      color: Pallete.whiteColor.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(15.r)),
-                  child: Row(
-                    children: [
-                      PhosphorIcons.bold.clockCounterClockwise
-                          .iconslide(size: 25.sp, color: Pallete.blackColor),
-                      10.sbW,
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          constraints: BoxConstraints(maxWidth: 250.w),
-                          child: result.txtStyled(
-                              fontSize: 18.sp,
-                              textOverflow: TextOverflow.ellipsis),
-                        ),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {},
-                        child: PhosphorIcons.bold.x
-                            .iconslide(size: 20.sp, color: Pallete.blackColor),
-                      ),
-                    ],
-                  )));
-        });
   }
 }

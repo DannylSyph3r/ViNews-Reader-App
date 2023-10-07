@@ -112,7 +112,7 @@ extension StyledTextExtension on String {
 }
 
 extension CustomIcon on IconData {
-  Widget iconslide({double? size, Color? color}) {
+  Icon iconslide({double? size, Color? color}) {
     return Icon(
       this, 
       size: size, 

@@ -7,7 +7,7 @@ import 'package:logger/logger.dart';
 import 'package:vinews_news_reader/features/auth/controllers/auth_action_controllers.dart';
 import 'package:vinews_news_reader/features/auth/states/login_state.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_Palette.dart';
 import 'package:vinews_news_reader/utils/vinews_icons.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
@@ -127,13 +127,13 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
                     70.sbH,
                     const Divider(
                       thickness: 1.5,
-                      color: Pallete.blackColor,
+                      color: Palette.blackColor,
                     ),
                     20.sbH,
                     ViNewsAppImageIconButton(
                       onButtonPress: resendCodedButtonPress,
-                      buttonColor: Pallete.blackColor,
-                      iconColor: Pallete.blackColor,
+                      buttonColor: Palette.blackColor,
+                      iconColor: Palette.blackColor,
                       buttonPlaceholderText: remainingTime == 0
                           ? "Resend Link"
                           : getFormattedRemainingTime(remainingTime),
@@ -150,7 +150,7 @@ class _EmailVerificationViewState extends ConsumerState<EmailVerificationView> {
                               ViNewsAppRouteConstants.authIntializer);
                         },
                         child: "Go Back to Login/Sign Up".txtStyled(
-                            fontSize: 18.sp, color: Pallete.blueColor)),
+                            fontSize: 18.sp, color: Palette.blueColor)),
                     150.sbH,
                   ],
                 ),

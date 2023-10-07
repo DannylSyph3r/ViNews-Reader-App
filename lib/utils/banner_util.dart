@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_palette.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
 void showMaterialBanner(BuildContext context, String bannerTitle,
@@ -32,10 +32,10 @@ void showMaterialBanner(BuildContext context, String bannerTitle,
                 bannerTitle.txtStyled(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
-                    color: Pallete.whiteColor),
+                    color: Palette.whiteColor),
                 13.sbH,
                 bannerMessage.txtStyled(
-                    fontSize: 14.sp, color: Pallete.whiteColor),
+                    fontSize: 14.sp, color: Palette.whiteColor),
                 5.sbH
               ],
             ),
@@ -45,7 +45,7 @@ void showMaterialBanner(BuildContext context, String bannerTitle,
         padding: 20.0.padA,
         leading: Icon(
           PhosphorIcons.bold.warningOctagon,
-          color: Pallete.whiteColor,
+          color: Palette.whiteColor,
         ),
         leadingPadding: const EdgeInsets.only(right: 25),
         actions: [
@@ -56,7 +56,7 @@ void showMaterialBanner(BuildContext context, String bannerTitle,
             },
             child: Icon(
               PhosphorIcons.bold.x,
-              color: Pallete.whiteColor,
+              color: Palette.whiteColor,
               size: 22,
             ),
           ),

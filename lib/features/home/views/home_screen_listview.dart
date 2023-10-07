@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -10,13 +10,17 @@ import 'package:vinews_news_reader/core/models/article_selections.dart';
 import 'package:vinews_news_reader/core/provider/app_providers.dart';
 import 'package:vinews_news_reader/features/settings/views/user_account_view.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
-import 'package:vinews_news_reader/utils/frosted_glass_box.dart';
+import 'package:vinews_news_reader/themes/color_palette.dart';
+import 'package:vinews_news_reader/utils/image_loader.dart';
+import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
 class UserHomePageView extends ConsumerStatefulWidget {
-  const UserHomePageView({super.key});
+  final VoidCallback showNavBar;
+  final VoidCallback hideNavBar;
+  const UserHomePageView(
+      {super.key, required this.showNavBar, required this.hideNavBar});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -24,18 +28,33 @@ class UserHomePageView extends ConsumerStatefulWidget {
 }
 
 class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
-  final ValueNotifier<int> _selectedOptionIndexValueNotifier =
-      ValueNotifier<int>(0);
+  final ScrollController _homeScrollController = ScrollController();
+  final ValueNotifier<int> _selectedOptionIndexValueNotifier = 0.notifier;
   String formattedDate = DateFormat('E d MMM, y').format(DateTime.now());
 
   @override
   void initState() {
-    _selectedOptionIndexValueNotifier.value = 0;
+    _homeScrollController.addListener(() {
+      if (_homeScrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        widget.showNavBar();
+      } else {
+        widget.hideNavBar();
+      }
+    });
     super.initState();
   }
 
   @override
   void dispose() {
+    _homeScrollController.removeListener(() {
+      if (_homeScrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        widget.showNavBar();
+      } else {
+        widget.hideNavBar();
+      }
+    });
     _selectedOptionIndexValueNotifier.dispose();
     super.dispose();
   }
@@ -83,7 +102,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
           return <Widget>[
             SliverAppBar(
               toolbarHeight: 90.h,
-              backgroundColor: Pallete.blackColor,
+              backgroundColor: Palette.blackColor,
               elevation: 0,
               titleSpacing: 0,
               title: Padding(
@@ -100,7 +119,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
               ),
               bottom: AppBar(
                 toolbarHeight: 90.h,
-                backgroundColor: Pallete.blackColor,
+                backgroundColor: Palette.blackColor,
                 titleSpacing: 0,
                 // Show Greeting along with user firstname
                 title: Padding(
@@ -154,10 +173,12 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
           ),
           child: Stack(children: [
             Scrollbar(
+              controller: _homeScrollController,
               interactive: true,
               thickness: 6,
               radius: Radius.circular(12.r),
               child: SingleChildScrollView(
+                controller: _homeScrollController,
                 physics: isOverlayActive
                     ? const NeverScrollableScrollPhysics()
                     : const BouncingScrollPhysics(),
@@ -235,14 +256,11 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                                 BorderRadius.circular(10.r),
                                           ),
                                           child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10.r),
-                                            child: CachedNetworkImage(
-                                              key: UniqueKey(),
-                                              imageUrl: articleDisplay.urlImage,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.r),
+                                              child: ImageLoaderForOverlay(
+                                                  imageUrl:
+                                                      articleDisplay.urlImage)),
                                         ),
                                       ),
                                     ],
@@ -271,7 +289,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                                 7.sbW,
                                                 Container(
                                                   decoration: BoxDecoration(
-                                                    color: Pallete.blackColor,
+                                                    color: Palette.blackColor,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             7.r),
@@ -283,7 +301,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                                         .articleCategory
                                                         .txtStyled(
                                                       fontSize: 14.sp,
-                                                      color: Pallete.whiteColor,
+                                                      color: Palette.whiteColor,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                     ),
@@ -370,7 +388,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.r),
-                                  color: Pallete.greyColor.withOpacity(0.75),
+                                  color: Palette.greyColor.withOpacity(0.75),
                                   image: const DecorationImage(
                                     image: AssetImage(
                                         ViNewsAppImagesPath.appBackgroundImage),
@@ -407,18 +425,25 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10.r),
-                                              // color: Pallete.greyColor,
+                                              // color: Palette.greyColor,
                                             ),
                                             child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.r),
-                                              child: CachedNetworkImage(
-                                                imageUrl: articleOverlayDisplay
-                                                    .urlImage,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                                child: ImageLoaderForOverlay(
+                                                    imageUrl:
+                                                        articleOverlayDisplay
+                                                            .urlImage)),
                                           ),
+                                        ),
+                                        Column(
+                                          children: [
+                                            5.sbH,
+                                            const Divider(
+                                              thickness: 1.5,
+                                            ),
+                                            5.sbH
+                                          ],
                                         ),
                                         Row(
                                           mainAxisAlignment:
@@ -466,7 +491,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                                     Container(
                                                       decoration: BoxDecoration(
                                                         color:
-                                                            Pallete.blackColor,
+                                                            Palette.blackColor,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(7.r),
@@ -479,7 +504,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                                                 .articleCategory
                                                                 .txtStyled(
                                                           fontSize: 14.sp,
-                                                          color: Pallete
+                                                          color: Palette
                                                               .whiteColor,
                                                           fontWeight:
                                                               FontWeight.w600,
@@ -544,7 +569,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                                         161, 237, 226, 226),
                                                 side: BorderSide(
                                                     width: 2.5.w,
-                                                    color: Pallete.blackColor),
+                                                    color: Palette.blackColor),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(11),
@@ -557,7 +582,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                                   "Back".txtStyled(
                                                     fontSize: 15.sp,
                                                     fontWeight: FontWeight.w800,
-                                                    color: Pallete.blackColor,
+                                                    color: Palette.blackColor,
                                                   ),
                                                 ],
                                               ),
@@ -592,7 +617,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                                 elevation: 0,
                                                 fixedSize: Size(110.w, 45.w),
                                                 backgroundColor:
-                                                    Pallete.blackColor,
+                                                    Palette.blackColor,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(11),

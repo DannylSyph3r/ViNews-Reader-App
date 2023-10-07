@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/features/explore/controllers/explore_controllers.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_Palette.dart';
 import 'package:vinews_news_reader/utils/keyboard_utils.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
@@ -47,9 +47,10 @@ class _ExploreScreenSearchViewState
         return true;
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           toolbarHeight: 90.h,
-          backgroundColor: Pallete.blackColor,
+          backgroundColor: Palette.blackColor,
           // The search area here
           title: ViNewsSearchTextField(
             textfieldHeight: 65.h,
@@ -109,7 +110,7 @@ class _ExploreScreenSearchViewState
             },
             prefixIcon: PhosphorIcons.regular.magnifyingGlass.iconslide(
               size: 26.sp,
-              color: Pallete.blackColor,
+              color: Palette.blackColor,
             ),
           ),
         ),
@@ -145,7 +146,7 @@ class _ExploreScreenSearchViewState
                                     vertical: 10.h, horizontal: 15.w),
                                 decoration: BoxDecoration(
                                     color:
-                                        Pallete.whiteColor.withOpacity(0.3),
+                                        Palette.whiteColor.withOpacity(0.3),
                                     borderRadius:
                                         BorderRadius.circular(15.r)),
                                 child: GestureDetector(
@@ -163,7 +164,7 @@ class _ExploreScreenSearchViewState
                                       PhosphorIcons.bold.clockCounterClockwise
                                           .iconslide(
                                               size: 25.sp,
-                                              color: Pallete.blackColor),
+                                              color: Palette.blackColor),
                                       10.sbW,
                                       Container(
                                         constraints:
@@ -195,7 +196,7 @@ class _ExploreScreenSearchViewState
                                                 .iconslide(
                                                     size: 25.sp,
                                                     color:
-                                                        Pallete.blackColor),
+                                                        Palette.blackColor),
                                           ),
                                           IconButton(
                                             onPressed: () {
@@ -212,7 +213,7 @@ class _ExploreScreenSearchViewState
                                                 .iconslide(
                                                     size: 25.sp,
                                                     color:
-                                                        Pallete.blackColor),
+                                                        Palette.blackColor),
                                           ),
                                         ],
                                       ),

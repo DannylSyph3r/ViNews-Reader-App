@@ -6,9 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:vinews_news_reader/features/auth/controllers/auth_action_controllers.dart';
 import 'package:vinews_news_reader/features/auth/states/login_state.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_Palette.dart';
 import 'package:vinews_news_reader/utils/banner_util.dart';
-import 'package:vinews_news_reader/utils/frosted_glass_box.dart';
+import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/keyboard_utils.dart';
 import 'package:vinews_news_reader/utils/string_validator.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
@@ -30,7 +30,7 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
   final _loginFormKey = GlobalKey<FormState>();
   final _emailAddressFieldController = TextEditingController();
   final _passwordFieldController = TextEditingController();
-  bool isLoading = false;
+  final ValueNotifier<bool> loadingOverlayActive = false.notifier;
 
   @override
   void initState() {
@@ -73,28 +73,35 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
   @override
   Widget build(BuildContext context) {
     // Auth State Changes logic handler
+    final ValueNotifier<bool> loadingOverlayActive = false.notifier;
+
     ref.listen<UserAuthenticationState>(authNotifierProvider,
         (previous, state) {
-      setState(() {
-        if (state is UserAuthenticationStateLoading) {
-          isLoading = true;
-        } else {
-          isLoading = false;
-        }
-      });
+      if (state is UserAuthenticationStateLoading) {
+        loadingOverlayActive.value = true;
+      } else {
+        loadingOverlayActive.value = false;
+      }
+
       if (state is UserAuthenticationStateError) {
-        isLoading = false;
+        loadingOverlayActive.value = false;
         showMaterialBanner(
-            context, "Sign In Error :(", state.error, Pallete.blackColor);
+          context,
+          "Sign In Error :(",
+          state.error,
+          Palette.blackColor,
+        );
       } else if (state is UserAuthenticationStateSuccess) {
-        isLoading = false;
+        loadingOverlayActive.value = false;
         context.pushReplacementNamed(ViNewsAppRouteConstants.authIntializer);
       }
     });
+
     final isLoginButtonActive = ref.watch(activeButtonStateProvider);
     final isEmailValid = ref.watch(emailValidatorProvider);
     final isPasswordObscured = ref.watch(showLoginPasswordProvider);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         constraints: const BoxConstraints.expand(),
         decoration: const BoxDecoration(
@@ -137,13 +144,13 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
                               obscureText: false,
                               validator: emailValidator,
                               prefixIconString: ViNewsAppImagesPath.emailIcon,
-                              prefixIconColor: Pallete.blackColor,
+                              prefixIconColor: Palette.blackColor,
                               suffixIconString: _emailAddressFieldController
                                           .text.isNotEmpty &&
                                       isEmailValid
                                   ? ViNewsAppImagesPath.validIcon
                                   : ViNewsAppImagesPath.invalidIcon,
-                              suffixIconColor: Pallete.blackColor),
+                              suffixIconColor: Palette.blackColor),
                           8.sbH,
                           ViNewsAppTextField(
                             controller: _passwordFieldController,
@@ -171,7 +178,7 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
                                       .forgotPasswordScreenRouteName);
                                 },
                                 child: "Forgot Password?".txtStyled(
-                                    fontSize: 16.sp, color: Pallete.blueColor),
+                                    fontSize: 16.sp, color: Palette.blueColor),
                               )
                             ],
                           ),
@@ -212,8 +219,8 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
                             },
                             prefixIcon: ViNewsAppImagesPath.googleSignInIcon,
                             buttonPlaceholderText: "Sign In with Google",
-                            buttonColor: Pallete.whiteColor,
-                            textColor: Pallete.blackColor,
+                            buttonColor: Palette.whiteColor,
+                            textColor: Palette.blackColor,
                             isEnabled: true,
                           ),
                           220.sbH,
@@ -230,7 +237,7 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
                                   resetButtonState();
                                 },
                                 child: "Sign Up".txtStyled(
-                                    color: Pallete.blueColor, fontSize: 17.sp),
+                                    color: Palette.blueColor, fontSize: 17.sp),
                               )
                             ],
                           ),
@@ -243,16 +250,22 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
               ),
             ),
             // Fancy Frosted Glass Loader ;)
-            Visibility(
-              visible: isLoading,
-              child: FrostedGlassBox(
-                  theWidth: MediaQuery.of(context).size.width,
-                  theHeight: MediaQuery.of(context).size.height,
-                  theChild: const SpinKitThreeBounce(
-                    color: Pallete.blackColor,
-                    size: 20,
-                  )),
-            ),
+            loadingOverlayActive.sync(
+              builder: (context, isVisible, child) {
+                return Visibility(
+                  visible: isVisible,
+                  child: Positioned.fill(
+                    child: FrostedGlassBox(
+                      theWidth: MediaQuery.of(context).size.width,
+                      theHeight: MediaQuery.of(context).size.height,
+                      theChild: SpinKitFadingCircle(
+                        color: Palette.blackColor.withOpacity(0.3),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
           ]),
         ),
       ),

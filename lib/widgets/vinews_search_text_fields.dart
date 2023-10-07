@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_palette.dart';
 
 class ViNewsSearchTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -61,7 +61,7 @@ class ViNewsSearchTextField extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
               borderSide:
-                  const BorderSide(color: Pallete.blackColor, width: 2.5),
+                  const BorderSide(color: Palette.blackColor, width: 2.5),
               borderRadius: BorderRadius.circular(12)),
           fillColor: Colors.white,
           filled: true,

@@ -1,0 +1,1 @@
+Future<bool> stopWillPop() async => false;

@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/core/provider/app_providers.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
-import 'package:vinews_news_reader/utils/frosted_glass_box.dart';
+import 'package:vinews_news_reader/themes/color_palette.dart';
+import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/vinews_app_texts.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
@@ -27,7 +27,7 @@ class _NewsInterestSelectionViewState
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Pallete.blackColor,
+        backgroundColor: Palette.blackColor,
         elevation: 0,
         centerTitle: true,
         title: Row(
@@ -84,8 +84,8 @@ class _NewsInterestSelectionViewState
                                 ),
                                 decoration: BoxDecoration(
                                   color: isSelected
-                                      ? Pallete.blackColor
-                                      : Pallete.whiteColor,
+                                      ? Palette.blackColor
+                                      : Palette.whiteColor,
                                   borderRadius: BorderRadius.circular(27.r),
                                 ),
                                 child: Row(
@@ -95,8 +95,8 @@ class _NewsInterestSelectionViewState
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.w800,
                                       color: isSelected
-                                          ? Pallete.whiteColor
-                                          : Pallete.blackColor,
+                                          ? Palette.whiteColor
+                                          : Palette.blackColor,
                                     ),
                                   ],
                                 ),
@@ -112,7 +112,7 @@ class _NewsInterestSelectionViewState
                       ),
                       Column(
                         children: [
-                          const Divider(color: Pallete.blackColor, thickness: 1),
+                          const Divider(color: Palette.blackColor, thickness: 1),
                           10.sbH,
                           Align(
                             alignment: Alignment.bottomCenter,
@@ -132,7 +132,7 @@ class _NewsInterestSelectionViewState
                                         161, 237, 226, 226),
                                     side: BorderSide(
                                         width: 2.5.w,
-                                        color: Pallete.blackColor),
+                                        color: Palette.blackColor),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(11),
                                     ),
@@ -143,7 +143,7 @@ class _NewsInterestSelectionViewState
                                       "Skip".txtStyled(
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.w800,
-                                        color: Pallete.blackColor,
+                                        color: Palette.blackColor,
                                       ),
                                     ],
                                   ),
@@ -158,7 +158,7 @@ class _NewsInterestSelectionViewState
                                   style: ElevatedButton.styleFrom(
                                     elevation: 0,
                                     fixedSize: Size(175.w, 62.w),
-                                    backgroundColor: Pallete.blackColor,
+                                    backgroundColor: Palette.blackColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(11),
                                     ),
@@ -188,7 +188,7 @@ class _NewsInterestSelectionViewState
                   theWidth: MediaQuery.of(context).size.width,
                   theHeight: MediaQuery.of(context).size.height,
                   theChild: AlertDialog(
-                    backgroundColor: Pallete.whiteColor.withOpacity(0.8),
+                    backgroundColor: Palette.whiteColor.withOpacity(0.8),
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -214,7 +214,7 @@ class _NewsInterestSelectionViewState
                         child: "Cancel".txtStyled(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w700,
-                            color: Pallete.blackColor),
+                            color: Palette.blackColor),
                       ),
                       TextButton(
                         onPressed: () {
@@ -226,7 +226,7 @@ class _NewsInterestSelectionViewState
                         child: "Yes, I'm sure!".txtStyled(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w700,
-                            color: Pallete.blackColor),
+                            color: Palette.blackColor),
                       ),
                     ],
                   ),

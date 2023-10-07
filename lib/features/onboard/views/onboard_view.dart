@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/features/onboard/widgets/onboard_screen_layout_widget.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_Palette.dart';
 
 class OnboardView extends ConsumerStatefulWidget {
   const OnboardView({super.key});
@@ -35,12 +35,13 @@ class _OnboardViewState extends ConsumerState<OnboardView> {
     // Custom Widget Implementation
     return OnboardScreenLayoutWidget(
        onTapSkipButton: () {
-        context.goNamed(ViNewsAppRouteConstants.authIntializer);
+        context.pushReplacementNamed(ViNewsAppRouteConstants.authIntializer);
       },
-      backgroundColor: Pallete.greyColor,
+      backgroundColor: Palette.greyColor,
       screenProgressIcon: PhosphorIcons.bold.caretRight,
-      circularProgressForegroundColor: Pallete.blackColor,
-      skipTextStyle: TextStyle(fontSize: 19.5.sp, color: Pallete.blackColor),
+      ultimateScreenIcon: PhosphorIcons.bold.caretDoubleRight,
+      circularProgressForegroundColor: Palette.blackColor,
+      skipTextStyle: TextStyle(fontSize: 19.5.sp, color: Palette.blackColor),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_palette.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
 class ViNewsAppIconButton extends ConsumerWidget {
@@ -34,7 +34,7 @@ class ViNewsAppIconButton extends ConsumerWidget {
       decoration: BoxDecoration(
         // boxShadow: [
         //   BoxShadow(
-        //     color: boxShadowColor ?? Pallete.blackColor,
+        //     color: boxShadowColor ?? Palette.blackColor,
         //     blurRadius: 16,
         //     offset: const Offset(0, 2),
         //     spreadRadius: 0,
@@ -49,7 +49,7 @@ class ViNewsAppIconButton extends ConsumerWidget {
         style: ElevatedButton.styleFrom(
           elevation: 0,
           fixedSize: Size(390.w, 78.w),
-          backgroundColor: buttonColor ?? Pallete.blackColor,
+          backgroundColor: buttonColor ?? Palette.blackColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

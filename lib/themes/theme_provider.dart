@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_palette.dart';
 
 final themeNotifierProvider =
     StateNotifierProvider<ThemeNotifier, ThemeData>((ref) {
@@ -13,7 +13,7 @@ class ThemeNotifier extends StateNotifier<ThemeData> {
   ThemeNotifier({ThemeMode mode = ThemeMode.dark})
       : _mode = mode,
         super(
-          Pallete.darkModeTheme,
+          Palette.darkModeTheme,
         ) {
     getTheme();
   }
@@ -26,10 +26,10 @@ class ThemeNotifier extends StateNotifier<ThemeData> {
 
     if (theme == 'lightTheme') {
       _mode = ThemeMode.light;
-      state = Pallete.lightModeTheme;
+      state = Palette.lightModeTheme;
     } else {
       _mode = ThemeMode.dark;
-      state = Pallete.darkModeTheme;
+      state = Palette.darkModeTheme;
     }
   }
 
@@ -38,11 +38,11 @@ class ThemeNotifier extends StateNotifier<ThemeData> {
 
     if (_mode == ThemeMode.dark) {
       _mode = ThemeMode.light;
-      state = Pallete.lightModeTheme;
+      state = Palette.lightModeTheme;
       prefs.setString('theme', 'lightTheme');
     } else {
       _mode = ThemeMode.dark;
-      state = Pallete.darkModeTheme;
+      state = Palette.darkModeTheme;
       prefs.setString('theme', 'darkTheme');
     }
   }

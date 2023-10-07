@@ -8,8 +8,8 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/core/models/article_selections.dart';
 import 'package:vinews_news_reader/core/provider/app_providers.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
-import 'package:vinews_news_reader/utils/frosted_glass_box.dart';
+import 'package:vinews_news_reader/themes/color_Palette.dart';
+import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
@@ -48,7 +48,7 @@ class _BookmarkSearchResultsViewState
       length: newsInterests.length + 1,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Pallete.blackColor,
+          backgroundColor: Palette.blackColor,
           elevation: 0,
           centerTitle: true,
           title: Row(
@@ -72,7 +72,7 @@ class _BookmarkSearchResultsViewState
           bottom: AppBar(
             automaticallyImplyLeading: false,
             toolbarHeight: 100.h,
-            backgroundColor: Pallete.blackColor,
+            backgroundColor: Palette.blackColor,
             titleSpacing: 0,
             title: TabBar(
               isScrollable: true,
@@ -81,7 +81,7 @@ class _BookmarkSearchResultsViewState
               labelColor: Colors.white,
               unselectedLabelColor: const Color.fromARGB(255, 154, 146, 146),
               dividerColor: Colors.grey,
-              indicatorColor: Pallete.greenColor,
+              indicatorColor: Palette.greenColor,
               indicatorWeight: 3.5,
               indicatorSize: TabBarIndicatorSize.label,
               splashFactory: NoSplash.splashFactory,
@@ -196,7 +196,7 @@ class _BookmarkSearchResultsViewState
                                         7.sbW,
                                         Container(
                                           decoration: BoxDecoration(
-                                            color: Pallete.blackColor,
+                                            color: Palette.blackColor,
                                             borderRadius:
                                                 BorderRadius.circular(7.r),
                                           ),
@@ -207,7 +207,7 @@ class _BookmarkSearchResultsViewState
                                                 .articleCategory
                                                 .txtStyled(
                                               fontSize: 14.sp,
-                                              color: Pallete.whiteColor,
+                                              color: Palette.whiteColor,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -357,7 +357,7 @@ class _BookmarkSearchResultsViewState
                                             7.sbW,
                                             Container(
                                               decoration: BoxDecoration(
-                                                color: Pallete.appButtonColor,
+                                                color: Palette.appButtonColor,
                                                 borderRadius:
                                                     BorderRadius.circular(7.r),
                                               ),
@@ -367,7 +367,7 @@ class _BookmarkSearchResultsViewState
                                                     .articleCategory
                                                     .txtStyled(
                                                   fontSize: 13.sp,
-                                                  color: Pallete.whiteColor,
+                                                  color: Palette.whiteColor,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
@@ -458,7 +458,7 @@ class _BookmarkSearchResultsViewState
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20.r),
-                                  color: Pallete.greyColor.withOpacity(0.75),
+                                  color: Palette.greyColor.withOpacity(0.75),
                                   image: const DecorationImage(
                                     image: AssetImage(
                                         ViNewsAppImagesPath.appBackgroundImage),
@@ -495,7 +495,7 @@ class _BookmarkSearchResultsViewState
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10.r),
-                                              // color: Pallete.greyColor,
+                                              // color: Palette.greyColor,
                                             ),
                                             child: ClipRRect(
                                               borderRadius:
@@ -508,6 +508,15 @@ class _BookmarkSearchResultsViewState
                                               ),
                                             ),
                                           ),
+                                        ),
+                                        Column(
+                                          children: [
+                                            5.sbH,
+                                            const Divider(
+                                              thickness: 1.5,
+                                            ),
+                                            5.sbH
+                                          ],
                                         ),
                                         Row(
                                           mainAxisAlignment:
@@ -555,7 +564,7 @@ class _BookmarkSearchResultsViewState
                                                     Container(
                                                       decoration: BoxDecoration(
                                                         color:
-                                                            Pallete.blackColor,
+                                                            Palette.blackColor,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(7.r),
@@ -568,7 +577,7 @@ class _BookmarkSearchResultsViewState
                                                                 .articleCategory
                                                                 .txtStyled(
                                                           fontSize: 14.sp,
-                                                          color: Pallete
+                                                          color: Palette
                                                               .whiteColor,
                                                           fontWeight:
                                                               FontWeight.w600,
@@ -633,7 +642,7 @@ class _BookmarkSearchResultsViewState
                                                         161, 237, 226, 226),
                                                 side: BorderSide(
                                                     width: 2.5.w,
-                                                    color: Pallete.blackColor),
+                                                    color: Palette.blackColor),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(11),
@@ -646,7 +655,7 @@ class _BookmarkSearchResultsViewState
                                                   "Back".txtStyled(
                                                     fontSize: 15.sp,
                                                     fontWeight: FontWeight.w800,
-                                                    color: Pallete.blackColor,
+                                                    color: Palette.blackColor,
                                                   ),
                                                 ],
                                               ),
@@ -681,7 +690,7 @@ class _BookmarkSearchResultsViewState
                                                 elevation: 0,
                                                 fixedSize: Size(110.w, 45.w),
                                                 backgroundColor:
-                                                    Pallete.blackColor,
+                                                    Palette.blackColor,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(11),

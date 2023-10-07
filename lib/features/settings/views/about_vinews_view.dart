@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_Palette.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
@@ -18,7 +18,7 @@ class _AboutViNewsViewState extends ConsumerState<AboutViNewsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Pallete.blackColor,
+        backgroundColor: Palette.blackColor,
         elevation: 0,
         centerTitle: true,
         title: "About ViNews".txtStyled(fontSize: 18.sp),

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_Palette.dart';
 import 'package:vinews_news_reader/utils/vinews_app_texts.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
@@ -52,7 +52,7 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                 }),
                 toolbarHeight: 90.h,
                 stretch: true,
-                backgroundColor: Pallete.blackColor,
+                backgroundColor: Palette.blackColor,
                 elevation: 0,
                 shape: ContinuousRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -198,7 +198,7 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                   Padding(
                     padding: 25.padH,
                     child: const Divider(
-                      color: Pallete.blackColor,
+                      color: Palette.blackColor,
                       thickness: 1,
                     ),
                   ),

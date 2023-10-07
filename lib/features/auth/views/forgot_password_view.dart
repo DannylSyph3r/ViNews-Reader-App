@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:vinews_news_reader/features/auth/controllers/auth_action_controllers.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_Palette.dart';
 import 'package:vinews_news_reader/utils/banner_util.dart';
 import 'package:vinews_news_reader/utils/keyboard_utils.dart';
 import 'package:vinews_news_reader/utils/string_validator.dart';
@@ -69,7 +69,7 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
         centerTitle: true,
         title: "Reset Password".txtStyled(fontSize: 18.sp),
         elevation: 0,
-        backgroundColor: Pallete.blackColor,
+        backgroundColor: Palette.blackColor,
       ),
       body: Container(
         constraints: const BoxConstraints.expand(),
@@ -110,13 +110,13 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
                             obscureText: false,
                             validator: emailValidator,
                             prefixIconString: ViNewsAppImagesPath.emailIcon,
-                            prefixIconColor: Pallete.blackColor,
+                            prefixIconColor: Palette.blackColor,
                             suffixIconString: _forgotPasswordFieldController
                                         .text.isNotEmpty &&
                                     isEmailValid
                                 ? ViNewsAppImagesPath.validIcon
                                 : ViNewsAppImagesPath.invalidIcon,
-                            suffixIconColor: Pallete.blackColor),
+                            suffixIconColor: Palette.blackColor),
                         40.sbH,
                         // "Send Link" Button
                         ViNewsAppIconButton(
@@ -135,7 +135,7 @@ class _ForgotPasswordViewState extends ConsumerState<ForgotPasswordView> {
                                     context,
                                     ViNewsAppTexts.passwordResetSuccessTitle,
                                     ViNewsAppTexts.passwordResetSuccessBody,
-                                    Pallete.blackColor);
+                                    Palette.blackColor);
                                 resetButtonState();
                               }
                             },

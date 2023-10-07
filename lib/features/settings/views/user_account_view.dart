@@ -10,9 +10,9 @@ import 'package:vinews_news_reader/features/auth/states/login_state.dart';
 import 'package:vinews_news_reader/features/settings/views/user_news_interest.dart';
 import 'package:vinews_news_reader/features/settings/widgets/settings_custom_divider.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_palette.dart';
 import 'package:vinews_news_reader/utils/banner_util.dart';
-import 'package:vinews_news_reader/utils/frosted_glass_box.dart';
+import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
@@ -26,29 +26,27 @@ class UserAccountSettingsView extends ConsumerStatefulWidget {
 
 class _UserAccountSettingsViewState
     extends ConsumerState<UserAccountSettingsView> {
-  bool isLoading = false;
+  final ValueNotifier<bool> loadingOverlayActive = false.notifier;
 
   @override
   Widget build(BuildContext context) {
     // Handling Loading State for user logout
     ref.listen<UserAuthenticationState>(authNotifierProvider,
         (previous, state) {
-      setState(() {
-        if (state is UserAuthenticationStateLoading) {
-          isLoading = true;
-        } else {
-          isLoading = false;
-        }
-      });
+      if (state is UserAuthenticationStateLoading) {
+        loadingOverlayActive.value = true;
+      } else {
+        loadingOverlayActive.value = false;
+      }
       if (state is UserAuthenticationStateError) {
-        isLoading = false;
+        loadingOverlayActive.value = false;
         showMaterialBanner(
-            context, "Something happened :(", state.error, Pallete.blackColor);
+            context, "Something happened :(", state.error, Palette.blackColor);
       }
     });
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Pallete.blackColor,
+        backgroundColor: Palette.blackColor,
         elevation: 0,
         centerTitle: true,
         title: Row(
@@ -94,23 +92,23 @@ class _UserAccountSettingsViewState
                           ],
                         ),
                         trailing: PhosphorIcons.bold.caretRight
-                            .iconslide(size: 18.sp, color: Pallete.blackColor),
+                            .iconslide(size: 18.sp, color: Palette.blackColor),
                       ),
                       const CustomSettingsDivider(),
                       ListTile(
                         onTap: () {
-                           navigateToNewsSelectionPage(context);
+                          navigateToNewsSelectionPage(context);
                         },
                         title: "Customize News Interests"
                             .txtStyled(fontSize: 18.sp),
                         trailing: PhosphorIcons.bold.caretRight
-                            .iconslide(size: 18.sp, color: Pallete.blackColor),
+                            .iconslide(size: 18.sp, color: Palette.blackColor),
                       ),
                       const CustomSettingsDivider(),
                       ListTile(
                         title: "Change Password".txtStyled(fontSize: 18.sp),
                         trailing: PhosphorIcons.bold.caretRight
-                            .iconslide(size: 18.sp, color: Pallete.blackColor),
+                            .iconslide(size: 18.sp, color: Palette.blackColor),
                       ),
                       const CustomSettingsDivider(),
                       ListTile(
@@ -118,14 +116,14 @@ class _UserAccountSettingsViewState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             "Delete Account".txtStyled(
-                                fontSize: 18.sp, color: Pallete.redColor),
+                                fontSize: 18.sp, color: Palette.redColor),
                             7.sbH,
                             "Permanently delete your account."
                                 .txtStyled(fontSize: 15.sp)
                           ],
                         ),
                         trailing: PhosphorIcons.bold.caretRight
-                            .iconslide(size: 18.sp, color: Pallete.blackColor),
+                            .iconslide(size: 18.sp, color: Palette.blackColor),
                       ),
                       const CustomSettingsDivider(),
                       ListTile(
@@ -136,23 +134,29 @@ class _UserAccountSettingsViewState
                         },
                         title: "Log out".txtStyled(fontSize: 18.sp),
                         trailing: PhosphorIcons.bold.caretRight
-                            .iconslide(size: 18.sp, color: Pallete.blackColor),
+                            .iconslide(size: 18.sp, color: Palette.blackColor),
                       ),
                     ],
                   ),
                 )),
               ),
             ),
-            Visibility(
-              visible: isLoading,
-              child: FrostedGlassBox(
-                  theWidth: MediaQuery.of(context).size.width,
-                  theHeight: MediaQuery.of(context).size.height,
-                  theChild: const SpinKitThreeBounce(
-                    color: Pallete.blackColor,
-                    size: 20,
-                  )),
-            ),
+            loadingOverlayActive.sync(
+              builder: (context, isVisible, child) {
+                return Visibility(
+                  visible: isVisible,
+                  child: Positioned.fill(
+                    child: FrostedGlassBox(
+                      theWidth: MediaQuery.of(context).size.width,
+                      theHeight: MediaQuery.of(context).size.height,
+                      theChild: SpinKitFadingCircle(
+                        color: Palette.blackColor.withOpacity(0.3),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
           ])),
     );
   }

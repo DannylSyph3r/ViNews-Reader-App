@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vinews_news_reader/themes/color_pallete.dart';
+import 'package:vinews_news_reader/themes/color_palette.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
 void showAlertDialog(BuildContext context, String title, Widget leadingIcon, String dialogContent,
@@ -30,14 +30,14 @@ void showAlertDialog(BuildContext context, String title, Widget leadingIcon, Str
               onPressed: () {
                 context.pop();
               },
-              child: actionButtonTextLeft.txtStyled(fontSize: 18.sp, fontWeight: FontWeight.w700, color: Pallete.blackColor),
+              child: actionButtonTextLeft.txtStyled(fontSize: 18.sp, fontWeight: FontWeight.w700, color: Palette.blackColor),
             ),
             TextButton(
               onPressed: () {
                 context.pop();
                 context.pop();
               },
-              child: actionButtonTextRight.txtStyled(fontSize: 18.sp, fontWeight: FontWeight.w700,color: Pallete.blackColor),
+              child: actionButtonTextRight.txtStyled(fontSize: 18.sp, fontWeight: FontWeight.w700,color: Palette.blackColor),
             ),
           ],
         );
