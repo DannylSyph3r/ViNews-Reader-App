@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/features/onboard/widgets/onboard_screen_layout_widget.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_Palette.dart';
+import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 
 class OnboardView extends ConsumerStatefulWidget {
   const OnboardView({super.key});

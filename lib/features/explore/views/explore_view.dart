@@ -7,10 +7,10 @@ import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/core/models/article_selections.dart';
-import 'package:vinews_news_reader/core/provider/app_providers.dart';
+import 'package:vinews_news_reader/core/controllers/app_providers.dart';
 import 'package:vinews_news_reader/features/explore/views/explore_search_view.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_Palette.dart';
+import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/image_loader.dart';
 import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
@@ -34,9 +34,6 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
   final ScrollController _exploreScrollController = ScrollController();
   final ValueNotifier<int> _selectedOptionIndexValueNotifier = 0.notifier;
   String formattedDate = DateFormat('E d MMM, y').format(DateTime.now());
-  final TextEditingController _exploreSearchFieldController =
-      TextEditingController();
-  // Dispose Explore Search Bar Controller
 
   @override
   void initState() {
@@ -62,7 +59,6 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
       }
     });
     _selectedOptionIndexValueNotifier.dispose();
-    _exploreSearchFieldController.dispose();
     super.dispose();
   }
 
@@ -75,6 +71,7 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
       body: DefaultTabController(
         length: newsInterests.length,
         child: NestedScrollView(
+          controller: _exploreScrollController,
           physics:
               isOverlayActive ? const NeverScrollableScrollPhysics() : null,
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -153,12 +150,11 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                       .where((article) => article.articleCategory == interest)
                       .toList();
                   return Scrollbar(
-                    controller: _exploreScrollController,
+                              controller: _exploreScrollController,
                     interactive: true,
                     thickness: 6,
                     radius: Radius.circular(12.r),
                     child: ListView.builder(
-                        controller: _exploreScrollController,
                         padding: 10.padV,
                         physics: isOverlayActive
                             ? const NeverScrollableScrollPhysics()
@@ -434,7 +430,7 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                           return FrostedGlassBox(
                               theWidth: MediaQuery.of(context).size.width,
                               theHeight: MediaQuery.of(context).size.height,
-                              theChildAlignment: MainAxisAlignment.end,
+                              theChildAlignment: MainAxisAlignment.center,
                               theChild: Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 25.w, vertical: 15.h),

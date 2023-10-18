@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vinews_news_reader/features/onboard/views/onboarding_contents.dart';
 import 'package:vinews_news_reader/features/onboard/widgets/circle_progress_bar.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_Palette.dart';
+import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 

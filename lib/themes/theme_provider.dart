@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vinews_news_reader/themes/color_palette.dart';
+import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 
 final themeNotifierProvider =
     StateNotifierProvider<ThemeNotifier, ThemeData>((ref) {

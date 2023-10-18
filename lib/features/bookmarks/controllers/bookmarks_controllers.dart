@@ -1,17 +1,35 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vinews_news_reader/core/models/article_selections.dart';
 
-class BookmarksViewSearchHistory extends StateNotifier<List<String>> {
-  BookmarksViewSearchHistory() : super([]);
+// Bookmarks Managing State Notifier Class
+class UserBookmarksListNotifier extends StateNotifier<List<ArticleSelections>> {
+  UserBookmarksListNotifier() : super(articleDisplayList);
 
-  void addToBookmarksHistory(String query) {
-    state = [...state, query];
-  }
+  //  void addArticleToBookmarks(ArticleSelections article) {
+  //   state = [...state, article];
+  // }
 
-    void removeFromBookmarksHistory(String query) {
-    state = state.where((item) => item != query).toList();
+  void removeArticleFromBookmarks(ArticleSelections article) {
+    state = state.where((a) => a != article).toList();
   }
 }
 
-final bookmarksSearchHistoryProvider = StateNotifierProvider<BookmarksViewSearchHistory, List<String>>((ref) {
-  return BookmarksViewSearchHistory();
+class QueryStringNotifier extends StateNotifier<String> {
+  QueryStringNotifier() : super('');
+
+  // Method to update the string
+  void updateQueryString(String newValue) {
+    state = newValue;
+  }
+}
+
+final bookmarksProvider =
+    StateNotifierProvider<UserBookmarksListNotifier, List<ArticleSelections>>(
+  (ref) => UserBookmarksListNotifier(),
+);
+
+final bookmarksQueryStringProvider =
+    StateNotifierProvider<QueryStringNotifier, String>((ref) {
+  return QueryStringNotifier();
 });
+

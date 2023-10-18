@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/features/explore/controllers/explore_controllers.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_Palette.dart';
+import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/keyboard_utils.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
@@ -53,7 +53,7 @@ class _ExploreScreenSearchViewState
           backgroundColor: Palette.blackColor,
           // The search area here
           title: ViNewsSearchTextField(
-            textfieldHeight: 65.h,
+            textfieldHeight: 55.h,
             controller: _exploreSearchFieldController,
             hintText: "What do you want to search for?",
             obscureText: false,
@@ -127,8 +127,8 @@ class _ExploreScreenSearchViewState
             ),
             child: GestureDetector(
               onTap: () => dropKeyboard(),
-              child: SingleChildScrollView(
-                child: Center(
+              child: ListView(children: [
+                Center(
                     child: Padding(
                   padding: 25.0.padA,
                   child: ListView.builder(
@@ -145,10 +145,8 @@ class _ExploreScreenSearchViewState
                                 padding: EdgeInsets.symmetric(
                                     vertical: 10.h, horizontal: 15.w),
                                 decoration: BoxDecoration(
-                                    color:
-                                        Palette.whiteColor.withOpacity(0.3),
-                                    borderRadius:
-                                        BorderRadius.circular(15.r)),
+                                    color: Palette.whiteColor.withOpacity(0.3),
+                                    borderRadius: BorderRadius.circular(15.r)),
                                 child: GestureDetector(
                                   onTap: () {
                                     dropKeyboard();
@@ -195,8 +193,7 @@ class _ExploreScreenSearchViewState
                                                 .bold.arrowUpRight
                                                 .iconslide(
                                                     size: 25.sp,
-                                                    color:
-                                                        Palette.blackColor),
+                                                    color: Palette.blackColor),
                                           ),
                                           IconButton(
                                             onPressed: () {
@@ -212,8 +209,7 @@ class _ExploreScreenSearchViewState
                                             icon: PhosphorIcons.bold.x
                                                 .iconslide(
                                                     size: 25.sp,
-                                                    color:
-                                                        Palette.blackColor),
+                                                    color: Palette.blackColor),
                                           ),
                                         ],
                                       ),
@@ -222,7 +218,7 @@ class _ExploreScreenSearchViewState
                                 )));
                       }),
                 )),
-              ),
+              ]),
             )),
       ),
     );

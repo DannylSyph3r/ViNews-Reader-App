@@ -1,5 +1,5 @@
-
 class ViNewsAppImagesPath {
+  static const String viNewsAppIcon = "assets/icons/vinews_app_icon.png";
   static const String appBackgroundImage = "assets/images/background.png";
   static const String onboardScreenImageOne = 'assets/images/onboard_1.svg';
   static const String onboardScreenImageTwo = 'assets/images/onboard_2.svg';

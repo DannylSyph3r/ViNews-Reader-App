@@ -30,6 +30,41 @@ class ViNewsAppTexts {
       "A password reset link has been sent to your Email Address. Dont forget it this time :/";
   static const redirectionErrorMessage =
       "Redirection to homepage has encountered an error. Please initiate manually!";
+  static const aboutViNewsPageText = """About ViNews
+
+Welcome to ViNews, your go-to source for the latest news, delivered straight to your fingertips. ViNews is a news reader app designed and developed by Slethware, where his passion for technology and information intersects to provide you with a cutting-edge news consumption experience.
+
+At ViNews, we believe in the power of knowledge and the importance of staying informed about the world around you. Our mission is to make it easy for you to access news articles, stay updated on current events, and explore stories that matter most to you.
+
+Our Vision
+
+Slethware's vision is to create innovative and user-friendly applications that simplify and enhance your daily life. With ViNews, we're dedicated to providing a platform that gives you the freedom to explore a diverse range of news categories, empowering you to make informed decisions.
+
+What Makes ViNews Unique
+
+Customizable News Feed: 
+ViNews allows you to tailor your news feed to match your interests. Select from a variety of categories, including technology, business, politics, sports, entertainment, science, and more.
+
+Intuitive User Interface: 
+Slethware prides itself on creating apps with intuitive and user-friendly interfaces. ViNews is designed for a seamless and enjoyable reading experience.
+
+Bookmark and Share: 
+With ViNews, you can save your favorite articles to read later or share them with friends and family, ensuring you never miss out on an important story.
+
+Stay Informed: 
+We're committed to delivering news from reliable sources, so you can trust that the information you're getting is accurate and up-to-date.
+
+Meet the Developers - Slethware
+Slethware is one dedicated developers with a passion for creating exceptional software experiences. With a commitment to quality and innovation drives us to deliver cutting-edge apps like ViNews.
+
+Akinola Daniel - Lead Developer: Junior Flutter dev looking to grow his skills. And heading ViNews as a practice project. From inception to completion.
+
+Connect with Us
+We value your feedback and are always looking for ways to improve ViNews. Whether you have a suggestion, encounter an issue, or simply want to connect with us, we'd love to hear from you.
+
+Email: dopedanny001@gmail.com
+Twitter: @Slethware
+  """;
   static const newsReadArticlePagePlaceholderText = """
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lacinia, metus eu tristique dapibus, urna urna congue lectus, nec cursus lorem leo eu ligula. Vivamus venenatis enim eget magna tincidunt tristique. Fusce efficitur tellus vel felis dignissim, nec aliquet erat tincidunt. Nulla facilisi. Sed iaculis tellus ut ante sollicitudin, sit amet vestibulum justo malesuada.
 

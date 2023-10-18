@@ -12,7 +12,7 @@ import 'package:vinews_news_reader/features/settings/views/news_language_picker_
 import 'package:vinews_news_reader/features/settings/views/read_articles_view.dart';
 import 'package:vinews_news_reader/features/settings/views/user_account_view.dart';
 import 'package:vinews_news_reader/features/settings/widgets/settings_custom_divider.dart';
-import 'package:vinews_news_reader/themes/color_palette.dart';
+import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/vinews_icons.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
@@ -65,6 +65,7 @@ class _UserProfileSettingsViewState
   Widget build(BuildContext context) {
     return Scaffold(
         body: NestedScrollView(
+      controller: _userProfileScrollController,
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return <Widget>[
           SliverAppBar(
@@ -104,10 +105,8 @@ class _UserProfileSettingsViewState
           interactive: true,
           thickness: 6,
           radius: Radius.circular(12.r),
-          child: SingleChildScrollView(
-            controller: _userProfileScrollController,
-            physics: const BouncingScrollPhysics(),
-            child: Center(
+          child: ListView(physics: const BouncingScrollPhysics(), children: [
+            Center(
               child: Padding(
                 padding: 25.0.padA,
                 child: Column(
@@ -203,13 +202,6 @@ class _UserProfileSettingsViewState
                     20.sbH,
                     Column(
                       children: [
-                        ListTile(
-                          onTap: () => navigateToReadArticlesPage(context),
-                          title: "Read Articles".txtStyled(fontSize: 18.sp),
-                          trailing: PhosphorIcons.bold.caretRight.iconslide(
-                              size: 18.sp, color: Palette.blackColor),
-                        ),
-                        const CustomSettingsDivider(),
                         ListTile(
                           onTap: () => navigateToLikedArticlesPage(context),
                           title: "Liked Articles".txtStyled(fontSize: 18.sp),
@@ -309,7 +301,7 @@ class _UserProfileSettingsViewState
                 ),
               ),
             ),
-          ),
+          ]),
         ),
       ),
     ));

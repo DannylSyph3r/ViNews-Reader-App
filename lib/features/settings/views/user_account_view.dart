@@ -10,7 +10,7 @@ import 'package:vinews_news_reader/features/auth/states/login_state.dart';
 import 'package:vinews_news_reader/features/settings/views/user_news_interest.dart';
 import 'package:vinews_news_reader/features/settings/widgets/settings_custom_divider.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_palette.dart';
+import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/banner_util.dart';
 import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
@@ -75,9 +75,9 @@ class _UserAccountSettingsViewState
               interactive: true,
               thickness: 6,
               radius: Radius.circular(12.r),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Center(
+              child:
+                  ListView(physics: const BouncingScrollPhysics(), children: [
+                Center(
                     child: Padding(
                   padding: 25.0.padA,
                   child: Column(
@@ -139,7 +139,7 @@ class _UserAccountSettingsViewState
                     ],
                   ),
                 )),
-              ),
+              ]),
             ),
             loadingOverlayActive.sync(
               builder: (context, isVisible, child) {

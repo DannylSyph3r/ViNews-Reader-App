@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vinews_news_reader/features/auth/controllers/auth_action_controllers.dart';
 import 'package:vinews_news_reader/features/auth/states/login_state.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
-import 'package:vinews_news_reader/themes/color_Palette.dart';
+import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/banner_util.dart';
 import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/keyboard_utils.dart';
@@ -128,8 +128,10 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
           child: Stack(
             children: [
               SafeArea(
-                child: SingleChildScrollView(
-                  child: Center(
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                  Center(
                     child: Padding(
                       padding: const EdgeInsets.only()
                           .padSpec(left: 25, top: 30, right: 25, bottom: 50),
@@ -301,7 +303,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
                       ),
                     ),
                   ),
-                ),
+                ]),
               ),
               // Fancy Frosted Glass Loader ;)
               loadingOverlayActive.sync(

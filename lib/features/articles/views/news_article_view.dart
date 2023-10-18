@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vinews_news_reader/themes/color_Palette.dart';
+import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/vinews_app_texts.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
@@ -47,9 +47,7 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
               SliverAppBar(
                 leading: PhosphorIcons.bold.arrowLeft
                     .iconslide(size: 30.sp)
-                    .onTap(() {
-                  context.pop();
-                }),
+                    .inkTap(onTap: () => context.pop()),
                 toolbarHeight: 90.h,
                 stretch: true,
                 backgroundColor: Palette.blackColor,
@@ -133,86 +131,89 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                 fit: BoxFit.cover,
               ),
             ),
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              // Content Column holder
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: ListView(
+                physics: const BouncingScrollPhysics(),
+                // Content Column holder
                 children: [
-                  30.sbH,
-                  // Article Title
-                  Padding(
-                    padding: 25.padH,
-                    child: widget.articleTitle.txtStyled(
-                        fontSize: 30.sp, fontWeight: FontWeight.w800),
-                  ),
-                  30.sbH,
-                  // Article Credentials, Author, Date Posted, Article read time.
-                  Padding(
-                    padding: 25.padH,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      30.sbH,
+                      // Article Title
+                      Padding(
+                        padding: 25.padH,
+                        child: widget.articleTitle.txtStyled(
+                            fontSize: 30.sp, fontWeight: FontWeight.w800),
+                      ),
+                      30.sbH,
+                      // Article Credentials, Author, Date Posted, Article read time.
+                      Padding(
+                        padding: 25.padH,
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  PhosphorIcons.regular.notePencil
-                                      .iconslide(size: 19.sp),
-                                  5.sbW,
-                                  "Author: ${widget.articleAuthor}".txtStyled(
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w600),
+                                  Row(
+                                    children: [
+                                      PhosphorIcons.regular.notePencil
+                                          .iconslide(size: 19.sp),
+                                      5.sbW,
+                                      "Author: ${widget.articleAuthor}"
+                                          .txtStyled(
+                                              fontSize: 18.sp,
+                                              fontWeight: FontWeight.w600),
+                                    ],
+                                  ),
+                                  7.sbH,
+                                  Row(
+                                    children: [
+                                      PhosphorIcons.regular.paperPlaneTilt
+                                          .iconslide(size: 19.sp),
+                                      5.sbW,
+                                      "Posted: ${widget.articlePublicationDate}"
+                                          .txtStyled(
+                                              fontSize: 18.sp,
+                                              fontWeight: FontWeight.w500),
+                                    ],
+                                  )
                                 ],
                               ),
-                              7.sbH,
                               Row(
                                 children: [
-                                  PhosphorIcons.regular.paperPlaneTilt
+                                  PhosphorIcons.bold.clockCountdown
                                       .iconslide(size: 19.sp),
                                   5.sbW,
-                                  "Posted: ${widget.articlePublicationDate}"
-                                      .txtStyled(
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.w500),
+                                  "10 mins".txtStyled(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w500)
                                 ],
                               )
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              PhosphorIcons.bold.clockCountdown
-                                  .iconslide(size: 19.sp),
-                              5.sbW,
-                              "10 mins".txtStyled(
-                                  fontSize: 18.sp, fontWeight: FontWeight.w500)
-                            ],
-                          )
-                        ]),
+                            ]),
+                      ),
+                      30.sbH,
+                      Padding(
+                        padding: 25.padH,
+                        child: const Divider(
+                          color: Palette.blackColor,
+                          thickness: 1,
+                        ),
+                      ),
+                      30.sbH,
+                      // Article Content
+                      Padding(
+                        padding: 25.padH,
+                        child: ViNewsAppTexts.newsReadArticlePagePlaceholderText
+                            .txtStyled(fontSize: 18.sp),
+                      ),
+                      20.sbH
+                    ],
                   ),
-                  30.sbH,
-                  Padding(
-                    padding: 25.padH,
-                    child: const Divider(
-                      color: Palette.blackColor,
-                      thickness: 1,
-                    ),
-                  ),
-                  30.sbH,
-                  // Article Content
-                  Padding(
-                    padding: 25.padH,
-                    child: ViNewsAppTexts.newsReadArticlePagePlaceholderText
-                        .txtStyled(fontSize: 18.sp),
-                  ),
-                  20.sbH
-                ],
-              ),
-            ),
+                ]),
           ),
         ),
       ),

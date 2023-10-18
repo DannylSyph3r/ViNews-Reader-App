@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vinews_news_reader/core/provider/app_providers.dart';
+import 'package:vinews_news_reader/core/controllers/app_providers.dart';
 import 'package:vinews_news_reader/features/base_navbar/controller/bottom_nav_controller.dart';
 import 'package:vinews_news_reader/features/base_navbar/navigation_bar_build_widget.dart';
 import 'package:vinews_news_reader/features/bookmarks/views/bookmarks_views.dart';
 import 'package:vinews_news_reader/features/explore/views/explore_view.dart';
 import 'package:vinews_news_reader/features/home/views/home_screen_listview.dart';
 import 'package:vinews_news_reader/features/settings/views/user_profile_settings.dart';
-import 'package:vinews_news_reader/themes/color_palette.dart';
+import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/nav_utils.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
@@ -86,8 +86,8 @@ class _ViNewsBottomNavBarState extends ConsumerState<ViNewsBottomNavBar> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: List.generate(
                       navItems.length, // Use navItems instead of nav
-                      (index) =>
-                          NavBarWidget(navItem: navItems[index]).onTap(() {
+                      (index) => NavBarWidget(navItem: navItems[index]).inkTap(
+                          onTap: () {
                         moveToPage(
                           context: context,
                           ref: ref,

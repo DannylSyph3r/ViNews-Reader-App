@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vinews_news_reader/core/provider/app_providers.dart';
-import 'package:vinews_news_reader/themes/color_palette.dart';
+import 'package:vinews_news_reader/core/controllers/app_providers.dart';
+import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/vinews_app_texts.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
@@ -68,7 +68,8 @@ class _NewsInterestSelectionViewState
                               fontSize: 24.sp, fontWeight: FontWeight.w800),
                           15.sbH,
                           "Get better News Recommendations on your Home Screen"
-                              .txtStyled(fontSize: 18.sp, textAlign: TextAlign.center),
+                              .txtStyled(
+                                  fontSize: 18.sp, textAlign: TextAlign.center),
                           50.sbH,
                           Wrap(
                             spacing: 15.w,
@@ -100,7 +101,7 @@ class _NewsInterestSelectionViewState
                                     ),
                                   ],
                                 ),
-                              ).onTap(() {
+                              ).inkTap(onTap: () {
                                 ref
                                     .read(
                                         selectedNewsInterestsProvider.notifier)
@@ -112,7 +113,8 @@ class _NewsInterestSelectionViewState
                       ),
                       Column(
                         children: [
-                          const Divider(color: Palette.blackColor, thickness: 1),
+                          const Divider(
+                              color: Palette.blackColor, thickness: 1),
                           10.sbH,
                           Align(
                             alignment: Alignment.bottomCenter,

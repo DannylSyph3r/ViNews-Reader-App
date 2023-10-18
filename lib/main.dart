@@ -9,7 +9,7 @@ import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
- 
+
   // Lock the orientation to portrait mode
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
@@ -33,11 +33,11 @@ class ViNewsApp extends ConsumerStatefulWidget {
 }
 
 class _ViNewsAppState extends ConsumerState<ViNewsApp> {
-
   @override
   Widget build(BuildContext context) {
     final appRouter = ref.watch(appRouterProvider);
     return ScreenUtilInit(
+        useInheritedMediaQuery: true,
         designSize: const Size(430, 932),
         builder: (context, child) {
           return Builder(
@@ -47,7 +47,7 @@ class _ViNewsAppState extends ConsumerState<ViNewsApp> {
                         theme: ThemeData(
                           fontFamily: 'SFProDisplay',
                         ),
-                        title: 'ViNews News Reader App',
+                        title: 'ViNews Reader',
                         debugShowCheckedModeBanner: false,
                         routerDelegate: appRouter.routerDelegate,
                         routeInformationProvider:

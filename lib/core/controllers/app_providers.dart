@@ -44,6 +44,8 @@ final readArticlesScreenOverlayActiveProvider = StateProvider<bool>((ref) => fal
 
 final likedArticlesScreenOverlayActiveProvider = StateProvider<bool>((ref) => false);
 
+final animatedBarOpenProvider = StateProvider((ref) => false);
+
 final selectedNewsInterestsProvider =
     StateNotifierProvider<SelectedNewsInterestsNotifier, List<String>>(
   (ref) => SelectedNewsInterestsNotifier(),

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vinews_news_reader/themes/color_Palette.dart';
+import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
+
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
 class ImageLoader extends ConsumerWidget {
@@ -32,16 +33,7 @@ class ImageLoader extends ConsumerWidget {
         imageUrl: imageUrl,
         placeholder: (context, url) => Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.black12.withOpacity(0.1),
-                Colors.black12.withOpacity(0.1),
-                Colors.black26,
-                Colors.black26,
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: Palette.darkerGreyColor,
             borderRadius: BorderRadius.circular(8.r),
           ),
         )
@@ -57,7 +49,7 @@ class ImageLoader extends ConsumerWidget {
           ),
         ),
       ),
-    ).onTap(() {
+    ).inkTap(onTap: () {
       ref
           .read(imageOverlayControllerProvider.notifier)
           .addImageToOverLay(imageUrl: imageUrl);
@@ -112,10 +104,12 @@ class CircularImageLoader extends ConsumerWidget {
           ),
         ),
       ),
-    ).onTap(() {
-      ref
-          .read(imageOverlayControllerProvider.notifier)
-          .addImageToOverLay(imageUrl: imageUrl);
+    ).inkTap(onTap: () {
+      {
+        ref
+            .read(imageOverlayControllerProvider.notifier)
+            .addImageToOverLay(imageUrl: imageUrl);
+      }
     });
   }
 }
@@ -163,21 +157,22 @@ class ImageLoaderForOverlay extends ConsumerWidget {
         imageUrl: imageUrl,
         placeholder: (context, url) => Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.black12.withOpacity(0.7),
-                Colors.black12.withOpacity(0.7),
-                Colors.black26.withOpacity(0.7),
-                Colors.black26.withOpacity(0.7),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: Palette.greyColor,
+            // gradient: LinearGradient(
+            //   colors: [
+            //     Colors.black12.withOpacity(0.7),
+            //     Colors.black12.withOpacity(0.7),
+            //     Colors.black26.withOpacity(0.7),
+            //     Colors.black26.withOpacity(0.7),
+            //   ],
+            //   begin: Alignment.topLeft,
+            //   end: Alignment.bottomRight,
+            // ),
             borderRadius: BorderRadius.circular(8.r),
           ),
         )
             .animate(onPlay: (controller) => controller.repeat())
-            .shimmer(duration: 400.ms),
+            .shimmer(duration: 300.ms),
         errorWidget: (context, url, error) => Container(
           color: const Color.fromARGB(255, 128, 128, 128),
           child: Center(
