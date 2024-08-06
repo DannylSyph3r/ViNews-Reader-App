@@ -3,11 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/features/auth/controllers/auth_action_controllers.dart';
 import 'package:vinews_news_reader/features/auth/states/login_state.dart';
-import 'package:vinews_news_reader/features/settings/views/user_news_interest.dart';
 import 'package:vinews_news_reader/features/settings/widgets/settings_custom_divider.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
@@ -49,13 +47,18 @@ class _UserAccountSettingsViewState
         backgroundColor: Palette.blackColor,
         elevation: 0,
         centerTitle: true,
+        leading: PhosphorIconsBold.arrowLeft
+            .iconslide(size:25.sp, color: Palette.whiteColor)
+            .inkTap(onTap: () => context.pop()),
         title: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            "Account Settings".txtStyled(fontSize: 18.sp),
+            "Account Settings"
+                .txtStyled(fontSize: 18.sp, color: Palette.whiteColor),
             5.sbW,
-            PhosphorIcons.regular.gear.iconslide(size: 19.sp),
+            PhosphorIconsFill.gear
+                .iconslide(size: 19.sp, color: Palette.whiteColor),
           ],
         ),
       ),
@@ -91,23 +94,24 @@ class _UserAccountSettingsViewState
                             "d********001@gmail.com".txtStyled(fontSize: 15.sp)
                           ],
                         ),
-                        trailing: PhosphorIcons.bold.caretRight
+                        trailing: PhosphorIconsBold.caretRight
                             .iconslide(size: 18.sp, color: Palette.blackColor),
                       ),
-                      const CustomSettingsDivider(),
-                      ListTile(
-                        onTap: () {
-                          navigateToNewsSelectionPage(context);
-                        },
-                        title: "Customize News Interests"
-                            .txtStyled(fontSize: 18.sp),
-                        trailing: PhosphorIcons.bold.caretRight
-                            .iconslide(size: 18.sp, color: Palette.blackColor),
-                      ),
+                      // const CustomSettingsDivider(),
+                      // ListTile(
+                      //   onTap: () {
+                      //     context.pushNamed(ViNewsAppRouteConstants
+                      //         .newsInterestSelectionRouteName);
+                      //   },
+                      //   title: "Customize News Interests"
+                      //       .txtStyled(fontSize: 18.sp),
+                      //   trailing: PhosphorIconsBold.caretRight
+                      //       .iconslide(size: 18.sp, color: Palette.blackColor),
+                      // ),
                       const CustomSettingsDivider(),
                       ListTile(
                         title: "Change Password".txtStyled(fontSize: 18.sp),
-                        trailing: PhosphorIcons.bold.caretRight
+                        trailing: PhosphorIconsBold.caretRight
                             .iconslide(size: 18.sp, color: Palette.blackColor),
                       ),
                       const CustomSettingsDivider(),
@@ -122,7 +126,7 @@ class _UserAccountSettingsViewState
                                 .txtStyled(fontSize: 15.sp)
                           ],
                         ),
-                        trailing: PhosphorIcons.bold.caretRight
+                        trailing: PhosphorIconsBold.caretRight
                             .iconslide(size: 18.sp, color: Palette.blackColor),
                       ),
                       const CustomSettingsDivider(),
@@ -133,7 +137,7 @@ class _UserAccountSettingsViewState
                               ViNewsAppRouteConstants.authIntializer);
                         },
                         title: "Log out".txtStyled(fontSize: 18.sp),
-                        trailing: PhosphorIcons.bold.caretRight
+                        trailing: PhosphorIconsBold.caretRight
                             .iconslide(size: 18.sp, color: Palette.blackColor),
                       ),
                     ],
@@ -159,11 +163,5 @@ class _UserAccountSettingsViewState
             )
           ])),
     );
-  }
-
-  void navigateToNewsSelectionPage(BuildContext context) {
-    pushNewScreenWithRouteSettings(context,
-        screen: const NewsInterestSelectionView(),
-        settings: const RouteSettings(name: "/newInterests"));
   }
 }

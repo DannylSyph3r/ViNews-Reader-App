@@ -46,4 +46,5 @@ app.*.map.json
 
 # Sensitive API Keys and related
 lib/firebase_options.dart
+lib\core\constants\api_urls.dart
 

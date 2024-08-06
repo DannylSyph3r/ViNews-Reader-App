@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vinews_news_reader/core/controllers/app_providers.dart';
+import 'package:vinews_news_reader/core/providers/app_providers.dart';
 import 'package:vinews_news_reader/features/bookmarks/controllers/bookmarks_controllers.dart';
 import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/keyboard_utils.dart';
@@ -91,7 +91,7 @@ class _AnimatedSearchFieldState extends ConsumerState<AnimatedSearchField>
                         );
                       },
                       animation: _con,
-                      child: PhosphorIcons.bold.x
+                      child: PhosphorIconsBold.x
                           .iconslide(
                             size: 18.sp,
                             color: Palette.blackColor,
@@ -147,7 +147,7 @@ class _AnimatedSearchFieldState extends ConsumerState<AnimatedSearchField>
                 borderRadius: BorderRadius.circular(30.r),
                 child: IconButton(
                   splashRadius: 10.r,
-                  icon: PhosphorIcons.regular.magnifyingGlass.iconslide(
+                  icon: PhosphorIconsBold.magnifyingGlass.iconslide(
                       color: expansionTrigger
                           ? Palette.whiteColor
                           : Palette.blackColor),

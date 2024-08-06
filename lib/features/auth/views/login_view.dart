@@ -15,7 +15,6 @@ import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 import 'package:vinews_news_reader/widgets/vinews_image_icon_button.dart';
 import 'package:vinews_news_reader/widgets/vinews_text_form_field.dart';
-import 'package:vinews_news_reader/widgets/vinews_textfield.dart';
 import 'package:vinews_news_reader/widgets/custom_divider.dart';
 
 class UserLoginView extends ConsumerStatefulWidget {
@@ -85,11 +84,10 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
 
       if (state is UserAuthenticationStateError) {
         loadingOverlayActive.value = false;
-        showMaterialBanner(
+        showMotionToast(
           context,
           "Sign In Error :(",
           state.error,
-          Palette.blackColor,
         );
       } else if (state is UserAuthenticationStateSuccess) {
         loadingOverlayActive.value = false;
@@ -154,7 +152,7 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
                                   : ViNewsAppImagesPath.invalidIcon,
                               suffixIconColor: Palette.blackColor),
                           8.sbH,
-                          ViNewsAppTextField(
+                          ViNewsAppTextFormField(
                             controller: _passwordFieldController,
                             hintText: "Passsword",
                             obscureText: isPasswordObscured,
@@ -222,7 +220,7 @@ class _UserLoginViewState extends ConsumerState<UserLoginView> {
                             prefixIcon: ViNewsAppImagesPath.googleSignInIcon,
                             buttonPlaceholderText: "Sign In with Google",
                             buttonColor: Palette.whiteColor,
-                            textColor: Palette.blackColor,
+                            textColor: const Color.fromARGB(255, 20, 14, 14),
                             isEnabled: true,
                           ),
                           220.sbH,

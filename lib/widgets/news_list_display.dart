@@ -10,7 +10,7 @@ class NewsListArticleItem extends ConsumerWidget {
   final Object imageHeroTag;
   final String articleImageUrlString;
   final String articleTitle;
-  final String articleCategory;
+  final String articleSource;
   final String articleReleaseDate;
   final void Function() articleDetailsTapAction;
 
@@ -19,7 +19,7 @@ class NewsListArticleItem extends ConsumerWidget {
     required this.imageHeroTag,
     required this.articleImageUrlString,
     required this.articleTitle,
-    required this.articleCategory,
+    required this.articleSource,
     required this.articleReleaseDate,
     required this.articleDetailsTapAction,
   });
@@ -65,30 +65,33 @@ class NewsListArticleItem extends ConsumerWidget {
               ),
               3.sbH,
               Row(
-                children: [
-                  Row(
-                    children: [
-                      PhosphorIcons.bold.tag.iconslide(size: 18.sp),
-                      7.sbW,
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Palette.blackColor,
-                          borderRadius: BorderRadius.circular(7.r),
-                        ),
-                        // News Article Category
-                        child: Padding(
-                          padding: 6.0.padA,
-                          child: articleCategory.txtStyled(
-                            fontSize: 14.sp,
-                            color: Palette.whiteColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+  children: [
+    PhosphorIconsBold.tag.iconslide(size: 18.sp),
+    7.sbW,
+    Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Palette.blackColor,
+          borderRadius: BorderRadius.circular(7.r),
+        ),
+        // News Article Category
+        child: Padding(
+          padding: 6.0.padA,
+          child: Align(
+            alignment: Alignment.centerLeft, // Align text to left
+            child: articleSource.txtStyled(      
+              fontSize: 14.sp,
+              color: Palette.whiteColor,
+              fontWeight: FontWeight.w600,
+              textOverflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+      ),
+    ),
+  ],
+),
+
               3.sbH,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -96,7 +99,7 @@ class NewsListArticleItem extends ConsumerWidget {
                   // Article Publication Date
                   Row(
                     children: [
-                      PhosphorIcons.bold.paperPlaneTilt.iconslide(size: 18.sp),
+                      PhosphorIconsBold.paperPlaneTilt.iconslide(size: 18.sp),
                       7.sbW,
                       articleReleaseDate.txtStyled(
                         fontSize: 16.sp,
@@ -106,7 +109,7 @@ class NewsListArticleItem extends ConsumerWidget {
                   ),
                   5.sbW,
                   // More Options
-                  PhosphorIcons.bold.dotsThree
+                  PhosphorIconsBold.dotsThree
                       .iconslide(size: 27.sp)
                       .inkTap(
                         splashColor: Palette.greyColor.withOpacity(0.2),

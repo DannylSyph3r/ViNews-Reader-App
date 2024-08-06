@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/core/models/article_selections.dart';
-import 'package:vinews_news_reader/core/controllers/app_providers.dart';
+import 'package:vinews_news_reader/core/providers/app_providers.dart';
 import 'package:vinews_news_reader/features/bookmarks/controllers/bookmarks_controllers.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
@@ -138,10 +138,10 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                         opacity: isHeaderVisible == true ? 0.0 : 1.0,
                         child: Row(
                           children: [
-                            PhosphorIcons.regular.bookmarks.iconslide(),
+                            PhosphorIconsRegular.bookmarks.iconslide(color: Palette.whiteColor),
                             10.sbW,
                             "Bookmarks".txtStyled(
-                                fontSize: 24.sp, fontWeight: FontWeight.w600),
+                                fontSize: 24.sp, fontWeight: FontWeight.w600, color: Palette.whiteColor),
                           ],
                         ),
                       ),
@@ -196,17 +196,18 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                       })),
                 ]),
                 bottom: AppBar(
-                  toolbarHeight: 100.h,
+                  toolbarHeight: 70.h,
                   backgroundColor: Palette.blackColor,
                   titleSpacing: 0,
                   title: TabBar(
                     isScrollable: true,
+                    tabAlignment: TabAlignment.start,
                     labelStyle:
                         TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w500),
                     labelColor: Colors.white,
                     unselectedLabelColor:
                         const Color.fromARGB(255, 154, 146, 146),
-                    dividerColor: Colors.grey,
+                    dividerColor: Colors.transparent,
                     indicatorColor: Palette.greenColor,
                     indicatorWeight: 3.5,
                     indicatorSize: TabBarIndicatorSize.label,
@@ -221,7 +222,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                         String interest = entry.value;
                         int categoryCount = filteredBookmarksList
                             .where((article) =>
-                                article.articleCategory == interest)
+                                article.articleSource == interest)
                             .length;
                         return Tab(
                           text:
@@ -287,7 +288,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                   children: [
                                     SlidableAction(
                                       backgroundColor: Palette.redColor,
-                                      icon: PhosphorIcons.bold.trash,
+                                      icon: PhosphorIconsBold.trash,
                                       label: "Delete",
                                       onPressed: (context) {},
                                     )
@@ -310,7 +311,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                   children: [
                                     SlidableAction(
                                       backgroundColor: Palette.redColor,
-                                      icon: PhosphorIcons.bold.trash,
+                                      icon: PhosphorIconsBold.trash,
                                       label: "Delete",
                                       onPressed: (context) {},
                                     )
@@ -327,16 +328,16 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                           pathParameters: {
                                             "articleImage":
                                                 articleFilterDisplay.urlImage,
-                                            "articleCategory":
+                                            "articleSource":
                                                 articleFilterDisplay
-                                                    .articleCategory,
+                                                    .articleSource,
                                             "heroTag":
                                                 'bookmarksScreentagImage$index',
                                             "articleTitle": articleFilterDisplay
                                                 .articleTitle,
                                             "articleAuthor":
                                                 articleFilterDisplay
-                                                    .articleCategory,
+                                                    .articleSource,
                                             "articlePublicationDate":
                                                 formattedDate.toString()
                                           });
@@ -394,7 +395,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                 children: [
                                                   Row(
                                                     children: [
-                                                      PhosphorIcons.bold.tag
+                                                      PhosphorIconsBold.tag
                                                           .iconslide(
                                                               size: 18.sp),
                                                       7.sbW,
@@ -413,7 +414,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                           padding: 6.0.padA,
                                                           child:
                                                               articleFilterDisplay
-                                                                  .articleCategory
+                                                                  .articleSource
                                                                   .txtStyled(
                                                             fontSize: 14.sp,
                                                             color: Palette
@@ -436,8 +437,8 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                   // Article Publication Date
                                                   Row(
                                                     children: [
-                                                      PhosphorIcons
-                                                          .bold.paperPlaneTilt
+                                                      PhosphorIconsBold
+                                                          .paperPlaneTilt
                                                           .iconslide(
                                                               size: 18.sp),
                                                       7.sbW,
@@ -463,8 +464,8 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                           .update((state) =>
                                                               !state);
                                                     },
-                                                    child: PhosphorIcons
-                                                        .bold.dotsThree
+                                                    child: PhosphorIconsBold
+                                                        .dotsThree
                                                         .iconslide(size: 27.sp),
                                                   ),
                                                 ],
@@ -485,7 +486,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                       // Filter the articles based on the selected category
                       final filteredTabArticles = filteredBookmarksList
                           .where(
-                              (article) => article.articleCategory == interest)
+                              (article) => article.articleSource == interest)
                           .toList();
 
                       return Scrollbar(
@@ -514,15 +515,15 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                     pathParameters: {
                                       "articleImage":
                                           filteredTabArticleDisplay.urlImage,
-                                      "articleCategory":
+                                      "articleSource":
                                           filteredTabArticleDisplay
-                                              .articleCategory,
+                                              .articleSource,
                                       "heroTag":
                                           'bookmarksScreentagImage$index',
                                       "articleTitle": filteredTabArticleDisplay
                                           .articleTitle,
                                       "articleAuthor": filteredTabArticleDisplay
-                                          .articleCategory,
+                                          .articleSource,
                                       "articlePublicationDate":
                                           formattedDate.toString(),
                                     },
@@ -576,7 +577,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                             children: [
                                               Row(
                                                 children: [
-                                                  PhosphorIcons.bold.tag
+                                                  PhosphorIconsBold.tag
                                                       .iconslide(size: 18.sp),
                                                   7.sbW,
                                                   Container(
@@ -591,7 +592,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                       padding: 6.0.padA,
                                                       child:
                                                           filteredTabArticleDisplay
-                                                              .articleCategory
+                                                              .articleSource
                                                               .txtStyled(
                                                         fontSize: 13.sp,
                                                         color:
@@ -613,8 +614,8 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                               Row(
                                                 children: [
                                                   // Article Publication Date
-                                                  PhosphorIcons
-                                                      .bold.paperPlaneTilt
+                                                  PhosphorIconsBold
+                                                      .paperPlaneTilt
                                                       .iconslide(
                                                     size: 18.sp,
                                                   ),
@@ -648,8 +649,8 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                       .update(
                                                           (state) => !state);
                                                 },
-                                                child: PhosphorIcons
-                                                    .bold.dotsThree
+                                                child: PhosphorIconsBold
+                                                    .dotsThree
                                                     .iconslide(
                                                   size: 27.sp,
                                                 ),
@@ -759,7 +760,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                             children: [
                                               Row(
                                                 children: [
-                                                  PhosphorIcons.bold.megaphone
+                                                  PhosphorIconsBold.megaphone
                                                       .iconslide(size: 18.sp),
                                                   7.sbW,
                                                   articleOverlayDisplay
@@ -772,8 +773,8 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                               ),
                                               Row(
                                                 children: [
-                                                  PhosphorIcons
-                                                      .bold.clockCountdown
+                                                  PhosphorIconsBold
+                                                      .clockCountdown
                                                       .iconslide(size: 19.sp),
                                                   5.sbW,
                                                   "10 mins".txtStyled(
@@ -794,7 +795,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                 children: [
                                                   Row(
                                                     children: [
-                                                      PhosphorIcons.bold.tag
+                                                      PhosphorIconsBold.tag
                                                           .iconslide(
                                                               size: 18.sp),
                                                       7.sbW,
@@ -813,7 +814,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                           padding: 7.0.padA,
                                                           child:
                                                               articleOverlayDisplay
-                                                                  .articleCategory
+                                                                  .articleSource
                                                                   .txtStyled(
                                                             fontSize: 14.sp,
                                                             color: Palette
@@ -828,8 +829,8 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                   5.sbH,
                                                   Row(
                                                     children: [
-                                                      PhosphorIcons
-                                                          .bold.paperPlaneTilt
+                                                      PhosphorIconsBold
+                                                          .paperPlaneTilt
                                                           .iconslide(
                                                               size: 18.sp),
                                                       7.sbW,
@@ -844,11 +845,11 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                               ),
                                               Row(
                                                 children: [
-                                                  PhosphorIcons.bold.bookmarks
+                                                  PhosphorIconsBold.bookmarks
                                                       .iconslide(size: 35.sp),
                                                   5.sbW,
-                                                  PhosphorIcons
-                                                      .bold.heartStraight
+                                                  PhosphorIconsBold
+                                                      .heartStraight
                                                       .iconslide(size: 35.sp)
                                                 ],
                                               )
@@ -915,9 +916,9 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                         "articleImage":
                                                             articleOverlayDisplay
                                                                 .urlImage,
-                                                        "articleCategory":
+                                                        "articleSource":
                                                             articleOverlayDisplay
-                                                                .articleCategory,
+                                                                .articleSource,
                                                         "heroTag":
                                                             'bookmarksScreenOverlaytagImage${_selectedOptionIndexValueNotifier.value}',
                                                         "articleTitle":
@@ -925,7 +926,7 @@ class _UserBookmarksViewState extends ConsumerState<UserBookmarksView> {
                                                                 .articleTitle,
                                                         "articleAuthor":
                                                             articleOverlayDisplay
-                                                                .articleCategory,
+                                                                .articleSource,
                                                         "articlePublicationDate":
                                                             formattedDate
                                                                 .toString()

@@ -8,9 +8,15 @@ import 'package:vinews_news_reader/features/auth/views/initalized_screen.dart';
 import 'package:vinews_news_reader/features/auth/views/login_view.dart';
 import 'package:vinews_news_reader/features/auth/views/sign_up_view.dart';
 import 'package:vinews_news_reader/features/base_navbar/bottom_navigation_bar.dart';
-import 'package:vinews_news_reader/features/bookmarks/views/bookmarks_search_results_screen.dart';
 import 'package:vinews_news_reader/features/explore/views/explore_search_results_view.dart';
+import 'package:vinews_news_reader/features/explore/views/explore_search_view.dart';
 import 'package:vinews_news_reader/features/onboard/views/onboard_view.dart';
+import 'package:vinews_news_reader/features/settings/views/about_vinews_view.dart';
+import 'package:vinews_news_reader/features/settings/views/liked_articles_view.dart';
+import 'package:vinews_news_reader/features/settings/views/news_language_picker_screen.dart';
+import 'package:vinews_news_reader/features/settings/views/read_articles_view.dart';
+import 'package:vinews_news_reader/features/settings/views/user_account_view.dart';
+import 'package:vinews_news_reader/features/settings/views/user_news_interest.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -190,17 +196,25 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         name: ViNewsAppRouteConstants.newsArticleReadView,
         path:
-            '/articlereadview/:articleImage/:articleCategory/:heroTag/:articleTitle/:articleAuthor/:articlePublicationDate',
+            '/articlereadview/:articleImage/:articleSource/:heroTag/:articleTitle/:articleAuthor/:articlePublicationDate/:articleContent',
         builder: (BuildContext context, GoRouterState state) {
           return NewsArticleReadView(
             articleImage: state.pathParameters['articleImage']!,
-            articleCategory: state.pathParameters['articleCategory']!,
+            articleSource: state.pathParameters['articleSource']!,
             heroTag: state.pathParameters['heroTag']!,
             articleTitle: state.pathParameters["articleTitle"]!,
             articleAuthor: state.pathParameters["articleAuthor"]!,
             articlePublicationDate:
                 state.pathParameters["articlePublicationDate"]!,
+            articleContent: state.pathParameters["articleContent"]!,
           );
+        },
+      ),
+      GoRoute(
+        name: ViNewsAppRouteConstants.userExploreSearchScreenRoute,
+        path: '/userexploresearch',
+        builder: (BuildContext context, GoRouterState state) {
+          return const ExploreScreenSearchView();
         },
       ),
       GoRoute(
@@ -213,12 +227,45 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        name: ViNewsAppRouteConstants.userBookmarksSearchResultsRouteName,
-        path: '/userbookmarkssearchresults/:searchedWord',
+        name: ViNewsAppRouteConstants.newsInterestSelectionRouteName,
+        path: '/newsinterestselection',
         builder: (BuildContext context, GoRouterState state) {
-          return BookmarkSearchResultsView(
-            searchedWord: state.pathParameters['searchedWord']!,
-          );
+          return const NewsInterestSelectionView();
+        },
+      ),
+      GoRoute(
+        name: ViNewsAppRouteConstants.userAccountSettingsRouteName,
+        path: '/useraccountsettings',
+        builder: (BuildContext context, GoRouterState state) {
+          return const UserAccountSettingsView();
+        },
+      ),
+      GoRoute(
+        name: ViNewsAppRouteConstants.newsLanguageSelectorRouteName,
+        path: '/newslanguageselection',
+        builder: (BuildContext context, GoRouterState state) {
+          return const NewsLanguageSelectorView();
+        },
+      ),
+      GoRoute(
+        name: ViNewsAppRouteConstants.userReadArticlesRouteName,
+        path: '/userreadarticles',
+        builder: (BuildContext context, GoRouterState state) {
+          return const ReadArticlesView();
+        },
+      ),
+      GoRoute(
+        name: ViNewsAppRouteConstants.userLikedArticlesRouteName,
+        path: '/userlikedarticles',
+        builder: (BuildContext context, GoRouterState state) {
+          return const LikedArticlesView();
+        },
+      ),
+      GoRoute(
+        name: ViNewsAppRouteConstants.aboutViNewsScreenRouteName,
+        path: '/aboutviNewsscreen',
+        builder: (BuildContext context, GoRouterState state) {
+          return const AboutViNewsView();
         },
       ),
     ],

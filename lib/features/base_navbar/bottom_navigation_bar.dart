@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:vinews_news_reader/core/controllers/app_providers.dart';
+import 'package:vinews_news_reader/core/providers/app_providers.dart';
 import 'package:vinews_news_reader/features/base_navbar/controller/bottom_nav_controller.dart';
 import 'package:vinews_news_reader/features/base_navbar/navigation_bar_build_widget.dart';
 import 'package:vinews_news_reader/features/bookmarks/views/bookmarks_views.dart';

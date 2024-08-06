@@ -50,6 +50,7 @@ class ViNewsAppTextFormField extends ConsumerWidget {
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
+          contentPadding: 18.padV,
           helperText: " ",
           errorText: errorText,
           prefixIcon: prefixIconString.imageAsset(

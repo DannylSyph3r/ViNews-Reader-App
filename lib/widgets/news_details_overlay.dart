@@ -14,7 +14,6 @@ class NewsDetailsFrostedOverlayDisplay extends ConsumerWidget {
   final String articleImageUrlString;
   final String articleTitle;
   final String articleDescription;
-  final String articleCategory;
   final String articleSource;
   final String articleReleaseDate;
   final void Function() backButtonTap;
@@ -26,7 +25,6 @@ class NewsDetailsFrostedOverlayDisplay extends ConsumerWidget {
     required this.articleImageUrlString,
     required this.articleTitle,
     required this.articleDescription,
-    required this.articleCategory,
     required this.articleSource,
     required this.articleReleaseDate,
     required this.backButtonTap,
@@ -93,27 +91,13 @@ class NewsDetailsFrostedOverlayDisplay extends ConsumerWidget {
                       ],
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            PhosphorIcons.bold.megaphone.iconslide(size: 18.sp),
-                            7.sbW,
-                            articleSource.txtStyled(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ],
+                        PhosphorIconsBold.megaphone.iconslide(size: 18.sp),
+                        7.sbW,
+                        articleSource.txtStyled(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w600,
                         ),
-                        Row(
-                          children: [
-                            PhosphorIcons.bold.clockCountdown
-                                .iconslide(size: 19.sp),
-                            5.sbW,
-                            "10 mins".txtStyled(
-                                fontSize: 18.sp, fontWeight: FontWeight.w500)
-                          ],
-                        )
                       ],
                     ),
                     Row(
@@ -124,7 +108,7 @@ class NewsDetailsFrostedOverlayDisplay extends ConsumerWidget {
                           children: [
                             Row(
                               children: [
-                                PhosphorIcons.bold.tag.iconslide(size: 18.sp),
+                                PhosphorIconsBold.tag.iconslide(size: 18.sp),
                                 7.sbW,
                                 Container(
                                   decoration: BoxDecoration(
@@ -134,7 +118,7 @@ class NewsDetailsFrostedOverlayDisplay extends ConsumerWidget {
                                   // News Article Category
                                   child: Padding(
                                     padding: 7.0.padA,
-                                    child: articleCategory
+                                    child: articleSource
                                         .txtStyled(
                                       fontSize: 14.sp,
                                       color: Palette.whiteColor,
@@ -147,7 +131,7 @@ class NewsDetailsFrostedOverlayDisplay extends ConsumerWidget {
                             5.sbH,
                             Row(
                               children: [
-                                PhosphorIcons.bold.paperPlaneTilt
+                                PhosphorIconsBold.paperPlaneTilt
                                     .iconslide(size: 18.sp),
                                 7.sbW,
                                 articleReleaseDate.txtStyled(
@@ -160,10 +144,10 @@ class NewsDetailsFrostedOverlayDisplay extends ConsumerWidget {
                         ),
                         Row(
                           children: [
-                            PhosphorIcons.bold.bookmarks.iconslide(size: 35.sp),
-                            5.sbW,
-                            PhosphorIcons.bold.heartStraight
-                                .iconslide(size: 35.sp)
+                            PhosphorIconsBold.bookmarks.iconslide(size: 40.sp),
+                            10.sbW,
+                            PhosphorIconsBold.heartStraight
+                                .iconslide(size: 40.sp)
                           ],
                         )
                       ],
@@ -221,6 +205,7 @@ class NewsDetailsFrostedOverlayDisplay extends ConsumerWidget {
                               "Read".txtStyled(
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.w800,
+                                color: Palette.whiteColor
                               ),
                             ],
                           ),

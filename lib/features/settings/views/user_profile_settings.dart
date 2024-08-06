@@ -4,14 +4,11 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vinews_news_reader/features/settings/views/about_vinews_view.dart';
-import 'package:vinews_news_reader/features/settings/views/liked_articles_view.dart';
-import 'package:vinews_news_reader/features/settings/views/news_language_picker_screen.dart';
-import 'package:vinews_news_reader/features/settings/views/read_articles_view.dart';
-import 'package:vinews_news_reader/features/settings/views/user_account_view.dart';
 import 'package:vinews_news_reader/features/settings/widgets/settings_custom_divider.dart';
+import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/vinews_icons.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
@@ -78,10 +75,13 @@ class _UserProfileSettingsViewState
               // Show Page Title
               child: Row(
                 children: [
-                  PhosphorIcons.regular.user.iconslide(),
+                  PhosphorIconsRegular.user
+                      .iconslide(color: Palette.whiteColor),
                   10.sbW,
-                  "Profile"
-                      .txtStyled(fontSize: 22.sp, fontWeight: FontWeight.w600),
+                  "Profile".txtStyled(
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Palette.whiteColor),
                 ],
               ),
             ),
@@ -121,10 +121,21 @@ class _UserProfileSettingsViewState
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              CircleAvatar(
-                                radius: 60.r,
-                                backgroundImage:
-                                    const AssetImage("assets/images/pfp.jpg"),
+                              badges.Badge(
+                                onTap: () {},
+                                badgeContent: const Icon(
+                                    PhosphorIconsFill.starAndCrescent),
+                                position: badges.BadgePosition.custom(
+                                    bottom: 5, end: -5),
+                                badgeStyle: badges.BadgeStyle(
+                                    badgeColor: Palette.greenColor,
+                                    padding: 5.0.padA),
+                                stackFit: StackFit.passthrough,
+                                child: CircleAvatar(
+                                  radius: 60.r,
+                                  backgroundImage:
+                                      const AssetImage("assets/images/pfp.jpg"),
+                                ),
                               ),
                             ],
                           ),
@@ -203,9 +214,13 @@ class _UserProfileSettingsViewState
                     Column(
                       children: [
                         ListTile(
-                          onTap: () => navigateToLikedArticlesPage(context),
+                          onTap: () => context.pushNamed(ViNewsAppRouteConstants
+                              .userLikedArticlesRouteName),
+                          contentPadding: 5.padH,
+                          leading: PhosphorIconsFill.heartStraight
+                              .iconslide(size: 25.sp),
                           title: "Liked Articles".txtStyled(fontSize: 18.sp),
-                          trailing: PhosphorIcons.bold.caretRight.iconslide(
+                          trailing: PhosphorIconsBold.caretRight.iconslide(
                               size: 18.sp, color: Palette.blackColor),
                         ),
                         const CustomSettingsDivider(),
@@ -222,28 +237,35 @@ class _UserProfileSettingsViewState
                     Column(
                       children: [
                         ListTile(
-                          onTap: () => navigateToMyAccountSettings(context),
+                          onTap: () => context.pushNamed(ViNewsAppRouteConstants
+                              .userAccountSettingsRouteName),
+                          contentPadding: 5.padH,
+                          leading:
+                              PhosphorIconsFill.gear.iconslide(size: 25.sp),
                           title: "Account Settings".txtStyled(fontSize: 18.sp),
-                          trailing: PhosphorIcons.bold.caretRight.iconslide(
+                          trailing: PhosphorIconsBold.caretRight.iconslide(
                               size: 18.sp, color: Palette.blackColor),
                         ),
                         const CustomSettingsDivider(),
+                        // ListTile(
+                        //   onTap: () => context.pushNamed(ViNewsAppRouteConstants.newsLanguageSelectorRouteName),
+                        //   title: "News Language".txtStyled(fontSize: 18.sp),
+                        //   trailing: Row(
+                        //     mainAxisSize: MainAxisSize.min,
+                        //     children: [
+                        //       "en".txtStyled(
+                        //           fontSize: 18.sp, fontWeight: FontWeight.w400),
+                        //       5.sbW,
+                        //       PhosphorIconsBold.caretRight.iconslide(
+                        //           size: 18.sp, color: Palette.blackColor),
+                        //     ],
+                        //   ),
+                        // ),
+                        // const CustomSettingsDivider(),
                         ListTile(
-                          onTap: () => navigateToLanguageSelectionPage(context),
-                          title: "News Language".txtStyled(fontSize: 18.sp),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              "en".txtStyled(
-                                  fontSize: 18.sp, fontWeight: FontWeight.w400),
-                              5.sbW,
-                              PhosphorIcons.bold.caretRight.iconslide(
-                                  size: 18.sp, color: Palette.blackColor),
-                            ],
-                          ),
-                        ),
-                        const CustomSettingsDivider(),
-                        ListTile(
+                          contentPadding: 5.padH,
+                          leading:
+                              PhosphorIconsFill.bell.iconslide(size: 25.sp),
                           title: "Notifications".txtStyled(fontSize: 18.sp),
                           trailing: SizedBox(
                             width: 60.w,
@@ -269,16 +291,23 @@ class _UserProfileSettingsViewState
                         ),
                         const CustomSettingsDivider(),
                         ListTile(
-                          onTap: () => navigateToAboutViNewsPage(context),
+                          onTap: () => context.pushNamed(ViNewsAppRouteConstants
+                              .aboutViNewsScreenRouteName),
+                          contentPadding: 5.padH,
+                          leading:
+                              PhosphorIconsFill.note.iconslide(size: 25.sp),
                           title: "About Us".txtStyled(fontSize: 18.sp),
-                          trailing: PhosphorIcons.bold.caretRight.iconslide(
+                          trailing: PhosphorIconsBold.caretRight.iconslide(
                               size: 18.sp, color: Palette.blackColor),
                         ),
                         const CustomSettingsDivider(),
                         ListTile(
                           onTap: () => clearCache(),
+                          contentPadding: 5.padH,
+                          leading:
+                              PhosphorIconsFill.trash.iconslide(size: 25.sp),
                           title: "Clear Cache".txtStyled(fontSize: 18.sp),
-                          trailing: PhosphorIcons.bold.caretRight.iconslide(
+                          trailing: PhosphorIconsBold.caretRight.iconslide(
                               size: 18.sp, color: Palette.blackColor),
                         ),
                         const CustomSettingsDivider(),
@@ -305,36 +334,6 @@ class _UserProfileSettingsViewState
         ),
       ),
     ));
-  }
-
-  void navigateToMyAccountSettings(BuildContext context) {
-    pushNewScreenWithRouteSettings(context,
-        screen: const UserAccountSettingsView(),
-        settings: const RouteSettings(name: "/profileAccount"));
-  }
-
-  void navigateToLanguageSelectionPage(BuildContext context) {
-    pushNewScreenWithRouteSettings(context,
-        screen: const NewsLanguageSelectorView(),
-        settings: const RouteSettings(name: "/newsLanguageSelector"));
-  }
-
-  void navigateToReadArticlesPage(BuildContext context) {
-    pushNewScreenWithRouteSettings(context,
-        screen: const ReadArticlesView(),
-        settings: const RouteSettings(name: "/readArticles"));
-  }
-
-  void navigateToLikedArticlesPage(BuildContext context) {
-    pushNewScreenWithRouteSettings(context,
-        screen: const LikedArticlesView(),
-        settings: const RouteSettings(name: "/likedArticles"));
-  }
-
-  void navigateToAboutViNewsPage(BuildContext context) {
-    pushNewScreenWithRouteSettings(context,
-        screen: const AboutViNewsView(),
-        settings: const RouteSettings(name: "/aboutViNews"));
   }
 
   void clearCache() {

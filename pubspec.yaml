@@ -29,11 +29,13 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   awesome_snackbar_content: ^0.1.3
+  badges: ^3.1.2
   cached_network_image: ^3.2.3
   change_app_package_name: ^1.1.0
   cloud_firestore: ^4.8.4
   cupertino_icons: ^1.0.2
   dash_flags: ^0.1.1
+  dio: ^5.4.0
   drop_cap_text: ^1.1.3
   email_validator: ^2.1.17
   equatable: ^2.0.5
@@ -57,9 +59,10 @@ dependencies:
   http: ^1.1.0
   intl: ^0.18.0
   logger: ^2.0.1
-  persistent_bottom_nav_bar_v2: ^4.2.8
+  motion_toast: ^2.7.10
   phosphor_flutter: ^2.0.0
   shared_preferences: ^2.2.0
+  shimmer: ^3.0.0
   skeletonizer: ^0.8.0
   stack_trace: ^1.11.0
   transitioned_indexed_stack: ^1.0.2

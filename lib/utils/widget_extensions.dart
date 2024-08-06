@@ -1,5 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+// Debugger Extension
+extension Log on Object {
+  void log() {
+    if (kDebugMode) {
+      print(toString());
+    }
+  }
+}
 
 //Image Assets extension for cleaner code
 extension ImageAssetExtension on String {

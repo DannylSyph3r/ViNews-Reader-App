@@ -4,17 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vinews_news_reader/core/models/article_selections.dart';
-import 'package:vinews_news_reader/core/controllers/app_providers.dart';
-import 'package:vinews_news_reader/features/explore/views/explore_search_view.dart';
+import 'package:vinews_news_reader/core/providers/app_providers.dart';
+import 'package:vinews_news_reader/features/home/notifiers/articles_notifier.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/image_loader.dart';
-import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
+import 'package:vinews_news_reader/utils/vinews_app_texts.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
+import 'package:vinews_news_reader/widgets/scaffold_background_body.dart';
 
 class UserExploreView extends ConsumerStatefulWidget {
   final VoidCallback showNavBar;
@@ -32,8 +32,13 @@ class UserExploreView extends ConsumerStatefulWidget {
 
 class _UserExploreViewState extends ConsumerState<UserExploreView> {
   final ScrollController _exploreScrollController = ScrollController();
-  final ValueNotifier<int> _selectedOptionIndexValueNotifier = 0.notifier;
-  String formattedDate = DateFormat('E d MMM, y').format(DateTime.now());
+  final ValueNotifier<int> _exploreOverlayDisplayNotifier = 0.notifier;
+
+  String formatDateString(String dateString) {
+    final originalDate = DateTime.parse(dateString);
+    final formattedDate = DateFormat('E d MMM, y').format(originalDate);
+    return formattedDate;
+  }
 
   @override
   void initState() {
@@ -58,7 +63,7 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
         widget.hideNavBar();
       }
     });
-    _selectedOptionIndexValueNotifier.dispose();
+    _exploreOverlayDisplayNotifier.dispose();
     super.dispose();
   }
 
@@ -86,10 +91,13 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                   // Show Page Title
                   child: Row(
                     children: [
-                      PhosphorIcons.regular.globeHemisphereWest.iconslide(),
+                      PhosphorIconsRegular.globeHemisphereWest
+                          .iconslide(color: Palette.whiteColor),
                       10.sbW,
                       "Explore".txtStyled(
-                          fontSize: 24.sp, fontWeight: FontWeight.w600),
+                          color: Palette.whiteColor,
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w600),
                     ],
                   ),
                 ),
@@ -97,24 +105,26 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
                   Padding(
                     padding: const EdgeInsets.only().padSpec(right: 30),
                     child: GestureDetector(
-                        onTap: () => navigateToExploreSearchScreen(context),
-                        child:
-                            PhosphorIcons.regular.magnifyingGlass.iconslide()),
+                        onTap: () => context.pushNamed(ViNewsAppRouteConstants
+                            .userExploreSearchScreenRoute),
+                        child: PhosphorIconsBold.magnifyingGlass
+                            .iconslide(color: Palette.whiteColor)),
                   )
                 ],
-                // Search Bar pinned on Sliver Collapse
+                // Tab Bar pinned on Sliver Collapse
                 bottom: AppBar(
-                  toolbarHeight: 100.h,
+                  toolbarHeight: 70.h,
                   backgroundColor: Palette.blackColor,
                   titleSpacing: 0,
                   title: TabBar(
                     isScrollable: true,
+                    tabAlignment: TabAlignment.start,
                     labelStyle:
                         TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w500),
                     labelColor: Colors.white,
                     unselectedLabelColor:
                         const Color.fromARGB(255, 154, 146, 146),
-                    dividerColor: Colors.grey,
+                    dividerColor: Colors.transparent,
                     indicatorColor: Palette.greenColor,
                     indicatorWeight: 3.5,
                     indicatorSize: TabBarIndicatorSize.label,
@@ -132,591 +142,268 @@ class _UserExploreViewState extends ConsumerState<UserExploreView> {
             ];
           },
           // Background image // Offseted by NestedScrollView
-          body: Container(
-            constraints: const BoxConstraints.expand(),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(ViNewsAppImagesPath.appBackgroundImage),
-                opacity: 0.15,
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Stack(children: [
+          body: ScaffoldBackgroundedBody(
+            theChild: Stack(children: [
               Center(
                 child: TabBarView(
                     children: newsInterests.map((interest) {
-                  // Filter the articles based on the selected category
-                  final filteredExploreArticles = articleDisplayList
-                      .where((article) => article.articleCategory == interest)
-                      .toList();
-                  return Scrollbar(
-                              controller: _exploreScrollController,
-                    interactive: true,
-                    thickness: 6,
-                    radius: Radius.circular(12.r),
-                    child: ListView.builder(
-                        padding: 10.padV,
+                  final explorePagearticles =
+                      ref.watch(explorePageArticlesListProvider(interest));
+
+                  return explorePagearticles.when(data: (articleData) {
+                    // Filter the articles based on the selected category
+                    return Scrollbar(
+                      controller: _exploreScrollController,
+                      interactive: true,
+                      thickness: 6,
+                      radius: Radius.circular(12.r),
+                      child: ListView.builder(
+                        padding: 15.padV,
                         physics: isOverlayActive
                             ? const NeverScrollableScrollPhysics()
                             : const BouncingScrollPhysics(
                                 parent: AlwaysScrollableScrollPhysics()),
                         shrinkWrap: true,
-                        itemCount: 10,
+                        itemCount: articleData.length,
                         itemBuilder: (BuildContext context, int index) {
-                          if (index < filteredExploreArticles.length) {
-                            ArticleSelections articleDisplayExplore =
-                                filteredExploreArticles[index];
-                            if (index == 0) {
-                              // Explore page Headliner Article
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 25.w, vertical: 10.h),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    context.pushNamed(
-                                        ViNewsAppRouteConstants
-                                            .newsArticleReadView,
-                                        pathParameters: {
-                                          "articleImage":
-                                              articleDisplayExplore.urlImage,
-                                          "articleCategory":
-                                              articleDisplayExplore
-                                                  .articleCategory,
-                                          "heroTag":
-                                              'exploreScreenHeadlinertag',
-                                          "articleTitle":
-                                              articleDisplayExplore
-                                                  .articleTitle,
-                                          "articleAuthor":
-                                              articleDisplayExplore
-                                                  .articleCategory,
-                                          "articlePublicationDate":
-                                              formattedDate.toString()
-                                        });
-                                  },
-                                  child: Column(
-                                    children: [
-                                      Hero(
-                                        tag: 'exploreScreenHeadlinertag',
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 230.h,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      15.r)),
-                                          child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(15.r),
-                                              child: ImageLoaderForOverlay(
-                                                  height: 230.h,
-                                                  imageUrl:
-                                                      articleDisplayExplore
-                                                          .urlImage)),
+                          final articleDisplayExplore = articleData[index];
+                          if (index == 0) {
+                            // Explore page Headliner Article
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25.w, vertical: 13.h),
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.pushNamed(
+                                    ViNewsAppRouteConstants.newsArticleReadView,
+                                    pathParameters: {
+                                      "articleImage":
+                                          articleDisplayExplore.urlToImage ??
+                                              ViNewsAppImagesPath
+                                                  .defaultArticleImage,
+                                      "articleSource":
+                                          articleDisplayExplore.source.name,
+                                      "heroTag": 'exploreScreenHeadlinertag',
+                                      "articleTitle":
+                                          articleDisplayExplore.title,
+                                      "articleAuthor":
+                                          articleDisplayExplore.author ??
+                                              'No Author Mentioned',
+                                      "articlePublicationDate":
+                                          formatDateString(articleDisplayExplore
+                                              .publishedAt
+                                              .toString()),
+                                      "articleContent":
+                                          articleDisplayExplore.content ??
+                                              ViNewsAppTexts
+                                                  .placeHolderArticleContent,
+                                    },
+                                  );
+                                },
+                                child: Column(
+                                  children: [
+                                    // Article Image
+                                    Hero(
+                                      tag: 'exploreScreenHeadlinertag',
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 230.h,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15.r),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15.r),
+                                          child: ImageLoaderForOverlay(
+                                            height: 230.h,
+                                            imageUrl: articleDisplayExplore
+                                                    .urlToImage ??
+                                                ViNewsAppImagesPath
+                                                    .defaultArticleImage,
+                                          ),
                                         ),
                                       ),
-                                      15.sbH,
-                                      // Headliner Article Title
-                                      articleDisplayExplore.articleTitle
-                                          .txtStyled(
-                                        fontSize: 32.sp,
-                                        fontWeight: FontWeight.w700,
-                                        maxLines: 2,
-                                        textOverflow: TextOverflow.fade,
-                                      ),
-                                      15.sbH,
-                                      // Headliner Publication Date
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              PhosphorIcons
-                                                  .bold.paperPlaneTilt
-                                                  .iconslide(size: 18.sp),
-                                              7.sbW,
-                                              formattedDate.txtStyled(
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ],
-                                          ),
-                                          // Headliner article (More Options)
-                                          GestureDetector(
-                                            onTap: () {
-                                              final selectedHeadlinerArticle =
-                                                  filteredExploreArticles[
-                                                      index];
-                                              final originalIndex =
-                                                  articleDisplayList.indexOf(
-                                                      selectedHeadlinerArticle);
-                                              // Update Index for Overlay Display
-                                              _selectedOptionIndexValueNotifier
-                                                  .value = originalIndex;
-                                              // Display Overlay
-                                              ref
-                                                  .read(
-                                                      exploreScreenOverlayActiveProider
-                                                          .notifier)
-                                                  .update((state) => !state);
-                                            },
-                                            child: PhosphorIcons
-                                                .bold.dotsThree
-                                                .iconslide(size: 27.sp),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            } else if (index > 0) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 25.w, vertical: 10.h),
-                                child: GestureDetector(
-                                    onTap: () {
-                                      context.pushNamed(
-                                          ViNewsAppRouteConstants
-                                              .newsArticleReadView,
-                                          pathParameters: {
-                                            "articleImage":
-                                                articleDisplayExplore
-                                                    .urlImage,
-                                            "articleCategory":
-                                                articleDisplayExplore
-                                                    .articleCategory,
-                                            "heroTag":
-                                                'exploreScreentagImage$index',
-                                            "articleTitle":
-                                                articleDisplayExplore
-                                                    .articleTitle,
-                                            "articleAuthor":
-                                                articleDisplayExplore
-                                                    .articleCategory,
-                                            "articlePublicationDate":
-                                                formattedDate.toString()
-                                          });
-                                    },
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    ),
+                                    SizedBox(height: 15.h),
+                                    // Article Title
+                                    articleDisplayExplore.title.txtStyled(
+                                      fontSize: 32.sp,
+                                      fontWeight: FontWeight.w700,
+                                      maxLines: 2,
+                                      textOverflow: TextOverflow.fade,
+                                    ),
+                                    SizedBox(height: 15.h),
+                                    // Publication Date
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Column(
-                                          mainAxisSize: MainAxisSize.max,
+                                        Row(
                                           children: [
-                                            // News Article Image
-                                            Hero(
-                                              tag:
-                                                  'exploreScreentagImage$index',
-                                              child: Container(
-                                                width: 125.w,
-                                                height: 110.h,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.r),
-                                                ),
-                                                child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.r),
-                                                    child: ImageLoaderForOverlay(
-                                                        imageUrl:
-                                                            articleDisplayExplore
-                                                                .urlImage)),
-                                              ),
+                                            PhosphorIconsBold.paperPlaneTilt
+                                                .iconslide(size: 18.sp),
+                                            SizedBox(width: 7.w),
+                                            formatDateString(
+                                                    articleDisplayExplore
+                                                        .publishedAt
+                                                        .toString())
+                                                .txtStyled(
+                                              fontSize: 16.sp,
+                                              fontWeight: FontWeight.w600,
                                             ),
                                           ],
                                         ),
-                                        15.sbW,
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              // News Article Image
-                                              articleDisplayExplore
-                                                  .articleTitle
-                                                  .txtStyled(
-                                                fontSize: 20.sp,
-                                                fontWeight: FontWeight.w700,
-                                                maxLines: 2,
-                                                textOverflow:
-                                                    TextOverflow.ellipsis,
-                                              ),
-                                              15.sbH,
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      // Article Publication Date
-                                                      PhosphorIcons
-                                                          .bold.paperPlaneTilt
-                                                          .iconslide(
-                                                              size: 18.sp),
-                                                      7.sbW,
-                                                      formattedDate.txtStyled(
-                                                        fontSize: 16.sp,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  5.sbW,
-                                                  // More Options
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      final selectedArticle =
-                                                          filteredExploreArticles[
-                                                              index];
-                                                      final originalIndex =
-                                                          articleDisplayList
-                                                              .indexOf(
-                                                                  selectedArticle);
-                                                      // Update Index for Overlay Display
-                                                      _selectedOptionIndexValueNotifier
-                                                              .value =
-                                                          originalIndex;
-                                                      // Display Overlay
-                                                      ref
-                                                          .read(
-                                                              exploreScreenOverlayActiveProider
-                                                                  .notifier)
-                                                          .update((state) =>
-                                                              !state);
-                                                    },
-                                                    child: PhosphorIcons
-                                                        .bold.dotsThree
-                                                        .iconslide(
-                                                            size: 27.sp),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
                                       ],
-                                    )),
-                              );
-                            }
-                          } else {
-                            return const SizedBox.shrink();
-                          }
-                          return null;
-                        }),
-                  );
-                }).toList()),
-              ),
-              // News Article Frosted Glass Preview Overlay
-              AnimatedOpacity(
-                  duration: const Duration(milliseconds: 400),
-                  opacity: isOverlayActive ? 1 : 0,
-                  child: Visibility(
-                    visible: isOverlayActive,
-                    child: ValueListenableBuilder(
-                        valueListenable: _selectedOptionIndexValueNotifier,
-                        builder:
-                            (BuildContext context, int value, Widget? child) {
-                          ArticleSelections articleOverlayDisplay =
-                              articleDisplayList[
-                                  _selectedOptionIndexValueNotifier.value];
-                          return FrostedGlassBox(
-                              theWidth: MediaQuery.of(context).size.width,
-                              theHeight: MediaQuery.of(context).size.height,
-                              theChildAlignment: MainAxisAlignment.center,
-                              theChild: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 25.w, vertical: 15.h),
-                                child: Container(
-                                  height: 590.h,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.r),
-                                    color: Palette.greyColor.withOpacity(0.75),
-                                    image: const DecorationImage(
-                                      image: AssetImage(ViNewsAppImagesPath
-                                          .appBackgroundImage),
-                                      opacity: 0.15,
-                                      fit: BoxFit.cover,
                                     ),
-                                  ),
-                                  child: Padding(
-                                    padding: 15.0.padA,
-                                    child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          articleOverlayDisplay.articleTitle
-                                              .txtStyled(
-                                                  fontSize: 25.sp,
-                                                  fontWeight: FontWeight.w700,
-                                                  maxLines: 2,
-                                                  textOverflow:
-                                                      TextOverflow.ellipsis),
-                                          articleOverlayDisplay
-                                              .articleDescription
-                                              .txtStyled(
-                                                  fontSize: 18.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                  maxLines: 3,
-                                                  textOverflow:
-                                                      TextOverflow.ellipsis),
-                                          Hero(
-                                            tag:
-                                                'exploreScreenOverlaytagImage${_selectedOptionIndexValueNotifier.value}',
-                                            child: Container(
-                                              width: double.infinity,
-                                              height: 150.h,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.r),
-                                                // color: Palette.greyColor,
-                                              ),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.r),
-                                                child: ImageLoaderForOverlay(
-                                                    imageUrl:
-                                                        articleOverlayDisplay
-                                                            .urlImage),
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else if (index > 0) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 25.w, vertical: 10.h),
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.pushNamed(
+                                    ViNewsAppRouteConstants.newsArticleReadView,
+                                    pathParameters: {
+                                      "articleImage":
+                                          articleDisplayExplore.urlToImage ??
+                                              ViNewsAppImagesPath
+                                                  .defaultArticleImage,
+                                      "articleSource":
+                                          articleDisplayExplore.source.name,
+                                      "heroTag": 'exploreScreentagImage$index',
+                                      "articleTitle":
+                                          articleDisplayExplore.title,
+                                      "articleAuthor":
+                                          articleDisplayExplore.author ??
+                                              'No Author Mentioned',
+                                      "articlePublicationDate":
+                                          formatDateString(articleDisplayExplore
+                                              .publishedAt
+                                              .toString()),
+                                      "articleContent":
+                                          articleDisplayExplore.content ??
+                                              ViNewsAppTexts
+                                                  .placeHolderArticleContent,
+                                    },
+                                  );
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        // Article Image
+                                        Hero(
+                                          tag: 'exploreScreentagImage$index',
+                                          child: Container(
+                                            width: 125.w,
+                                            height: 110.h,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.r),
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.r),
+                                              child: ImageLoaderForOverlay(
+                                                imageUrl: articleDisplayExplore
+                                                        .urlToImage ??
+                                                    ViNewsAppImagesPath
+                                                        .defaultArticleImage,
                                               ),
                                             ),
                                           ),
-                                          Column(
-                                            children: [
-                                              5.sbH,
-                                              const Divider(
-                                                thickness: 1.5,
-                                              ),
-                                              5.sbH
-                                            ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(width: 15.w),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          // Article Title
+                                          articleDisplayExplore.title.txtStyled(
+                                            fontSize: 20.sp,
+                                            fontWeight: FontWeight.w700,
+                                            maxLines: 2,
+                                            textOverflow: TextOverflow.ellipsis,
                                           ),
+                                          SizedBox(height: 15.h),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Row(
                                                 children: [
-                                                  PhosphorIcons.bold.megaphone
+                                                  // Publication Date
+                                                  PhosphorIconsBold
+                                                      .paperPlaneTilt
                                                       .iconslide(size: 18.sp),
-                                                  7.sbW,
-                                                  articleOverlayDisplay
-                                                      .articleSource
+                                                  SizedBox(width: 7.w),
+                                                  formatDateString(
+                                                          articleDisplayExplore
+                                                              .publishedAt
+                                                              .toString())
                                                       .txtStyled(
-                                                    fontSize: 18.sp,
+                                                    fontSize: 16.sp,
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                                 ],
                                               ),
-                                              Row(
-                                                children: [
-                                                  PhosphorIcons
-                                                      .bold.clockCountdown
-                                                      .iconslide(size: 19.sp),
-                                                  5.sbW,
-                                                  "10 mins".txtStyled(
-                                                      fontSize: 18.sp,
-                                                      fontWeight:
-                                                          FontWeight.w500)
-                                                ],
-                                              )
                                             ],
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      PhosphorIcons.bold.tag
-                                                          .iconslide(
-                                                              size: 18.sp),
-                                                      7.sbW,
-                                                      Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Palette
-                                                              .blackColor,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      7.r),
-                                                        ),
-                                                        // News Article Category
-                                                        child: Padding(
-                                                          padding: 7.0.padA,
-                                                          child:
-                                                              articleOverlayDisplay
-                                                                  .articleCategory
-                                                                  .txtStyled(
-                                                            fontSize: 14.sp,
-                                                            color: Palette
-                                                                .whiteColor,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  5.sbH,
-                                                  Row(
-                                                    children: [
-                                                      PhosphorIcons
-                                                          .bold.paperPlaneTilt
-                                                          .iconslide(
-                                                              size: 18.sp),
-                                                      7.sbW,
-                                                      formattedDate.txtStyled(
-                                                        fontSize: 16.sp,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                              Row(
-                                                children: [
-                                                  PhosphorIcons.bold.bookmarks
-                                                      .iconslide(size: 35.sp),
-                                                  5.sbW,
-                                                  PhosphorIcons
-                                                      .bold.heartStraight
-                                                      .iconslide(size: 35.sp)
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                          Column(
-                                            children: [
-                                              5.sbH,
-                                              const Divider(
-                                                thickness: 1.5,
-                                              ),
-                                              5.sbH
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  ref
-                                                      .read(
-                                                          exploreScreenOverlayActiveProider
-                                                              .notifier)
-                                                      .update(
-                                                          (state) => !state);
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  elevation: 0,
-                                                  fixedSize: Size(110.w, 45.w),
-                                                  backgroundColor:
-                                                      const Color.fromARGB(
-                                                          161, 237, 226, 226),
-                                                  side: BorderSide(
-                                                      width: 2.5.w,
-                                                      color:
-                                                          Palette.blackColor),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            11),
-                                                  ),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    "Back".txtStyled(
-                                                      fontSize: 15.sp,
-                                                      fontWeight:
-                                                          FontWeight.w800,
-                                                      color: Palette.blackColor,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              17.sbW,
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  context.pushNamed(
-                                                      ViNewsAppRouteConstants
-                                                          .newsArticleReadView,
-                                                      pathParameters: {
-                                                        "articleImage":
-                                                            articleOverlayDisplay
-                                                                .urlImage,
-                                                        "articleCategory":
-                                                            articleOverlayDisplay
-                                                                .articleCategory,
-                                                        "heroTag":
-                                                            'exploreScreenOverlaytagImage${_selectedOptionIndexValueNotifier.value}',
-                                                        "articleTitle":
-                                                            articleOverlayDisplay
-                                                                .articleTitle,
-                                                        "articleAuthor":
-                                                            articleOverlayDisplay
-                                                                .articleCategory,
-                                                        "articlePublicationDate":
-                                                            formattedDate
-                                                                .toString()
-                                                      });
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  elevation: 0,
-                                                  fixedSize: Size(110.w, 45.w),
-                                                  backgroundColor:
-                                                      Palette.blackColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            11),
-                                                  ),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    "Read".txtStyled(
-                                                      fontSize: 15.sp,
-                                                      fontWeight:
-                                                          FontWeight.w800,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        ]),
-                                  ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ));
-                        }),
-                  )),
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
+                    );
+                  }, error: (Object error, StackTrace stackTrace) {
+                    return MotionToast(
+                        animationType: AnimationType.fromBottom,
+                        animationDuration: 300.milliseconds,
+                        toastDuration: 10.seconds,
+                        position: MotionToastPosition.bottom,
+                        borderRadius: 25.r,
+                        dismissable: true,
+                        displaySideBar: false,
+                        animationCurve: Curves.easeIn,
+                        layoutOrientation: ToastOrientation.ltr,
+                        primaryColor: Palette.appButtonColor,
+                        secondaryColor: Palette.greenColor,
+                        backgroundType: BackgroundType.transparent,
+                        description: "Failed to Load Articles"
+                            .txtStyled(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Palette.whiteColor,
+                                textAlign: TextAlign.center)
+                            .alignCenter(),
+                        padding: EdgeInsets.all(10.h));
+                  }, loading: () {
+                    return const CircularProgressIndicator();
+                  });
+                }).toList()),
+              ),
             ]),
           ),
         ),
       ),
     );
-  }
-
-  void navigateToExploreSearchScreen(BuildContext context) {
-    pushNewScreenWithRouteSettings(context,
-        screen: const ExploreScreenSearchView(),
-        settings: const RouteSettings(name: "/exploreSearch"));
   }
 }

@@ -98,8 +98,7 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
       }
       if (state is UserAuthenticationStateError) {
         loadingOverlayActive.value = false;
-        showMaterialBanner(
-            context, "Sign Up Error :(", state.error, Palette.blackColor);
+        showMotionToast(context, "Sign Up Error :(", state.error);
       } else if (state is UserAuthenticationStateSuccess) {
         loadingOverlayActive.value = false;
         context.pushReplacementNamed(ViNewsAppRouteConstants.authIntializer);
@@ -128,9 +127,8 @@ class _UserSignUpViewState extends ConsumerState<UserSignUpView> {
           child: Stack(
             children: [
               SafeArea(
-                child: ListView(
-                  physics: const BouncingScrollPhysics(),
-                  children: [
+                child:
+                    ListView(physics: const BouncingScrollPhysics(), children: [
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.only()

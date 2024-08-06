@@ -5,16 +5,11 @@ class NewsInterestSelectionNotifier extends StateNotifier<List<String>> {
       : super([
           "Business",
           "Entertainment",
-          "Food",
-          "Environment",   
+          "General", 
           "Health",
-          "Politics",
           "Science",
           "Sports",
           "Technology",
-          "Top News",
-          "Tourism",
-          "World",
         ]);
 }
 

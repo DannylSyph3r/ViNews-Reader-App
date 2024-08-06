@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vinews_news_reader/core/controllers/app_providers.dart';
+import 'package:vinews_news_reader/core/providers/app_providers.dart';
 import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/widgets/frosted_glass_box.dart';
 import 'package:vinews_news_reader/utils/vinews_app_texts.dart';
@@ -36,7 +36,7 @@ class _NewsInterestSelectionViewState
           children: [
             "Customize News Interests".txtStyled(fontSize: 18.sp),
             5.sbW,
-            PhosphorIcons.regular.newspaper.iconslide(size: 19.sp),
+            PhosphorIconsRegular.newspaper.iconslide(size: 19.sp),
           ],
         ),
       ),
@@ -195,7 +195,7 @@ class _NewsInterestSelectionViewState
                       mainAxisAlignment: MainAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        PhosphorIcons.regular.warningCircle.iconslide(),
+                        PhosphorIconsRegular.warningCircle.iconslide(),
                         7.sbW,
                         "Confirm Action".txtStyled(
                             fontSize: 22.sp, fontWeight: FontWeight.bold),

@@ -39,17 +39,29 @@ class _ExploreScreenSearchViewState
     final List<String> filteredList = exploreSearchHistoryList
         .where((item) => item.toLowerCase().contains(queryString.toLowerCase()))
         .toList();
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (didPop) async {
         await Future.delayed(200.milliseconds, () {
           ref.read(queryStringProvider.notifier).updateQueryString("");
         });
-        return true;
+        return;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           toolbarHeight: 90.h,
+          leadingWidth: 60.w,
+          leading: Row(
+            children: [
+              20.sbW,
+              PhosphorIconsBold.arrowLeft
+                  .iconslide(color: Palette.whiteColor)
+                  .inkTap(onTap: () {
+                context.pop();
+              }),
+            ],
+          ),
           backgroundColor: Palette.blackColor,
           // The search area here
           title: ViNewsSearchTextField(
@@ -91,7 +103,7 @@ class _ExploreScreenSearchViewState
                     ? const SizedBox
                         .shrink() // Hide the suffix icon if the text is empty
                     : IconButton(
-                        icon: PhosphorIcons.bold.x.iconslide(size: 20.sp),
+                        icon: PhosphorIconsBold.x.iconslide(size: 20.sp),
                         onPressed: () {
                           _exploreSearchFieldController.clear();
                           // Update the ValueNotifier when the text is cleared
@@ -108,7 +120,7 @@ class _ExploreScreenSearchViewState
               // Update the ValueNotifier when the text is cleared via the icon
               _isTextFieldEmpty.value = true;
             },
-            prefixIcon: PhosphorIcons.regular.magnifyingGlass.iconslide(
+            prefixIcon: PhosphorIconsRegular.magnifyingGlass.iconslide(
               size: 26.sp,
               color: Palette.blackColor,
             ),
@@ -159,7 +171,7 @@ class _ExploreScreenSearchViewState
                                   },
                                   child: Row(
                                     children: [
-                                      PhosphorIcons.bold.clockCounterClockwise
+                                      PhosphorIconsBold.clockCounterClockwise
                                           .iconslide(
                                               size: 25.sp,
                                               color: Palette.blackColor),
@@ -189,8 +201,7 @@ class _ExploreScreenSearchViewState
                                                   .updateQueryString(
                                                       filteredList[index]);
                                             },
-                                            icon: PhosphorIcons
-                                                .bold.arrowUpRight
+                                            icon: PhosphorIconsBold.arrowUpRight
                                                 .iconslide(
                                                     size: 25.sp,
                                                     color: Palette.blackColor),
@@ -206,10 +217,9 @@ class _ExploreScreenSearchViewState
                                                   .removeFromExploreHistory(
                                                       itemToDelete);
                                             },
-                                            icon: PhosphorIcons.bold.x
-                                                .iconslide(
-                                                    size: 25.sp,
-                                                    color: Palette.blackColor),
+                                            icon: PhosphorIconsBold.x.iconslide(
+                                                size: 25.sp,
+                                                color: Palette.blackColor),
                                           ),
                                         ],
                                       ),

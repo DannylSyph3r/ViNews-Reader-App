@@ -34,12 +34,12 @@ class _OnboardViewState extends ConsumerState<OnboardView> {
   Widget build(BuildContext context) {
     // Custom Widget Implementation
     return OnboardScreenLayoutWidget(
-       onTapSkipButton: () {
+      onTapSkipButton: () {
         context.pushReplacementNamed(ViNewsAppRouteConstants.authIntializer);
       },
       backgroundColor: Palette.greyColor,
-      screenProgressIcon: PhosphorIcons.bold.caretRight,
-      ultimateScreenIcon: PhosphorIcons.bold.caretDoubleRight,
+      screenProgressIcon: PhosphorIconsBold.caretRight,
+      ultimateScreenIcon: PhosphorIconsBold.caretDoubleRight,
       circularProgressForegroundColor: Palette.blackColor,
       skipTextStyle: TextStyle(fontSize: 19.5.sp, color: Palette.blackColor),
     );

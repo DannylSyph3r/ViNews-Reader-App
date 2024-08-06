@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/core/models/article_selections.dart';
-import 'package:vinews_news_reader/core/controllers/app_providers.dart';
+import 'package:vinews_news_reader/core/providers/app_providers.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/image_loader.dart';
@@ -49,27 +49,33 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
           backgroundColor: Palette.blackColor,
           elevation: 0,
           centerTitle: true,
+          leading: PhosphorIconsBold.arrowLeft
+              .iconslide(size: 25.sp, color: Palette.whiteColor)
+              .inkTap(onTap: () => context.pop()),
           title: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              "Liked Articles".txtStyled(fontSize: 18.sp),
+              "Liked Articles"
+                  .txtStyled(fontSize: 18.sp, color: Palette.whiteColor),
               5.sbW,
-              PhosphorIcons.regular.heartStraight.iconslide(size: 19.sp),
+              PhosphorIconsFill.heartStraight
+                  .iconslide(size: 19.sp, color: Palette.whiteColor),
             ],
           ),
           bottom: AppBar(
             automaticallyImplyLeading: false,
-            toolbarHeight: 100.h,
+            toolbarHeight: 70.h,
             backgroundColor: Palette.blackColor,
             titleSpacing: 0,
             title: TabBar(
               isScrollable: true,
+              tabAlignment: TabAlignment.start,
               labelStyle:
                   TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w500),
               labelColor: Colors.white,
               unselectedLabelColor: const Color.fromARGB(255, 154, 146, 146),
-              dividerColor: Colors.grey,
+              dividerColor: Colors.transparent,
               indicatorColor: Palette.greenColor,
               indicatorWeight: 3.5,
               indicatorSize: TabBarIndicatorSize.label,
@@ -83,7 +89,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                 ...newsInterests.asMap().entries.map((entry) {
                   String interest = entry.value;
                   int categoryCount = articleDisplayList
-                      .where((article) => article.articleCategory == interest)
+                      .where((article) => article.articleSource == interest)
                       .length;
                   return Tab(
                     text: "$interest ($categoryCount)", // Display the count
@@ -125,10 +131,10 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                             ViNewsAppRouteConstants.newsArticleReadView,
                             pathParameters: {
                               "articleImage": articleDisplay.urlImage,
-                              "articleCategory": articleDisplay.articleCategory,
+                              "articleSource": articleDisplay.articleSource,
                               "heroTag": 'likedArticlesScreentagImage$index',
                               "articleTitle": articleDisplay.articleTitle,
-                              "articleAuthor": articleDisplay.articleCategory,
+                              "articleAuthor": articleDisplay.articleSource,
                               "articlePublicationDate": formattedDate.toString()
                             });
                       },
@@ -149,9 +155,9 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                     borderRadius: BorderRadius.circular(10.r),
                                   ),
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.r),
-                                    child: ImageLoaderForOverlay(imageUrl: articleDisplay.urlImage)
-                                  ),
+                                      borderRadius: BorderRadius.circular(10.r),
+                                      child: ImageLoaderForOverlay(
+                                          imageUrl: articleDisplay.urlImage)),
                                 ),
                               ),
                             ],
@@ -174,7 +180,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                   children: [
                                     Row(
                                       children: [
-                                        PhosphorIcons.bold.tag
+                                        PhosphorIconsBold.tag
                                             .iconslide(size: 18.sp),
                                         7.sbW,
                                         Container(
@@ -187,7 +193,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                           child: Padding(
                                             padding: 6.0.padA,
                                             child: articleDisplay
-                                                .articleCategory
+                                                .articleSource
                                                 .txtStyled(
                                               fontSize: 14.sp,
                                               color: Palette.whiteColor,
@@ -207,7 +213,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                     // Article Publication Date
                                     Row(
                                       children: [
-                                        PhosphorIcons.bold.paperPlaneTilt
+                                        PhosphorIconsBold.paperPlaneTilt
                                             .iconslide(size: 18.sp),
                                         7.sbW,
                                         formattedDate.txtStyled(
@@ -229,7 +235,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                     .notifier)
                                             .update((state) => !state);
                                       },
-                                      child: PhosphorIcons.bold.dotsThree
+                                      child: PhosphorIconsBold.dotsThree
                                           .iconslide(size: 27.sp),
                                     ),
                                   ],
@@ -247,7 +253,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
               ...newsInterests.map((interest) {
                 // Filter the articles based on the selected category
                 final filteredArticles = articleDisplayList
-                    .where((article) => article.articleCategory == interest)
+                    .where((article) => article.articleSource == interest)
                     .toList();
 
                 return Scrollbar(
@@ -274,11 +280,11 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                               ViNewsAppRouteConstants.newsArticleReadView,
                               pathParameters: {
                                 "articleImage": articleDisplay.urlImage,
-                                "articleCategory":
-                                    articleDisplay.articleCategory,
+                                "articleSource":
+                                    articleDisplay.articleSource,
                                 "heroTag": 'likedArticlesScreentagImage$index',
                                 "articleTitle": articleDisplay.articleTitle,
-                                "articleAuthor": articleDisplay.articleCategory,
+                                "articleAuthor": articleDisplay.articleSource,
                                 "articlePublicationDate":
                                     formattedDate.toString(),
                               },
@@ -302,10 +308,11 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                             BorderRadius.circular(10.r),
                                       ),
                                       child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.r),
-                                        child: ImageLoaderForOverlay(imageUrl: articleDisplay.urlImage)
-                                      ),
+                                          borderRadius:
+                                              BorderRadius.circular(10.r),
+                                          child: ImageLoaderForOverlay(
+                                              imageUrl:
+                                                  articleDisplay.urlImage)),
                                     ),
                                   ),
                                 ],
@@ -329,7 +336,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                       children: [
                                         Row(
                                           children: [
-                                            PhosphorIcons.bold.tag
+                                            PhosphorIconsBold.tag
                                                 .iconslide(size: 18.sp),
                                             7.sbW,
                                             Container(
@@ -341,7 +348,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                               child: Padding(
                                                 padding: 6.0.padA,
                                                 child: articleDisplay
-                                                    .articleCategory
+                                                    .articleSource
                                                     .txtStyled(
                                                   fontSize: 13.sp,
                                                   color: Palette.whiteColor,
@@ -361,7 +368,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                         Row(
                                           children: [
                                             // Article Publication Date
-                                            PhosphorIcons.bold.paperPlaneTilt
+                                            PhosphorIconsBold.paperPlaneTilt
                                                 .iconslide(
                                               size: 18.sp,
                                             ),
@@ -391,7 +398,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                         .notifier)
                                                 .update((state) => !state);
                                           },
-                                          child: PhosphorIcons.bold.dotsThree
+                                          child: PhosphorIconsBold.dotsThree
                                               .iconslide(
                                             size: 27.sp,
                                           ),
@@ -498,7 +505,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                           children: [
                                             Row(
                                               children: [
-                                                PhosphorIcons.bold.megaphone
+                                                PhosphorIconsBold.megaphone
                                                     .iconslide(size: 18.sp),
                                                 7.sbW,
                                                 articleOverlayDisplay
@@ -511,8 +518,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                             ),
                                             Row(
                                               children: [
-                                                PhosphorIcons
-                                                    .bold.clockCountdown
+                                                PhosphorIconsBold.clockCountdown
                                                     .iconslide(size: 19.sp),
                                                 5.sbW,
                                                 "10 mins".txtStyled(
@@ -532,7 +538,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                               children: [
                                                 Row(
                                                   children: [
-                                                    PhosphorIcons.bold.tag
+                                                    PhosphorIconsBold.tag
                                                         .iconslide(size: 18.sp),
                                                     7.sbW,
                                                     Container(
@@ -548,7 +554,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                         padding: 7.0.padA,
                                                         child:
                                                             articleOverlayDisplay
-                                                                .articleCategory
+                                                                .articleSource
                                                                 .txtStyled(
                                                           fontSize: 14.sp,
                                                           color: Palette
@@ -563,8 +569,8 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                 5.sbH,
                                                 Row(
                                                   children: [
-                                                    PhosphorIcons
-                                                        .bold.paperPlaneTilt
+                                                    PhosphorIconsBold
+                                                        .paperPlaneTilt
                                                         .iconslide(size: 18.sp),
                                                     7.sbW,
                                                     formattedDate.txtStyled(
@@ -578,10 +584,10 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                             ),
                                             Row(
                                               children: [
-                                                PhosphorIcons.bold.bookmarks
+                                                PhosphorIconsBold.bookmarks
                                                     .iconslide(size: 35.sp),
                                                 5.sbW,
-                                                PhosphorIcons.bold.heartStraight
+                                                PhosphorIconsBold.heartStraight
                                                     .iconslide(size: 35.sp)
                                               ],
                                             )
@@ -644,9 +650,9 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                       "articleImage":
                                                           articleOverlayDisplay
                                                               .urlImage,
-                                                      "articleCategory":
+                                                      "articleSource":
                                                           articleOverlayDisplay
-                                                              .articleCategory,
+                                                              .articleSource,
                                                       "heroTag":
                                                           'likedArticlesScreenOverlaytagImage${_selectedOptionIndexValueNotifier.value}',
                                                       "articleTitle":
@@ -654,7 +660,7 @@ class _LikedArticlesViewState extends ConsumerState<LikedArticlesView> {
                                                               .articleTitle,
                                                       "articleAuthor":
                                                           articleOverlayDisplay
-                                                              .articleCategory,
+                                                              .articleSource,
                                                       "articlePublicationDate":
                                                           formattedDate
                                                               .toString()

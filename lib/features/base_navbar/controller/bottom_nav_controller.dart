@@ -33,10 +33,10 @@ class NavItem {
 }
 
 final List<NavItem> navItems = [
-  NavItem(Nav.home, 'Home', PhosphorIcons.fill.house),
-  NavItem(Nav.explore, 'Explore', PhosphorIcons.fill.globeHemisphereWest),
-  NavItem(Nav.bookmarks, 'Bookmarks', PhosphorIcons.fill.bookmarks),
-  NavItem(Nav.profile, 'Profile', PhosphorIcons.fill.user),
+  const NavItem(Nav.home, 'Home', PhosphorIconsFill.house),
+  const NavItem(Nav.explore, 'Explore', PhosphorIconsFill.globeHemisphereWest),
+  const NavItem(Nav.bookmarks, 'Bookmarks', PhosphorIconsFill.bookmarks),
+  const NavItem(Nav.profile, 'Profile', PhosphorIconsFill.user),
 ];
 
 enum Nav {

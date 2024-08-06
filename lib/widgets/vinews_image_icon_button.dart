@@ -40,7 +40,7 @@ class ViNewsAppImageIconButton extends ConsumerWidget {
             : null, // Disable the button if isEnabled is false
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          fixedSize: Size(390.w, 78.w),
+          fixedSize: Size(390.w, 70.w),
           backgroundColor: buttonColor ?? Palette.blackColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

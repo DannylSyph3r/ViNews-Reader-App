@@ -2,6 +2,8 @@ import 'package:drop_cap_text/drop_cap_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/vinews_app_texts.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
@@ -23,7 +25,11 @@ class _AboutViNewsViewState extends ConsumerState<AboutViNewsView> {
         backgroundColor: Palette.blackColor,
         elevation: 0,
         centerTitle: true,
-        title: "About ViNews".txtStyled(fontSize: 18.sp),
+        leading: PhosphorIconsBold.arrowLeft
+            .iconslide(size: 25.sp, color: Palette.whiteColor)
+            .inkTap(onTap: () => context.pop()),
+        title: "About ViNews"
+            .txtStyled(fontSize: 18.sp, color: Palette.whiteColor),
       ),
       body: Container(
           constraints: const BoxConstraints.expand(),

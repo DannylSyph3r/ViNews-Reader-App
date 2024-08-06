@@ -24,7 +24,7 @@ class NewsLanguageSelectorView extends ConsumerWidget {
           children: [
             "News Language".txtStyled(fontSize: 18.sp),
             5.sbW,
-            PhosphorIcons.regular.globe.iconslide(size: 19.sp),
+            PhosphorIconsRegular.globe.iconslide(size: 19.sp),
           ],
         ),
       ),

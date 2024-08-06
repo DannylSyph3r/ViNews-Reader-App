@@ -4,11 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vinews_news_reader/core/models/article_selections.dart';
-import 'package:vinews_news_reader/core/controllers/app_providers.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:vinews_news_reader/core/models/news_response.dart';
+import 'package:vinews_news_reader/features/home/notifiers/articles_notifier.dart';
+import 'package:vinews_news_reader/core/providers/app_providers.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
+import 'package:vinews_news_reader/utils/vinews_app_texts.dart';
+import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/widgets/custom_sliver_app_bar.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 import 'package:vinews_news_reader/widgets/news_details_overlay.dart';
@@ -28,8 +33,47 @@ class UserHomePageView extends ConsumerStatefulWidget {
 
 class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
   final ScrollController _homeScrollController = ScrollController();
-  final ValueNotifier<int> _overlayDisplayNotifier = 0.notifier;
-  String formattedDate = DateFormat('E d MMM, y').format(DateTime.now());
+  final ValueNotifier<int> _homeOverlayDisplayNotifier = 0.notifier;
+
+  // User Greetings on AppBar
+  String _getGreeting() {
+    final DateTime now = DateTime.now();
+    final int currentTime = now.hour;
+
+    if (currentTime >= 0 && currentTime < 12) {
+      return 'Good Morning';
+    } else if (currentTime >= 12 && currentTime < 17) {
+      return 'Good Afternoon';
+    } else {
+      return 'Good Evening';
+    }
+  }
+
+  // Greeting Icon based on Time of Day
+  Icon _greetingIcon() {
+    final DateTime now = DateTime.now();
+    final int currentTime = now.hour;
+
+    if (currentTime >= 6 && currentTime < 12) {
+      return const Icon(PhosphorIconsRegular.sunHorizon,
+          color: Palette.whiteColor);
+    } else if (currentTime >= 12 && currentTime < 16) {
+      return const Icon(PhosphorIconsRegular.sun, color: Palette.whiteColor);
+    } else if (currentTime >= 16 && currentTime < 19) {
+      return const Icon(PhosphorIconsRegular.sunDim, color: Palette.whiteColor);
+    } else if (currentTime >= 19 && currentTime < 22) {
+      return const Icon(PhosphorIconsRegular.moon, color: Palette.whiteColor);
+    } else {
+      return const Icon(PhosphorIconsRegular.moonStars,
+          color: Palette.whiteColor);
+    }
+  }
+
+  String formatDateString(String dateString) {
+    final originalDate = DateTime.parse(dateString);
+    final formattedDate = DateFormat('E d MMM, y').format(originalDate);
+    return formattedDate;
+  }
 
   @override
   void initState() {
@@ -54,40 +98,8 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
         widget.hideNavBar();
       }
     });
-    _overlayDisplayNotifier.dispose();
+    _homeOverlayDisplayNotifier.dispose();
     super.dispose();
-  }
-
-  // User Greetings on AppBar
-  String _getGreeting() {
-    final DateTime now = DateTime.now();
-    final int currentTime = now.hour;
-
-    if (currentTime >= 0 && currentTime < 12) {
-      return 'Good Morning';
-    } else if (currentTime >= 12 && currentTime < 17) {
-      return 'Good Afternoon';
-    } else {
-      return 'Good Evening';
-    }
-  }
-
-  // Greeting Icon based on Time of Day
-  Icon _greetingIcon() {
-    final DateTime now = DateTime.now();
-    final int currentTime = now.hour;
-
-    if (currentTime >= 6 && currentTime < 12) {
-      return Icon(PhosphorIcons.regular.sunHorizon);
-    } else if (currentTime >= 12 && currentTime < 16) {
-      return Icon(PhosphorIcons.regular.sun);
-    } else if (currentTime >= 16 && currentTime < 19) {
-      return Icon(PhosphorIcons.regular.sunDim);
-    } else if (currentTime >= 19 && currentTime < 22) {
-      return Icon(PhosphorIcons.regular.moon);
-    } else {
-      return Icon(PhosphorIcons.regular.moonStars);
-    }
   }
 
   @override
@@ -95,6 +107,8 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
     final String gretting = _getGreeting();
     final Icon greetingIcon = _greetingIcon();
     final bool isOverlayActive = ref.watch(homeScreenOverlayActiveProvider);
+    AsyncValue<List<Article>> articleData = ref.watch(homeArticlesListProvider);
+    // final isLoading = ref.watch(isLoadingArticlesProvider);
     return Scaffold(
       body: NestedScrollView(
         controller: _homeScrollController,
@@ -115,10 +129,13 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                 // Show Page Title
                 child: Row(
                   children: [
-                    PhosphorIcons.regular.house.iconslide(),
+                    PhosphorIconsRegular.house
+                        .iconslide(color: Palette.whiteColor),
                     10.sbW,
                     "Home".txtStyled(
-                        fontSize: 24.sp, fontWeight: FontWeight.w600),
+                        color: Palette.whiteColor,
+                        fontSize: 24.sp,
+                        fontWeight: FontWeight.w600),
                   ],
                 ),
               ),
@@ -140,18 +157,21 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                                   greetingIcon,
                                   10.sbW,
                                   "$gretting, SlethWare".txtStyled(
+                                      color: Palette.whiteColor,
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.w600),
                                 ],
                               )
                             : Row(
                                 children: [
-                                  PhosphorIcons.fill.calendarBlank
-                                      .iconslide(),
+                                  PhosphorIconsFill.calendarBlank
+                                      .iconslide(color: Palette.whiteColor),
                                   10.sbW,
-                                  formattedDate.txtStyled(
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w600),
+                                  formatDateString(DateTime.now().toString())
+                                      .txtStyled(
+                                          color: Palette.whiteColor,
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w600),
                                 ],
                               ))),
               ),
@@ -182,7 +202,7 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                               "Latest News for You".txtStyled(
                                   fontSize: 22.sp, fontWeight: FontWeight.w500),
                               5.sbW,
-                              PhosphorIcons.fill.newspaperClipping
+                              PhosphorIconsFill.newspaperClipping
                                   .iconslide(size: 24.sp),
                             ],
                           ),
@@ -190,57 +210,115 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
 
                         // News List View via ListView.builder
                         15.sbH,
-                        ListView.builder(
-                          cacheExtent: 100,
-                          padding: 0
-                              .padV, //Zero Padding Needed just needed to offset default value
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: articleDisplayList.length,
+                        articleData.when(data: (List<Article> articleData) {
+                          return ListView.builder(
+                            cacheExtent: 100,
+                            //Zero Padding Needed just needed to offset default value
+                            padding: 0.padV,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: articleData.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 13.h, horizontal: 25.w),
+                                child: NewsListArticleItem(
+                                    imageHeroTag: 'homeScreentagImage$index',
+                                    articleImageUrlString: articleData[index]
+                                            .urlToImage ??
+                                        ViNewsAppImagesPath.defaultArticleImage,
+                                    articleTitle: articleData[index].title,
+                                    articleSource:
+                                        articleData[index].source.name,
+                                    articleReleaseDate: formatDateString(
+                                        articleData[index]
+                                            .publishedAt
+                                            .toString()),
+                                    articleDetailsTapAction: () {
+                                      //Update ValueNotifer with Selected Index
+                                      _homeOverlayDisplayNotifier.value = index;
+                                      ref
+                                          .read(homeScreenOverlayActiveProvider
+                                              .notifier)
+                                          .update((state) => !state);
+                                    }).inkTap(
+                                  splashColor:
+                                      Palette.greyColor.withOpacity(0.2),
+                                  onTap: () {
+                                    context.pushNamed(
+                                      ViNewsAppRouteConstants
+                                          .newsArticleReadView,
+                                      pathParameters: {
+                                        "articleImage":
+                                            articleData[index].urlToImage ??
+                                                ViNewsAppImagesPath
+                                                    .defaultArticleImage,
+                                        "articleSource":
+                                            articleData[index].source.name,
+                                        "heroTag": 'homeScreentagImage$index',
+                                        "articleTitle":
+                                            articleData[index].title,
+                                        "articleAuthor":
+                                            articleData[index].author ??
+                                                'No Author Mentioned',
+                                        "articlePublicationDate":
+                                            formatDateString(articleData[index]
+                                                .publishedAt
+                                                .toString()),
+                                        "articleContent":
+                                            articleData[index].content ??
+                                                ViNewsAppTexts
+                                                    .placeHolderArticleContent,
+                                      },
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          );
+                        }, error: (Object error, StackTrace stackTrace) {
+                          return MotionToast(
+                              animationType: AnimationType.fromBottom,
+                              animationDuration: 300.milliseconds,
+                              toastDuration: 10.seconds,
+                              position: MotionToastPosition.bottom,
+                              borderRadius: 25.r,
+                              dismissable: true,
+                              displaySideBar: false,
+                              animationCurve: Curves.easeIn,
+                              layoutOrientation: ToastOrientation.ltr,
+                              primaryColor: Palette.appButtonColor,
+                              secondaryColor: Palette.greenColor,
+                              backgroundType: BackgroundType.transparent,
+                              description: "Failed to Load Articles"
+                                  .txtStyled(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Palette.whiteColor,
+                                      textAlign: TextAlign.center)
+                                  .alignCenter(),
+                              padding: EdgeInsets.all(10.h));
+                        }, loading: () {
+                          return ListView.separated(
+                            cacheExtent: 100,
+                            //Zero Padding Needed just needed to offset default value
+                            padding: 0.padV,
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: 20,
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              // Return a SizedBox with desired height as separator
+                              return 15.sbH;
+                            },
+                            itemBuilder: (BuildContext context, int index) {
+                              // Return your shimmer loader widget
+                              return getShimmerLoader();
+                            },
+                          );
+                        }),
 
-                          // The number of times you want to duplicate the widget
-                          itemBuilder: (BuildContext context, int index) {
-                            ArticleSelections articleDisplay =
-                                articleDisplayList[index];
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 13.h, horizontal: 25.w),
-                              child: NewsListArticleItem(
-                                  imageHeroTag: 'homeScreentagImage$index',
-                                  articleImageUrlString:
-                                      articleDisplay.urlImage,
-                                  articleTitle: articleDisplay.articleTitle,
-                                  articleCategory:
-                                      articleDisplay.articleCategory,
-                                  articleReleaseDate: formattedDate,
-                                  articleDetailsTapAction: () {
-                                    //Update ValueNotifer with Selected Index
-                                    _overlayDisplayNotifier.value = index;
-                                    ref
-                                        .read(homeScreenOverlayActiveProvider
-                                            .notifier)
-                                        .update((state) => !state);
-                                  }).inkTap(
-                                    splashColor: Palette.greyColor.withOpacity(0.2),
-                                    onTap: () {
-                                context.pushNamed(
-                                    ViNewsAppRouteConstants.newsArticleReadView,
-                                    pathParameters: {
-                                      "articleImage": articleDisplay.urlImage,
-                                      "articleCategory":
-                                          articleDisplay.articleCategory,
-                                      "heroTag": 'homeScreentagImage$index',
-                                      "articleTitle":
-                                          articleDisplay.articleTitle,
-                                      "articleAuthor":
-                                          articleDisplay.articleCategory,
-                                      "articlePublicationDate": formattedDate
-                                    });
-                              }),
-                            );
-                          },
-                        ),
-                        20.sbH
+                        20.sbH,
                       ],
                     ),
                   ]),
@@ -252,19 +330,26 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                 opacity: isOverlayActive ? 1 : 0,
                 child: Visibility(
                   visible: isOverlayActive,
-                  child: _overlayDisplayNotifier.sync(builder:
+                  child: _homeOverlayDisplayNotifier.sync(builder:
                       (BuildContext context, int displayValue, Widget? child) {
-                    ArticleSelections articleOverlayDisplay =
-                        articleDisplayList[displayValue];
+                    final List<Article> articleOverlayDisplay = articleData.maybeWhen(
+                      data: (articles) => articles ,
+                      orElse: () => []);
+
+                    if(articleOverlayDisplay.isEmpty){
+                      return const SizedBox();
+                    } else {
                     return NewsDetailsFrostedOverlayDisplay(
                         imageHeroTag: 'homeScreenOverlaytagImage$displayValue',
-                        articleImageUrlString: articleOverlayDisplay.urlImage,
-                        articleTitle: articleOverlayDisplay.articleTitle,
-                        articleDescription:
-                            articleOverlayDisplay.articleDescription,
-                        articleCategory: articleOverlayDisplay.articleCategory,
-                        articleSource: articleOverlayDisplay.articleSource,
-                        articleReleaseDate: formattedDate,
+                        articleImageUrlString:
+                            articleOverlayDisplay[displayValue].urlToImage ??
+                                ViNewsAppImagesPath.defaultArticleImage,
+                        articleTitle: articleOverlayDisplay[displayValue].title,
+                        articleDescription: articleOverlayDisplay[displayValue].description ??
+                            "No description attached",
+                        articleSource: articleOverlayDisplay[displayValue].source.name,
+                        articleReleaseDate: formatDateString(
+                            articleOverlayDisplay[displayValue].publishedAt.toString()),
                         backButtonTap: () {
                           ref
                               .read(homeScreenOverlayActiveProvider.notifier)
@@ -272,23 +357,137 @@ class _UserHomePageViewState extends ConsumerState<UserHomePageView> {
                         },
                         readButtonTap: () {
                           context.pushNamed(
-                              ViNewsAppRouteConstants.newsArticleReadView,
-                              pathParameters: {
-                                "articleImage": articleOverlayDisplay.urlImage,
-                                "articleCategory":
-                                    articleOverlayDisplay.articleCategory,
-                                "heroTag":
-                                    'homeScreenOverlaytagImage${_overlayDisplayNotifier.value}',
-                                "articleTitle":
-                                    articleOverlayDisplay.articleTitle,
-                                "articleAuthor":
-                                    articleOverlayDisplay.articleCategory,
-                                "articlePublicationDate": formattedDate
-                              });
+                            ViNewsAppRouteConstants.newsArticleReadView,
+                            pathParameters: {
+                              "articleImage":
+                                  articleOverlayDisplay[displayValue].urlToImage ??
+                                      ViNewsAppImagesPath.defaultArticleImage,
+                              "articleSource":
+                                  articleOverlayDisplay[displayValue].source.name,
+                              "heroTag":
+                                  'homeScreenOverlaytagImage$displayValue',
+                              "articleTitle": articleOverlayDisplay[displayValue].title,
+                              "articleAuthor": articleOverlayDisplay[displayValue].author ??
+                                  'No Author Mentioned',
+                              "articlePublicationDate": formatDateString(
+                                  articleOverlayDisplay[displayValue].publishedAt.toString()),
+                              "articleContent": articleOverlayDisplay[displayValue].content ??
+                                  ViNewsAppTexts.placeHolderArticleContent,
+                            },
+                          );
                         });
+                    }
                   }),
                 )),
+                
           ]),
+        ),
+      ),
+    );
+  }
+
+  Shimmer getShimmerLoader() {
+    return Shimmer.fromColors(
+      baseColor: Palette.greyColor,
+      highlightColor: const Color.fromARGB(255, 255, 255, 255),
+      child: Padding(
+        padding: 25.padH,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                // Shimmer News Article Image
+                Container(
+                  width: 125.w, // Adjust width as needed
+                  height: 110.h, // Adjust height as needed
+                  decoration: BoxDecoration(
+                    color: Palette.greyColor, // Use a shimmer color
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                ),
+              ],
+            ),
+            15.sbW, // Adjust spacing as needed
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  // Shimmer News Article Title
+                  Container(
+                    width: double.infinity,
+                    height: 30.h,
+                    decoration: BoxDecoration(
+                      color: Palette.greyColor,
+                      borderRadius: BorderRadius.circular(7.r),
+                    ),
+                  ),
+                  7.sbH,
+                  Row(
+                    children: [
+                      Row(
+                        children: [
+                          // Shimmer Tag Icon
+                          Container(
+                            width: 24.w,
+                            height: 24.h,
+                            color: Palette.greyColor,
+                          ),
+                          7.sbW,
+                          Container(
+                            width: 100.w,
+                            height: 24.h,
+                            decoration: BoxDecoration(
+                              color: Palette.greyColor,
+                              borderRadius: BorderRadius.circular(7.r),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  5.sbH,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          // Shimmer Date Icon
+                          Container(
+                            width: 24.w,
+                            height: 24.h,
+                            color: Palette.greyColor,
+                          ),
+                          7.sbW,
+                          Container(
+                            width: 100.w,
+                            height: 24.h,
+                            decoration: BoxDecoration(
+                              color: Palette.greyColor,
+                              borderRadius: BorderRadius.circular(7.r),
+                            ),
+                          ),
+                        ],
+                      ),
+                      5.sbW,
+                      // Shimmer More Options Icon
+                      Container(
+                        width: 27.w,
+                        height: 27.h,
+                        decoration: BoxDecoration(
+                          color: Palette.greyColor,
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

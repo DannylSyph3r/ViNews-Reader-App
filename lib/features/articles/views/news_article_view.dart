@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
-import 'package:vinews_news_reader/utils/vinews_app_texts.dart';
+import 'package:vinews_news_reader/utils/banner_util.dart';
 import 'package:vinews_news_reader/utils/vinews_images_path.dart';
 import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
@@ -13,19 +13,21 @@ import 'package:vinews_news_reader/utils/widget_extensions.dart';
 
 class NewsArticleReadView extends ConsumerStatefulWidget {
   final String articleImage;
-  final String articleCategory;
+  final String articleSource;
   final String articleTitle;
   final String articleAuthor;
   final String articlePublicationDate;
+  final String articleContent;
   final String heroTag;
 
   const NewsArticleReadView(
       {super.key,
       required this.articleImage,
-      required this.articleCategory,
+      required this.articleSource,
       required this.articleTitle,
       required this.articleAuthor,
       required this.articlePublicationDate,
+      required this.articleContent,
       required this.heroTag});
 
   @override
@@ -34,6 +36,16 @@ class NewsArticleReadView extends ConsumerStatefulWidget {
 }
 
 class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
+  final ValueNotifier<bool> likeIconChangeNotifer = false.notifier;
+  final ValueNotifier<bool> bookmarkIconChangeNotifer = false.notifier;
+
+  @override
+  void dispose() {
+    likeIconChangeNotifer.dispose();
+    bookmarkIconChangeNotifer.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,8 +57,8 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
-                leading: PhosphorIcons.bold.arrowLeft
-                    .iconslide(size: 30.sp)
+                leading: PhosphorIconsBold.arrowLeft
+                    .iconslide(size: 28.sp, color: Palette.whiteColor)
                     .inkTap(onTap: () => context.pop()),
                 toolbarHeight: 90.h,
                 stretch: true,
@@ -55,9 +67,9 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                 shape: ContinuousRectangleBorder(
                   borderRadius: BorderRadius.only(
                     bottomLeft:
-                        Radius.circular(25.r), // Adjust the radius as needed
+                        Radius.circular(30.r), // Adjust the radius as needed
                     bottomRight:
-                        Radius.circular(25.r), // Adjust the radius as needed
+                        Radius.circular(30.r), // Adjust the radius as needed
                   ),
                 ),
                 // collapsedHeight: 90.h, //AppBar height
@@ -77,13 +89,45 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                         padding: const EdgeInsets.only().padSpec(right: 30),
                         child: Row(
                           children: [
-                            PhosphorIcons.regular.heartStraight
-                                .iconslide(size: 30.sp),
+                            likeIconChangeNotifer.sync(
+                                builder: (context, isIconTapped, child) {
+                              return GestureDetector(
+                                  onTap: () => likeIconChangeNotifer.value =
+                                      !likeIconChangeNotifer.value,
+                                  child: isIconTapped
+                                      ? PhosphorIconsFill.heartStraight
+                                          .iconslide(
+                                              size: 30.sp,
+                                              color: Palette.redColor)
+                                      : PhosphorIconsRegular.heartStraight
+                                          .iconslide(
+                                              size: 30.sp,
+                                              color: Palette.whiteColor));
+                            }),
                             15.sbW,
-                            PhosphorIcons.regular.bookmarksSimple
-                                .iconslide(size: 30.sp),
+                            bookmarkIconChangeNotifer.sync(
+                                builder: (context, isIconTapped, child) {
+                              return GestureDetector(
+                                onTap: () {
+                                  bookmarkIconChangeNotifer.value =
+                                      !bookmarkIconChangeNotifer.value;
+                                  showBookmarkToast(
+                                      context, "Added to Bookmarks");
+                                },
+                                child: isIconTapped
+                                    ? PhosphorIconsFill.bookmarksSimple
+                                        .iconslide(
+                                            size: 30.sp,
+                                            color: Palette.greenColor)
+                                    : PhosphorIconsRegular.bookmarksSimple
+                                        .iconslide(
+                                            size: 30.sp,
+                                            color: Palette.whiteColor),
+                              );
+                            }),
                             15.sbW,
-                            PhosphorIcons.regular.share.iconslide(size: 30.sp)
+                            PhosphorIconsRegular.share.iconslide(
+                                size: 30.sp, color: Palette.whiteColor)
                           ],
                         ),
                       ),
@@ -103,8 +147,13 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                           // top == MediaQuery.of(context).padding.top + 90.h
                           //     ? 0
                           //     : 1.0,
-                          child: widget.articleCategory.txtStyled(
-                              fontSize: 22.sp, fontWeight: FontWeight.w600)),
+                          child: SizedBox(
+                            width: 170.w,
+                            child: widget.articleSource.txtStyled(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w600,
+                                textOverflow: TextOverflow.ellipsis),
+                          )),
                       stretchModes: const [StretchMode.blurBackground],
                       centerTitle: false,
                       // News Article Image
@@ -150,29 +199,31 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                       Padding(
                         padding: 25.padH,
                         child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
-                                mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Row(
                                     children: [
-                                      PhosphorIcons.regular.notePencil
+                                      PhosphorIconsRegular.notePencil
                                           .iconslide(size: 19.sp),
                                       5.sbW,
-                                      "Author: ${widget.articleAuthor}"
-                                          .txtStyled(
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.w600),
+                                      SizedBox(
+                                        width: 300.w,
+                                        child: "Author: ${widget.articleAuthor}"
+                                            .txtStyled(
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w600,
+                                                textOverflow:
+                                                    TextOverflow.ellipsis),
+                                      ),
                                     ],
                                   ),
                                   7.sbH,
                                   Row(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      PhosphorIcons.regular.paperPlaneTilt
+                                      PhosphorIconsRegular.paperPlaneTilt
                                           .iconslide(size: 19.sp),
                                       5.sbW,
                                       "Posted: ${widget.articlePublicationDate}"
@@ -180,19 +231,9 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                                               fontSize: 18.sp,
                                               fontWeight: FontWeight.w500),
                                     ],
-                                  )
+                                  ),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  PhosphorIcons.bold.clockCountdown
-                                      .iconslide(size: 19.sp),
-                                  5.sbW,
-                                  "10 mins".txtStyled(
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w500)
-                                ],
-                              )
                             ]),
                       ),
                       30.sbH,
@@ -207,10 +248,10 @@ class _NewsArticleReadViewState extends ConsumerState<NewsArticleReadView> {
                       // Article Content
                       Padding(
                         padding: 25.padH,
-                        child: ViNewsAppTexts.newsReadArticlePagePlaceholderText
+                        child: widget.articleContent
                             .txtStyled(fontSize: 18.sp),
                       ),
-                      20.sbH
+                      500.sbH
                     ],
                   ),
                 ]),

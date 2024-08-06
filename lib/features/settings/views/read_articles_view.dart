@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vinews_news_reader/core/models/article_selections.dart';
-import 'package:vinews_news_reader/core/controllers/app_providers.dart';
+import 'package:vinews_news_reader/core/providers/app_providers.dart';
 import 'package:vinews_news_reader/routes/route_constants.dart';
 import 'package:vinews_news_reader/themes/color_scheme_palette.dart';
 import 'package:vinews_news_reader/utils/image_loader.dart';
@@ -55,7 +55,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
             children: [
               "Read Articles".txtStyled(fontSize: 18.sp),
               5.sbW,
-              PhosphorIcons.regular.eye.iconslide(size: 19.sp),
+              PhosphorIconsRegular.eye.iconslide(size: 19.sp),
             ],
           ),
           bottom: AppBar(
@@ -83,7 +83,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                 ...newsInterests.asMap().entries.map((entry) {
                   String interest = entry.value;
                   int categoryCount = articleDisplayList
-                      .where((article) => article.articleCategory == interest)
+                      .where((article) => article.articleSource == interest)
                       .length;
                   return Tab(
                     text: "$interest ($categoryCount)", // Display the count
@@ -125,10 +125,10 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                             ViNewsAppRouteConstants.newsArticleReadView,
                             pathParameters: {
                               "articleImage": articleDisplay.urlImage,
-                              "articleCategory": articleDisplay.articleCategory,
+                              "articleSource": articleDisplay.articleSource,
                               "heroTag": 'readArticlesScreentagImage$index',
                               "articleTitle": articleDisplay.articleTitle,
-                              "articleAuthor": articleDisplay.articleCategory,
+                              "articleAuthor": articleDisplay.articleSource,
                               "articlePublicationDate": formattedDate.toString()
                             });
                       },
@@ -149,9 +149,9 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                     borderRadius: BorderRadius.circular(10.r),
                                   ),
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.r),
-                                    child: ImageLoaderForOverlay(imageUrl: articleDisplay.urlImage)
-                                  ),
+                                      borderRadius: BorderRadius.circular(10.r),
+                                      child: ImageLoaderForOverlay(
+                                          imageUrl: articleDisplay.urlImage)),
                                 ),
                               ),
                             ],
@@ -174,7 +174,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                   children: [
                                     Row(
                                       children: [
-                                        PhosphorIcons.bold.tag
+                                        PhosphorIconsBold.tag
                                             .iconslide(size: 18.sp),
                                         7.sbW,
                                         Container(
@@ -187,7 +187,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                           child: Padding(
                                             padding: 6.0.padA,
                                             child: articleDisplay
-                                                .articleCategory
+                                                .articleSource
                                                 .txtStyled(
                                               fontSize: 14.sp,
                                               color: Palette.whiteColor,
@@ -207,7 +207,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                     // Article Publication Date
                                     Row(
                                       children: [
-                                        PhosphorIcons.bold.paperPlaneTilt
+                                        PhosphorIconsBold.paperPlaneTilt
                                             .iconslide(size: 18.sp),
                                         7.sbW,
                                         formattedDate.txtStyled(
@@ -229,7 +229,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                                     .notifier)
                                             .update((state) => !state);
                                       },
-                                      child: PhosphorIcons.bold.dotsThree
+                                      child: PhosphorIconsBold.dotsThree
                                           .iconslide(size: 27.sp),
                                     ),
                                   ],
@@ -247,7 +247,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
               ...newsInterests.map((interest) {
                 // Filter the articles based on the selected category
                 final filteredArticles = articleDisplayList
-                    .where((article) => article.articleCategory == interest)
+                    .where((article) => article.articleSource == interest)
                     .toList();
 
                 return Scrollbar(
@@ -274,11 +274,11 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                               ViNewsAppRouteConstants.newsArticleReadView,
                               pathParameters: {
                                 "articleImage": articleDisplay.urlImage,
-                                "articleCategory":
-                                    articleDisplay.articleCategory,
+                                "articleSource":
+                                    articleDisplay.articleSource,
                                 "heroTag": 'readArticlesScreentagImage$index',
                                 "articleTitle": articleDisplay.articleTitle,
-                                "articleAuthor": articleDisplay.articleCategory,
+                                "articleAuthor": articleDisplay.articleSource,
                                 "articlePublicationDate":
                                     formattedDate.toString(),
                               },
@@ -302,10 +302,11 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                             BorderRadius.circular(10.r),
                                       ),
                                       child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.r),
-                                        child: ImageLoaderForOverlay(imageUrl: articleDisplay.urlImage)
-                                      ),
+                                          borderRadius:
+                                              BorderRadius.circular(10.r),
+                                          child: ImageLoaderForOverlay(
+                                              imageUrl:
+                                                  articleDisplay.urlImage)),
                                     ),
                                   ),
                                 ],
@@ -329,7 +330,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                       children: [
                                         Row(
                                           children: [
-                                            PhosphorIcons.bold.tag
+                                            PhosphorIconsBold.tag
                                                 .iconslide(size: 18.sp),
                                             7.sbW,
                                             Container(
@@ -341,7 +342,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                               child: Padding(
                                                 padding: 6.0.padA,
                                                 child: articleDisplay
-                                                    .articleCategory
+                                                    .articleSource
                                                     .txtStyled(
                                                   fontSize: 13.sp,
                                                   color: Palette.whiteColor,
@@ -361,7 +362,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                         Row(
                                           children: [
                                             // Article Publication Date
-                                            PhosphorIcons.bold.paperPlaneTilt
+                                            PhosphorIconsBold.paperPlaneTilt
                                                 .iconslide(
                                               size: 18.sp,
                                             ),
@@ -391,7 +392,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                                         .notifier)
                                                 .update((state) => !state);
                                           },
-                                          child: PhosphorIcons.bold.dotsThree
+                                          child: PhosphorIconsBold.dotsThree
                                               .iconslide(
                                             size: 27.sp,
                                           ),
@@ -475,10 +476,12 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                               // color: Palette.greyColor,
                                             ),
                                             child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.r),
-                                              child: ImageLoaderForOverlay(imageUrl: articleOverlayDisplay.urlImage)
-                                            ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.r),
+                                                child: ImageLoaderForOverlay(
+                                                    imageUrl:
+                                                        articleOverlayDisplay
+                                                            .urlImage)),
                                           ),
                                         ),
                                         Column(
@@ -496,7 +499,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                           children: [
                                             Row(
                                               children: [
-                                                PhosphorIcons.bold.megaphone
+                                                PhosphorIconsBold.megaphone
                                                     .iconslide(size: 18.sp),
                                                 7.sbW,
                                                 articleOverlayDisplay
@@ -509,8 +512,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                             ),
                                             Row(
                                               children: [
-                                                PhosphorIcons
-                                                    .bold.clockCountdown
+                                                PhosphorIconsBold.clockCountdown
                                                     .iconslide(size: 19.sp),
                                                 5.sbW,
                                                 "10 mins".txtStyled(
@@ -530,7 +532,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                               children: [
                                                 Row(
                                                   children: [
-                                                    PhosphorIcons.bold.tag
+                                                    PhosphorIconsBold.tag
                                                         .iconslide(size: 18.sp),
                                                     7.sbW,
                                                     Container(
@@ -546,7 +548,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                                         padding: 7.0.padA,
                                                         child:
                                                             articleOverlayDisplay
-                                                                .articleCategory
+                                                                .articleSource
                                                                 .txtStyled(
                                                           fontSize: 14.sp,
                                                           color: Palette
@@ -561,8 +563,8 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                                 5.sbH,
                                                 Row(
                                                   children: [
-                                                    PhosphorIcons
-                                                        .bold.paperPlaneTilt
+                                                    PhosphorIconsBold
+                                                        .paperPlaneTilt
                                                         .iconslide(size: 18.sp),
                                                     7.sbW,
                                                     formattedDate.txtStyled(
@@ -576,10 +578,10 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                             ),
                                             Row(
                                               children: [
-                                                PhosphorIcons.bold.bookmarks
+                                                PhosphorIconsBold.bookmarks
                                                     .iconslide(size: 35.sp),
                                                 5.sbW,
-                                                PhosphorIcons.bold.heartStraight
+                                                PhosphorIconsBold.heartStraight
                                                     .iconslide(size: 35.sp)
                                               ],
                                             )
@@ -642,9 +644,9 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                                       "articleImage":
                                                           articleOverlayDisplay
                                                               .urlImage,
-                                                      "articleCategory":
+                                                      "articleSource":
                                                           articleOverlayDisplay
-                                                              .articleCategory,
+                                                              .articleSource,
                                                       "heroTag":
                                                           'readArticlesScreenOverlaytagImage${_selectedOptionIndexValueNotifier.value}',
                                                       "articleTitle":
@@ -652,7 +654,7 @@ class _ReadArticlesViewState extends ConsumerState<ReadArticlesView> {
                                                               .articleTitle,
                                                       "articleAuthor":
                                                           articleOverlayDisplay
-                                                              .articleCategory,
+                                                              .articleSource,
                                                       "articlePublicationDate":
                                                           formattedDate
                                                               .toString()

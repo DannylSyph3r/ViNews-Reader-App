@@ -30,6 +30,7 @@ class ViNewsAppTexts {
       "A password reset link has been sent to your Email Address. Dont forget it this time :/";
   static const redirectionErrorMessage =
       "Redirection to homepage has encountered an error. Please initiate manually!";
+  static const placeHolderArticleContent = "No Article Content";
   static const aboutViNewsPageText = """About ViNews
 
 Welcome to ViNews, your go-to source for the latest news, delivered straight to your fingertips. ViNews is a news reader app designed and developed by Slethware, where his passion for technology and information intersects to provide you with a cutting-edge news consumption experience.
